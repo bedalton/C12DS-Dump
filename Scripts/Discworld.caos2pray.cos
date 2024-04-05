@@ -11,6 +11,8 @@
 *# Web URL = "www.hightechhand.com"
 **# Attach "../Images/thth.c16"
 **# Attach "c1discworldborder.c16"
+**# Attach "../Catalogue/c1tods.catalogue"
+*# Depend "../Catalogue/c1tods.catalogue"
 *# Depend "thth.c16"
 *# Depend "c1discworldborder.c16"
 * C1 Discworld

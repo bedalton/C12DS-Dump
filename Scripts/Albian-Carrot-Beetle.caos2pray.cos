@@ -7,6 +7,8 @@
 **# Attach "../images/c1plants.c16"
 **# Attach "../sounds/c1bg.c16"
 **# Attach "../sounds/c1b5.c16"
+**# Attach "../Catalogue/c1tods.catalogue"
+*# Depend "../Catalogue/c1tods.catalogue"
 *# Depend "c1carrotbeetle.c16"
 *# Depend "c1plants.c16"
 *# Depend "c1bg.c16"

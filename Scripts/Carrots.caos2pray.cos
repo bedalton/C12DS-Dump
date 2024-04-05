@@ -6,6 +6,8 @@
 *# Agent Description = "C1 Carrots are delicious and nutritious."
 **# Attach "../Images/c1plants.c16"
 **# Attach "../Sounds/c1dr.wav"
+**# Attach "../Catalogue/c1tods.catalogue"
+*# Depend "../Catalogue/c1tods.catalogue"
 *# Depend "c1plants.c16"
 *# Depend "c1dr.wav"
 * LINK Actual Script

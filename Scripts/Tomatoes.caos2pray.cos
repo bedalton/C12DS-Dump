@@ -11,6 +11,8 @@
 *# Web URL = "www.hightechhand.com"
 **# Attach "../Images/thth.c16"
 **# Attach "../Images/c1plants.c16"
+**# Attach "../Catalogue/c1tods.catalogue"
+*# Depend "../Catalogue/c1tods.catalogue"
 *# Depend "thth.c16"
 *# Depend "c1plants.c16"
 *# Link "Tomatoes.cos"
