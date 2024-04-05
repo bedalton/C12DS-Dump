@@ -7,6 +7,8 @@
 **# Attach "../Images/c1cavefly.c16"
 **# Attach "../Sounds/c1sg.wav"
 **# Attach "../Sounds/c1sp.wav"
+**# Attach "../Catalogue/c1tods.catalogue"
+*# Depend "../Catalogue/c1tods.catalogue"
 *# Depend "c1cavefly.c16"
 *# Depend "c1sp.wav"
 *# Depend "c1sg.wav"

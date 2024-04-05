@@ -7,6 +7,8 @@
 **# Attach "../Catalogue/c1tods.catalogue"
 **# Attach "../Images/c1_fav_place.c16"
 **# Attach "../Images/c1plants.c16"
+**# Attach "../Catalogue/c1tods.catalogue"
+*# Depend "../Catalogue/c1tods.catalogue"
 *# Depend "c1tods.catalogue"
 *# Depend "c1plants.c16"
 *# Depend "c1_fav_place.c16"

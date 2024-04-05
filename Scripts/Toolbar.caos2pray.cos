@@ -22,6 +22,8 @@
 **# Attach "../Sounds/c1hf.wav"
 **# Attach "../Sounds/c1he.wav"
 **# Attach "../Sounds/c1ki.wav"
+**# Attach "../Catalogue/c1tods.catalogue"
+*# Depend "../Catalogue/c1tods.catalogue"
 *# Depend "c1toolbar.c16"
 *# Depend "c1hatchery.c16"
 *# Depend "c1viewer.c16"
