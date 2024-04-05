@@ -1,0 +1,87 @@
+* C1EF
+* Dependencies:
+*	c1lf.wav
+*	c1lift.c16
+*	norn.clucky.eemfoo.gen
+*	c1bu.wav
+
+inst
+
+doif game "C1_to_DS_Loaded" = 1
+	new: simp 1 1 32337 "c1ef" 1 0 10
+	attr 4
+	mvto 4624 10430
+endi
+
+scrp 1 1 32337 1
+*	do something magical
+	inst
+	lock
+	attr 0
+
+*	vehicle
+	new: vhcl 1 1 32337 "c1lift" 0 1 90
+	seta va98 targ
+	cabp 1
+	cabn 0 -10 120 150
+	pat: dull 1 "c1lift" 0 0 0 2
+	pat: butt 2 "c1lift" 2 4 82 72 3 [] 1001 1
+	pat: butt 3 "c1lift" 3 4 82 83 3 [] 1002 1
+	attr 520
+	elas 0
+	perm 0
+	setv va00 posl
+	setv va01 post
+
+* 	celebrity
+	gene load ownr 1 "norn.clucky.eemfoo"
+	new: crea 4 ownr 1 1 0
+	setv va91 11
+	addv va91 gnus
+	emit va91 0.5
+	attr 0
+	drea 1
+	pose 75
+	aslp 0
+	perm 60
+	born
+	sets va97 gtos 0
+	hist name va97 "Eem Foo"
+	seta va99 targ
+
+*	load celebrity	
+	targ va98
+*	gpas 4 0 0 0
+	spas va98 va99
+	targ va99
+	accg game "c3_creature_accg"
+	bhvr game "c3_creature_bhvr"
+	attr game "c3_creature_attr"
+	perm game "c3_creature_perm"
+	slow
+	unlk
+
+*	move 'em out
+	targ va98
+	setv va04 9836
+	setv va04 10000
+	sndl "c1lf"
+	loop
+		mvto 4615 va04
+		addv va04 game "c1liftspeed"
+	untl va04 >= 10787
+	stpc
+	snde "c1bu"
+	dpas 4 0 0
+	wait rand 60 120
+	kill targ
+	targ ownr
+	attr 4
+endm
+
+
+rscr
+enum 1 1 32337
+	kill targ
+next
+scrx 1 1 32337 1

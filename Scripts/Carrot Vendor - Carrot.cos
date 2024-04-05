@@ -1,0 +1,138 @@
+****************************
+* C1 CarrotVendor Carrot
+****************************
+
+* Dependencies:
+*  C1CarrotVendorCarrot.c16
+
+* Installers
+*	NONE - all in other agents
+
+scrp 2 10 32404 9
+	inst
+	targ ownr
+	kill targ
+endm
+
+scrp 2 11 32404 1
+*	carrot was clicked
+	inst
+	doif game "C1_Clickable_Food" = 1
+* 		Make Carrot
+		setv va00 posl
+		setv va01 post
+		new: simp 2 11 32404 "c1carrotvendorcarrot" 3 0 7001
+		pose 1
+		accg 3
+		attr 199
+		bhvr 48
+		fric 100
+		elas 0
+		aero 0
+*		carrot scent
+		emit 6 .20
+		emit 7 .20
+		emit 8 .20
+		perm 60
+		mvsf va00 va01
+		velo rand -10 10 rand -10 -5
+		targ ownr
+	endi
+endm
+
+scrp 2 11 32404 4
+*	carrot has been picked up
+	inst
+	lock
+	doif pose = 6
+		mira rand 0 1
+		pose 7
+		tick 0
+		attr 199
+		accg 3
+		fric 90
+		aero 10
+	else
+		attr 199
+		accg 3
+		fric 90
+		aero 10
+	endi
+endm
+
+scrp 2 11 32404 6
+*	carrot has collided!
+	sndc "dr64"
+endm
+
+scrp 2 11 32404 9
+*	Carrot's timer
+	inst
+	lock
+	doif pose = 2
+		targ ownr
+		kill targ
+	endi
+endm
+
+scrp 2 11 32404 12
+*	eating a carrot
+	inst
+	lock
+*	attr 208
+	bhvr 0
+	doif pose = 1
+		targ ownr
+		setv va00 posl
+		setv va01 post
+		pose 2
+		tick rand 100 200
+		targ from
+		doif crea targ = 1
+			snde "chwp"
+*			chem 5 1.0
+*			chem 10 1.0
+*			chem 12 1.0
+			chem 96 .05
+			stim writ from 79 1
+			new: simp 2 10 32404 "c1carrotvendorcarrot" 1 2 7001
+			elas 0
+			aero 0
+			bhvr 0
+			pose 0
+			perm 60
+			puhl 0 8 20
+			accg 3
+			attr 213
+			fric 100
+			mvsf va00 va01
+			tick rand 90 210
+			targ ownr
+			kill targ
+		endi
+	elif pose = 2
+		targ ownr
+		kill targ
+	endi
+endm
+
+****************************
+* Removers
+
+* CarrotVendor Carrot remover
+rscr
+
+enum 2 10 32404
+	kill targ
+next
+
+scrx 2 10 32404 9
+
+enum 2 11 32404
+	kill targ
+next
+
+*scrx 2 11 32404 4
+*scrx 2 11 32404 6
+*scrx 2 11 32404 9
+*scrx 2 11 32404 12

@@ -1,0 +1,223 @@
+* Cheats
+
+inst
+
+* Button - Clickable Foods Enabler/Disabler
+new: simp 1 1 32309 "c1switch" 4 0 2
+attr 20
+accg 0
+fric 100
+aero 100
+bhvr 0
+tick rand 15 25
+mvsf 3485 11032
+
+* Button - Guardrails Disabler/Enabler
+new: simp 1 1 32310 "c1switch" 4 0 6
+attr 20
+accg 0
+fric 100
+aero 100
+bhvr 0
+tick rand 15 25
+*mvsf 3480 11025
+mvsf 9338 10878
+
+
+* Button - Grendel Mother
+new: simp 1 1 32319 "c1switch" 4 0 9
+attr 20
+accg 0
+fric 100
+aero 100
+bhvr 0
+tick rand 15 25
+mvsf 7166 10560
+seta va00 targ
+rtar 1 1 1015
+setv va01 ov01
+targ va00
+doif va01 = 1
+	pose 1
+else
+	pose 0
+endi
+
+* Button - Aquanorn Mode Button
+new: simp 1 1 32318 "c1lightbulb" 2 0 9
+attr 20
+accg 0
+fric 100
+aero 100
+bhvr 0
+tick rand 15 25
+mvsf 8409 10791
+
+
+scrp 1 1 32309 1
+*	Clickable Foods Enabler/Disabler clicked
+	doif game "C1_Clickable_Food" = 1
+		anim [3 2 1 0]
+		setv game "C1_Clickable_Food" 0
+	else
+		anim [0 1 2 3]
+		setv game "C1_Clickable_Food" 1
+	endi
+endm
+
+scrp 1 1 32309 9
+*	Clickable Foods Enabler/Disabler Timer
+	doif game "C1_Clickable_Food" = 0
+		pose 0
+	else
+		pose 3
+	endi
+endm
+
+scrp 1 1 32310 1
+*	Guardrails cheat button clicked
+	doif game "C1_Guardrails" = 0
+		setv va03 69
+		pose 3
+		setv game "C1_Guardrails" 1
+	else
+		setv va03 100
+		pose 0
+		setv game "C1_Guardrails" 0
+	endi
+	door grap 1770 10280 grap 1790 10280 va03
+	door grap 1770 10380 grap 1790 10380 va03
+	door grap 1700 10460 grap 1720 10460 va03
+	door grap 1700 10555 grap 1720 10555 va03
+	door grap 2090 10300 grap 2110 10300 va03
+	door grap 2090 10390 grap 2110 10390 va03
+	door grap 2520 10500 grap 2540 10500 va03
+	door grap 2520 10560 grap 2540 10560 va03
+	door grap 2520 10660 grap 2540 10660 va03
+	door grap 2520 10750 grap 2540 10750 va03
+	door grap 2680 10500 grap 2700 10500 va03
+	door grap 2680 10560 grap 2700 10560 va03
+	door grap 2680 10660 grap 2700 10660 va03
+	door grap 2680 10750 grap 2700 10750 va03
+	door grap 3840 10550 grap 3860 10550 va03
+	door grap 3980 10630 grap 4000 10630 va03
+	door grap 3980 10690 grap 4000 10690 va03
+	door grap 5250 10390 grap 5270 10390 va03
+	door grap 5250 10490 grap 5270 10490 va03
+	door grap 7570 10560 grap 7590 10560 va03
+	door grap 7570 10630 grap 7590 10630 va03
+	door grap 8170 10400 grap 8190 10400 va03
+	door grap 8170 10600 grap 8190 10600 va03
+	door grap 8780 10400 grap 8800 10400 va03
+	door grap 8960 10600 grap 8980 10600 va03
+	door grap 4220 10990 grap 4240 10990 va03
+	door grap 4220 11060 grap 4240 11060 va03
+	door grap 5580 10990 grap 5600 10990 va03
+	door grap 5580 11060 grap 5600 11060 va03
+	door grap 1620 11030 grap 1640 11030 va03
+	door grap 1620 11080 grap 1640 11080 va03
+	door grap 9970 11030 grap 9990 11030 va03
+	door grap 9970 11080 grap 9990 11080 va03
+	door grap 9190 11015 grap 9210 11015 va03
+	door grap 9190 11060 grap 9210 11060 va03
+	door grap 10121 10280 grap 10141 10280 va03
+	door grap 10121 10380 grap 10141 10380 va03
+	door grap 10051 10460 grap 10071 10460 va03
+	door grap 10051 10555 grap 10071 10555 va03
+endm
+
+scrp 1 1 32310 9
+*	Guardrails cheat button timer
+	doif game "C1_Guardrails" = 1
+		pose 3
+	else
+		pose 0
+	endi
+endm
+
+scrp 1 1 32319 1
+*	grendel mother switch clicked
+	rtar 1 1 1015
+	inst
+	lock
+	seta va02 targ
+	setv va01 ov01
+	targ ownr
+	doif va01 = 1
+		pose 0
+		targ va02
+		tint 32 64 32 128 128
+		sndc "buzz"
+		setv ov01 0
+	else
+		pose 1
+		targ va02
+		tint 128 128 128 128 128
+		sndc "bep2"
+		setv ov01 1
+	endi
+endm
+
+scrp 1 1 32319 9
+*	Grendel mother switch
+	inst
+	rtar 1 1 1015
+	setv va01 ov01
+	targ ownr
+	doif va01 = 1
+		pose 1
+	else
+		pose 0
+	endi
+endm
+
+scrp 1 1 32318 1
+*	Aquanorn Mode switch clicked
+	inst
+	lock
+	doif game "C1_Sub_pickup" = 1
+		setv game "C1_Sub_pickup" 0
+	else
+		setv game "C1_Sub_pickup" 1
+	endi
+	mesg writ ownr 9
+endm
+
+scrp 1 1 32318 9
+*	Aquanorn Mode timer
+	inst
+	lock
+	doif game "C1_Sub_pickup" = 0
+		pose 1
+	else
+		pose 0
+	endi
+endm
+
+
+**********
+* Remover
+
+rscr
+enum 1 1 32309
+	kill targ
+next
+scrx 1 1 32309 1
+scrx 1 1 32309 9
+enum 1 1 32310
+	kill targ
+next
+scrx 1 1 32310 1
+scrx 1 1 32310 9
+
+enum 1 1 32319
+	kill targ
+next
+scrx 1 1 32319 1
+scrx 1 1 32319 9
+
+enum 1 1 32318
+	kill targ
+next
+scrx 1 1 32318 1
+scrx 1 1 32318 9

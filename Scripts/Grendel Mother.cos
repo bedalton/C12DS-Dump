@@ -1,0 +1,133 @@
+* C1 Grendel Mother
+
+* Dependencies:
+*  C1greg.c16
+*  C1Gren.gen
+
+inst
+
+doif game "C1_to_DS_Loaded" = 1 and totl 1 1 1015 < 1
+
+	new: simp 1 1 1015 "c1greg" 12 0 5000
+	attr 4
+	accg 0
+	aero 100
+	fric 100
+	bhvr 0
+	elas 0
+	perm 0
+	clac 0
+	setv ov61 100
+
+	tick 1500
+
+	setv va00 6828
+	setv va01 10399
+	mvsf va00 va01
+
+* 	if ov01 = 0, Grendel Mother is Off
+* 	if ov01 = 1, Grendel Mother is On
+	setv ov01 0
+	tint 32 64 32 128 128
+endi
+
+**********
+* Scripts
+
+scrp 1 1 1015 1
+*	Clicked on Grendel Mum
+
+	doif ov01 = 1
+		setv ov01 0
+		tint 32 64 32 128 128
+		sndc "buzz"
+	else
+		setv ov01 1
+		tint 128 128 128 128 128
+		sndc "bep2"
+	endi
+endm
+
+scrp 1 1 1015 9
+	mesg writ ownr 1000
+endm
+
+scrp 1 1 1015 1000
+*	pick a gender for whichever there are less of	
+	doif ov01 = 1
+		enum 4 2 2
+			doif dead <> 1
+				addv va22 1
+			endi
+		next
+		enum 4 2 1
+			doif dead <> 1
+				addv va23 1
+			endi
+		next
+
+		doif va22 >= va23
+			setv va21 1
+		else
+			setv va21 2
+		endi
+
+*		Now we know which gender of grendel to create
+
+		doif totl 4 2 0 < 1 and totl 3 4 2 < 1
+
+			inst
+			lock
+
+			gene load ownr 1 "gren.c1tods.grendel*"
+			new: crea 4 ownr 1 va21 0
+			seta va20 targ
+			accg game "c3_creature_accg"
+			bhvr game "c3_creature_bhvr"
+			attr game "c3_creature_attr"
+			perm game "c3_creature_perm"
+			setv va91 11
+			addv va91 gnus
+			emit va91 0.5
+			drea 1
+*			doin 20
+*			Grendel is ready
+			wait 20
+			inst
+			targ ownr
+			frat 2.0
+			anim [0 1 2 3 4 5 5 5 5 5 5 4 3 2 1]
+			over
+			wait rand 40 90
+			anim [1 2 3 4 5 6]
+			over
+			wait rand 40 90
+			anim [7 8 9]
+			over
+			inst
+			setv va00 posl
+			setv va01 posb
+			addv va00 25
+			addv va01 25
+			targ va20
+			mvsf va00 va01
+			born
+			targ ownr
+			slow
+			anim [10 11 0]
+			targ va20
+			aslp 0
+		endi
+	endi
+endm
+
+rscr
+enum 1 1 1015
+	kill targ
+next
+scrx 1 1 1015 1
+scrx 1 1 1015 2
+scrx 1 1 1015 6
+scrx 1 1 1015 9
+scrx 1 1 1015 255
+scrx 1 1 1015 1000

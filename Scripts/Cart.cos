@@ -1,0 +1,377 @@
+* C1 Cart
+
+* Dependencies:
+*  C1Cart.c16
+*  C1C3.WAV
+
+* Bug - when creature pushes, does not move left immediately
+
+inst
+
+doif game "C1_to_DS_Loaded" = 1 and totl 1 19 32399 < 1
+
+	new: simp 1 19 32399 "blank" 0 0 200
+	tick 800
+	mvto 4115 11000
+
+	setv game "C1_Cart_Speed2" 25
+
+	new: vhcl 3 1 32317 "c1cart" 9 0 6995
+
+*	left position
+	setv ov97 8956
+
+*	right position
+	setv ov98 1750
+
+*	Y position
+	setv ov93 11038
+
+	setv ov99 0
+	cabp -1
+	cabv 146
+	cabw 10
+	cabn -5 -140 110 0
+*	cabn -55 -240 128 0
+	accg 2
+	aero 0
+	fric 50
+	bhvr 1
+	elas 0
+	perm 0
+	tick 800
+	clac 0
+*	attr 196
+	attr 716
+	setv ov61 100
+	mvto ov97 ov93
+endi
+
+scrp 1 19 32399 9
+	rtar 3 1 32317
+	mesg writ targ 0
+endm
+
+scrp 3 1 32317 2
+	mesg writ ownr 0
+endm
+
+scrp 3 1 32317 1001
+	inst
+	lock
+	setv ov99 -1
+	etch 4 0 0
+		setv va21 0
+		loop
+			spas ownr targ
+			wait 1
+			inst
+			addv va21 1
+		untl movs <> 0 or va21 > 10
+	next
+	anim [5 4 3 2 1 0 255]
+	sndl "c1c3"
+	mesg writ ownr 0
+endm
+
+scrp 3 1 32317 1002
+	inst
+	lock
+	setv ov99 1
+	etch 4 0 0
+		setv va21 0
+		loop
+			spas ownr targ
+			wait 1
+			inst
+			addv va21 1
+		untl movs <> 0 or va21 > 10
+	next
+	anim [0 1 2 3 4 5 255]
+	sndl "c1c3"
+	mesg writ ownr 0
+endm
+
+scrp 3 1 32317 1
+	inst
+	lock
+
+*	The cart has been pushed
+
+	stim writ from 94 1.0
+	doif posl = ov97
+*		doif ov99 = 0 and posl >= ov97 and posl <> ov98
+		doif ov99 = 0 and posl <> ov98
+
+			anim [5 6 7 8 255]
+			sndl "c1c3"
+*		currently not going anywhere
+*		hide the vehicle from creatures
+*			attr 724
+			attr 716
+			doif type from = 7
+				targ from
+				doif movs = 0
+					setv va21 0
+					loop
+						spas ownr from
+						wait 1
+						inst
+						addv va21 1
+					untl movs <> 0 or va21 > 10
+				endi
+			else
+				etch 4 0 0
+					doif movs = 0
+						setv va21 0
+						loop
+							spas ownr targ
+							wait 1
+							inst
+							addv va21 1
+						untl movs <> 0 or va21 > 10
+					endi
+				next
+			endi
+			targ ownr
+			setv ov99 1
+		elif ov99 <> 0 and from = pntr
+			targ ownr
+			setv ov99 1
+		elif ov99 = 0 and posl = ov98
+			stim writ from 0 1.0
+		endi
+		doif ov99 <> 0
+			targ ownr
+			tick 1
+		endi
+	elif posl = ov98
+		doif ov99 = 0 and posl <> ov97
+
+			anim [1 2 3 4 255]
+			sndl "c1c3"
+*		currently not going anywhere
+*		hide the vehicle from creatures
+*			attr 724
+			attr 716
+			doif type from = 7
+				setv va21 0
+				loop
+					spas ownr from
+					wait 1
+					inst
+					addv va21 1
+				untl movs <> 0 or va21 > 100
+			else
+				setv va00 posx
+				setv va01 posy
+				etch 4 0 0
+					mvft va00 va01
+					setv va21 0
+					loop
+						spas ownr targ
+						wait 1
+						inst
+						addv va21 1
+					untl movs <> 0 or va21 > 100
+				next
+			endi
+			targ ownr
+			setv ov99 -1
+		elif ov99 <> 0 and from = pntr
+			targ ownr
+			setv ov99 -1
+		elif ov99 = 0 and posl = ov98
+			stim writ from 0 1.0
+		endi
+		doif ov99 <> 0
+			targ ownr
+			tick 1
+		endi
+	else
+		doif crea from <> 1
+			doif ov99 = 1
+				setv ov99 -1
+				anim [1 2 3 4 255]
+			else
+				setv ov99 1
+				anim [5 6 7 8 255]
+			endi
+		endi
+	endi
+	rtar 1 19 32399
+	tick 800
+	slow
+	unlk
+endm
+
+scrp 3 1 32317 2001
+	inst
+	lock
+
+* 	Cart moving left
+	doif ov99 = -1 and posl >= ov97
+		setv va00 game "C1_Cart_Speed2"
+		mulv va00 -1
+		setv va01 vely
+		velo va00 va01
+	elif ov99 = -1 and posl >= 0 and posl <= ov98
+		setv va00 game "C1_Cart_Speed2"
+		mulv va00 -1
+		setv va01 vely
+		velo va00 va01
+	else
+		setv ov99 0
+		stpc
+		mesg writ ownr 3002
+	endi
+endm
+
+scrp 3 1 32317 2002
+	inst
+	lock
+
+* 	Cart moving right
+	doif ov99 = 1 and posl >= ov97
+		setv va00 game "C1_Cart_Speed2"
+		setv va01 vely
+		velo va00 va01
+	elif ov99 = 1 and posl >= 0 and posl <= ov98
+		setv va00 game "C1_Cart_Speed2"
+		setv va01 vely
+		velo va00 va01
+	else
+		setv ov99 0
+		stpc
+		mesg writ ownr 3002
+	endi
+endm
+
+scrp 3 1 32317 3002
+*	drop creatures
+	inst
+	lock
+*	attr 708
+	attr 716
+	setv va00 posx
+	setv va01 posb
+	subv va01 10
+	doif posl <= ov97
+		addv va00 -1
+		setv va02 -5
+	elif posl >= ov98
+		addv va00 1
+		setv va02 5
+	endi
+	epas 4 0 0
+		rpas ownr targ
+		mvft va00 va01
+		velo va02 1
+	next
+endm
+
+
+scrp 3 1 32317 9
+	inst
+	lock
+	doif posl >= 9984
+		setv va00 posl
+		setv va01 post
+		subv va00 8351
+		mvsf va00 va01
+	elif posl <= 1633
+		setv va00 posl
+		setv va01 post
+		addv va00 8351
+		mvsf va00 va01
+	endi
+	epas 4 0 0
+		chem 24 -10.0
+		chem 29 10.0
+		chem 30 10.0
+	next
+	doif ov99 = -1
+*		attr 724
+		attr 716
+		mesg writ ownr 2001
+	elif ov99 = 1
+*		attr 724
+		attr 716
+		mesg writ ownr 2002
+	elif ov99 = 0
+		pose 0
+		velo 0 0
+		doif posl >= ov98 and posl < 2000
+			setv va00 ov98
+			setv va01 post
+			addv va01 10
+			mvsf va00 va01
+		elif posl <= ov97 and posl > 8000
+			setv va00 ov97
+			setv va01 post
+			addv va01 10
+			mvsf va00 va01
+		endi
+*		attr 708
+		attr 716
+		tick 800
+	endi
+endm
+
+scrp 3 1 32317 124
+*	got item
+	setv va10 0
+	setv va11 0
+	epas 0 0 0
+		doif fmly = 4
+*			eject creatures
+			mesg writ ownr 3002
+		elif fmly = 2 and gnus = 24 and spcs = 32334
+*			got wetsuit
+			snde "c102"
+		elif fmly = 2 and gnus = 22 and spcs = 32316
+*			got incubator
+*			attr 143
+			snde "c102"
+		elif fmly = 2 and gnus = 25 and spcs = 32302
+*			got coffee pot
+			snde "c102"
+			setv va11 1
+		elif fmly = 2 and gnus = 11 and spcs = 32403
+*			got carrot (ignore)
+		elif fmly = 2 and gnus = 11 and spcs = 32302
+*			got ec (ignore)
+			setv va10 1
+		elif fmly = 2 and gnus = 21 and spcs = 1160
+*			got top (ignore)
+		else
+			rpas ownr targ
+		endi
+	next
+	doif va10 = 1 and va11 = 1
+		epas 2 11 32302
+			mesg writ targ 12
+		next
+	endi
+endm
+
+scrp 3 1 32317 125
+	inst
+endm
+rscr
+enum 3 1 32317
+	kill targ
+next
+scrx 3 1 32317 1
+scrx 3 1 32317 2
+scrx 3 1 32317 124
+scrx 3 1 32317 125
+scrx 3 1 32317 2001
+scrx 3 1 32317 2002
+scrx 3 1 32317 3001
+scrx 3 1 32317 3002
+
+enum 1 19 32399
+	kill targ
+next
+scrx 1 19 32399 9

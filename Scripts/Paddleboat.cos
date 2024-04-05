@@ -1,0 +1,309 @@
+* C1 Paddleboat
+* 2005-05-07 added bobbing
+
+* Dependencies:
+*  c1paddeboat.c16
+*  c1p7.WAV
+*  c1p8.WAV
+
+inst
+
+doif game "C1_to_DS_Loaded" = 1 and totl 1 16 32399 = 0
+
+	new: simp 1 16 32399 "blank" 0 0 200
+	tick 800
+	mvto 4115 11000
+
+	setv game "C1_Raft_Speed2" 3
+
+	new: vhcl 3 1 32316 "c1paddleboat" 6 0 100
+	pat: butt 1 "c1paddleboat" 6 2 8 61 0 [] 1001 0
+	pat: butt 2 "c1paddleboat" 8 2 136 61 0 [] 1002 0
+
+*	left position
+	setv ov97 7416
+
+*	right position
+	setv ov98 8180
+
+*	Y position
+	setv ov93 10590
+
+	setv ov99 0
+	setv ov96 0
+	cabp -1
+	cabv 146
+	cabw 10
+	cabn -5 -40 110 100
+
+	accg 0
+	aero 100
+	fric 100
+	bhvr 1
+	elas 0
+	perm 0
+	tick 1
+	clac 0
+	attr 4
+	setv ov61 100
+	mvto ov97 ov93
+endi
+
+scrp 1 16 32399 9
+	rtar 3 1 32316
+	mesg writ targ 0
+endm
+
+scrp 3 1 32316 2
+	stim writ from 94 1.0
+	mesg writ ownr 0
+endm
+
+scrp 3 1 32316 1001
+	inst
+	lock
+	setv ov99 -1
+	etch 4 0 0
+		setv va21 0
+		loop
+			spas ownr targ
+			wait 1
+			inst
+			addv va21 1
+		untl movs <> 0 or va21 > 10
+	next
+	anim [5 4 3 2 1 0 255]
+	sndl "c1p7"
+	mesg writ ownr 0
+endm
+
+scrp 3 1 32316 1002
+	inst
+	lock
+	setv ov99 1
+	etch 4 0 0
+		setv va21 0
+		loop
+			spas ownr targ
+			wait 1
+			inst
+			addv va21 1
+		untl movs <> 0 or va21 > 10
+	next
+	anim [0 1 2 3 4 5 255]
+	sndl "c1p7"
+	mesg writ ownr 0
+endm
+
+scrp 3 1 32316 1
+	inst
+	lock
+	stim writ from 94 1.0
+	doif posl = ov97
+		doif ov99 = 0 and posl >= ov97 and posl <> ov98
+			anim [0 1 2 3 4 5 255]
+			sndl "c1p7"
+*		currently not going anywhere
+*		hide the vehicle from creatures
+			attr 540
+			doif type from = 7
+				targ from
+				doif movs = 0
+					setv va21 0
+					loop
+						spas ownr from
+						wait 1
+						inst
+						addv va21 1
+					untl movs <> 0 or va21 > 10
+				endi
+			else
+				etch 4 0 0
+					doif movs = 0
+						setv va21 0
+						loop
+							spas ownr targ
+							wait 1
+							inst
+							addv va21 1
+						untl movs <> 0 or va21 > 10
+					endi
+				next
+			endi
+			targ ownr
+			setv ov99 1
+		elif ov99 <> 0 and from = pntr
+			targ ownr
+			setv ov99 1
+		elif ov99 = 0 and posl = ov98
+			stim writ from 0 1.0
+		endi
+		doif ov99 <> 0
+			targ ownr
+*			tick 5
+		endi
+	endi
+	doif posl = ov98
+		doif ov99 = 0 and posl <= ov98 and posl <> ov97
+			anim [5 4 3 2 1 0 255]
+			sndl "c1p7"
+*		currently not going anywhere
+*		hide the vehicle from creatures
+			attr 540
+			doif type from = 7
+				setv va21 0
+				loop
+					spas ownr from
+					wait 1
+					inst
+					addv va21 1
+				untl movs <> 0 or va21 > 100
+			else
+				etch 4 0 0
+					setv va21 0
+					loop
+						spas ownr targ
+						wait 1
+						inst
+						addv va21 1
+					untl movs <> 0 or va21 > 100
+				next
+			endi
+			targ ownr
+			setv ov99 -1
+		elif ov99 <> 0 and from = pntr
+			targ ownr
+			setv ov99 -1
+		elif ov99 = 0 and posl = ov98
+			stim writ from 0 1.0
+		endi
+		doif ov99 <> 0
+			targ ownr
+*			tick 5
+		endi
+	endi
+	rtar 1 16 32399
+*	tick 5
+	slow
+	unlk
+endm
+
+scrp 3 1 32316 2001
+	inst
+	lock
+
+	doif posl >= ov97 and posl <= ov98 and ov99 = -1
+		setv va00 posl
+		subv va00 game "C1_Raft_Speed2"
+		setv va01 ov93
+		setv va02 sin_ ov96
+		addv va01 va02
+		mvto va00 va01
+	else
+		setv ov99 0
+		setv va00 ov97
+		setv va01 ov93
+		mvto va00 va01
+		stpc
+		mesg writ ownr 3002
+	endi
+endm
+
+scrp 3 1 32316 2002
+	inst
+	lock
+	doif posl >= ov97 and posl <= ov98 and ov99 = 1
+		setv va00 posl
+		addv va00 game "C1_Raft_Speed2"
+		setv va01 ov93
+		setv va02 sin_ ov96
+		addv va01 va02
+		mvto va00 va01
+	else
+		setv ov99 0
+		setv va00 ov98
+		setv va01 ov93
+		mvto va00 va01
+		stpc
+		mesg writ ownr 3002
+	endi
+endm
+
+scrp 3 1 32316 3002
+*	drop creatures
+	inst
+	lock
+	attr 516
+	setv va00 posl
+	doif posl <= ov97
+		setv va00 -10
+	elif posl >= ov98
+		setv va00 10
+	endi
+	epas 4 0 0
+		rpas ownr targ
+	next
+endm
+
+
+scrp 3 1 32316 9
+	inst
+	lock
+	addv ov96 7.5
+	doif ov96 > 359
+		setv ov96 0
+	endi
+	doif ov99 = -1
+		attr 540
+		part 1
+		pose 1
+		part 2
+		pose 0
+		mesg writ ownr 2001
+	elif ov99 = 1
+		attr 540
+		part 1
+		pose 0
+		part 2
+		pose 1
+		mesg writ ownr 2002
+	elif ov99 = 0
+		doif pose <> 0
+*			pose 0
+			sndc "c1p8"
+			anim [0 0 0 1 1 1 0 0 0 1 1 1 0 0 0]
+			over
+			attr 516
+			part 1
+			pose 0
+			part 2
+			pose 0
+			part 0
+		endi
+	endi
+	doif ov99 = 0
+		setv va00 posl
+		setv va01 ov93
+		setv va02 sin_ ov96
+		mulv va02 game "C1_Raft_Speed2"
+		addv va01 va02
+		mvto va00 va01
+	endi
+endm
+
+rscr
+enum 3 1 32316
+	kill targ
+next
+scrx 3 1 32316 1
+scrx 3 1 32316 2
+scrx 3 1 32316 9
+scrx 3 1 32316 2001
+scrx 3 1 32316 2002
+scrx 3 1 32316 3001
+scrx 3 1 32316 3002
+
+enum 1 16 32399
+	kill targ
+next
+scrx 1 16 32399 9

@@ -1,0 +1,33 @@
+**CAOS2Pray Join
+*# DSAG-Name "C1 to DS Lemon Trellis"
+*# Agent Animation File = "c1plants.c16"
+*# Agent Animation Gallery = "c1plants"
+*# Agent Animation String = "49"
+*# Agent Description = "C1 Lemons provide protein and vitamins that creatures need to stay healthy."
+*# Web Icon = "thth"
+*# Web Icon Animation String = "0"
+*# Web Icon Base = "0"
+*# Web Label =  "Visit The High Tech Hand"
+*# Web URL = "www.hightechhand.com"
+*# Attach "../Images/thth.c16"
+**# Attach "../Images/c1plants.c16"
+**# Attach "../Sounds/c1dr.wav"
+*# Depend "thth.c16"
+*# Depend "c1plants.c16"
+*# Depend "c1dr.wav"
+*# Link "Lemon-Trellis.cos"
+
+rscr
+enum 2 8 32390
+    kill targ
+next
+scrx 2 8 32390 1
+scrx 2 8 32390 4
+scrx 2 8 32390 5
+scrx 2 8 32390 9
+scrx 2 8 32390 12
+enum 2 4 32304
+    kill targ
+next
+scrx 2 4 32304 4
+

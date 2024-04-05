@@ -1,0 +1,327 @@
+* C1 Carrots
+
+* Dependencies:
+*  C1Plants.c16
+
+* Carrots now act more like real plants. They can spread in normal soil and monitor their population
+
+inst
+lock
+
+doif game "C1_to_DS_Loaded" = 1 and totl 2 11 32403 = 0
+* 	Carrot Plants
+    setv va03 4400
+    setv va04 0
+    reps 4
+        new: simp 2 11 32403 "c1plants" 9 40 7001
+        pose 6
+        accg 3
+        attr 7
+        fric 100
+        elas 0
+        aero 0
+        bhvr 48
+        puhl 0 8 45
+        puhl 1 8 45
+        puhl 2 8 45
+        puhl 3 8 45
+        puhl 4 8 45
+        puhl 5 8 45
+        puhl 6 8 45
+        puhl 7 26 20
+        puhl 8 26 20
+        rnge 300
+        emit 8 .20
+        perm 60
+        addv va04 25
+        setv va00 va03
+        setv va01 10883
+        addv va00 rand 0 10
+        addv va00 va04
+        mvto va00 va01
+    repe
+    setv va03 4650
+    setv va04 0
+    reps 4
+        new: simp 2 11 32403 "c1plants" 9 40 7001
+        pose 6
+        accg 3
+        attr 7
+        fric 100
+        elas 0
+        aero 0
+        bhvr 48
+        puhl 0 8 45
+        puhl 1 8 45
+        puhl 2 8 45
+        puhl 3 8 45
+        puhl 4 8 45
+        puhl 5 8 45
+        puhl 6 8 45
+        puhl 7 26 20
+        puhl 8 26 20
+        rnge 300
+        emit 8 .20
+        perm 60
+        addv va04 25
+        setv va00 va03
+        setv va01 10883
+        addv va00 rand 0 10
+        addv va00 va04
+        mvto va00 va01
+    repe
+else
+    inst
+    doif type game "ds_game_type" ne 2
+* 	it's NOT a string, this must be C3 only
+* 	choose a safe C3 location
+        setv va00 5440
+        setv va01 3580
+    else
+* 	it IS a string, but what is the value?
+        doif game "ds_game_type" eq "undocked"
+* 		this is an undocked world, location needs to be DS safe
+            setv va00 6100
+            setv va01 9200
+        elif game "ds_game_type" eq "docked"
+* 		this is a docked world, location can be anywhere in the DS/C3 realm
+            setv va00 6100
+            setv va01 9200
+        endi
+    endi
+*	make carrots
+    reps 4
+        new: simp 2 11 32403 "c1plants" 9 40 7001
+        pose 6
+        accg 3
+        attr 199
+        fric 100
+        elas 0
+        aero 0
+        bhvr 48
+        puhl 0 8 45
+        puhl 1 8 45
+        puhl 2 8 45
+        puhl 3 8 45
+        puhl 4 8 45
+        puhl 5 8 45
+        puhl 6 8 45
+        puhl 7 26 20
+        puhl 8 26 20
+        rnge 300
+        emit 8 .20
+        perm 60
+        mvsf va00 va01
+        velo rand 30 40 -5
+    repe
+endi
+
+***************************
+* Scripts
+
+scrp 2 11 32403 1
+*	Carrot has been clicked
+    inst
+    doif game "C1_Clickable_Food" = 1
+        doif from = pntr
+            mesg wrt+ ownr 1000 1 0 0
+        endi
+    endi
+endm
+
+scrp 2 11 32403 4
+*	Carrot has been picked up
+    inst
+    lock
+    doif pose = 6
+        pose 7
+    endi
+    attr 199
+    accg 3
+    fric 90
+    aero 10
+endm
+
+scrp 2 11 32403 6
+*	Carrot has collided!
+    inst
+    lock
+    doif pose = 0
+        pose 1
+        attr 23
+        mvby 0 31
+        tick rand 30 90
+    elif pose > 0 and pose < 6
+        attr 23
+        mvby 0 31
+        tick rand 30 90
+    elif pose = 6
+        pose 7
+        tick 0
+        sndc "c1dr"
+    elif pose = 7
+        sndc "c1dr"
+    else
+        doif attr = 23
+            attr 199
+        endi
+    endi
+endm
+
+scrp 2 11 32403 9
+*	Carrot's timer
+    inst
+    lock
+    doif pose = 0
+        pose 1
+        tick rand 100 200
+        elas 20
+    elif pose > 0 and pose < 6
+        setv va20 pose
+        addv va20 1
+        pose va20
+    elif pose = 6
+        bhvr 48
+        attr 7
+        tick 0
+    endi
+endm
+
+scrp 2 11 32403 12
+*	eating a Carrot
+    inst
+    lock
+    snde "chwp"
+    setv va00 posl
+    setv va01 post
+    targ from
+    doif crea targ = 1
+*		chem 3 1.0
+*		chem 5 1.0
+*		chem 10 1.0
+*		chem 12 1.0
+        chem 96 .05
+        stim writ from 79 1
+    endi
+    targ ownr
+    bhvr 0
+    doif pose = 6
+        setv va50 posl
+        subv va50 25
+        addv va50 rand -10 10
+        mvsf va50 post
+        pose 8
+        mesg wrt+ ownr 1000 2 0 rand 20 0
+    elif pose = 7
+        pose 8
+        mesg wrt+ ownr 1000 2 0 rand 20 0
+    else
+        pose 8
+        mesg wrt+ ownr 1000 2 0 rand 20 0
+    endi
+    accg 5
+*bhvr 0
+    attr 215
+    velo 0 5
+    targ carr
+    doif crea targ = 1
+*		drop
+        mesg writ targ 4
+    endi
+endm
+
+scrp 2 11 32403 1000
+    inst
+    lock
+    setv va20 0
+    esee 2 11 32403
+        doif targ <> ownr
+            addv va20 1
+        endi
+    next
+    targ ownr
+    setv va00 posl
+    setv va01 post
+    setv va22 0
+    setv va21 rtyp grap posl post
+    setv va23 rtyp grap posr post
+    doif va20 < 10
+        setv va24 3
+    elif va20 > 10
+        setv va24 1
+    elif va20 = 10
+        setv va24 2
+    endi
+    doif va23 = 5 or va23 = 6 or va23 = 7
+        setv va25 1
+    endi
+    doif va21 = 5 or va21 = 6 or va21 = 7
+        setv va26 1
+    endi
+    doif va25 = 1 and va26 = 1 and _p1_ <> 1 and va20 <= 15
+        setv va22 rand 0 va24
+    elif _p1_ = 1
+        setv va22 1
+    endi
+    doif va22 >= 1
+        reps va22
+            new: simp 2 11 32403 "c1plants" 9 40 7001
+            accg 3
+            fric 100
+            aero 10
+            fric 100
+            elas 0
+            aero 0
+            puhl 0 8 45
+            puhl 1 8 45
+            puhl 2 8 45
+            puhl 3 8 45
+            puhl 4 8 45
+            puhl 5 8 45
+            puhl 6 8 45
+            puhl 7 26 20
+            puhl 8 26 20
+            rnge 300
+            tick rand 100 200
+            emit 8 .20
+            perm 60
+            doif _p1_ = 1
+                pose 7
+                attr 199
+                bhvr 48
+                addv va01 30
+                subv va00 20
+                velo rand -10 10 rand -10 -5
+            else
+                pose 0
+                attr 215
+                bhvr 0
+                velo rand -10 10 rand -10 -5
+            endi
+            mvsf va00 va01
+        repe
+    endi
+    doif _p1_ = 2
+        mesg wrt+ ownr 1001 0 0 rand 20 40
+    endi
+endm
+
+scrp 2 11 32403 1001
+    inst
+    targ ownr
+    kill targ
+endm
+
+***************************
+* Removal scripts
+
+rscr
+enum 2 11 32403
+    kill targ
+next
+scrx 2 11 32403 1
+scrx 2 11 32403 4
+scrx 2 11 32403 6
+scrx 2 11 32403 9
+scrx 2 11 32403 12
+scrx 2 11 32403 1000

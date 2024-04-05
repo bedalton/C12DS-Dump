@@ -1,0 +1,881 @@
+* C1 Overlays
+* There are 170 overlays
+* set ov62 = name "takeme" to make this C3 compatible
+
+* Dependencies:
+*  c1wave.c16
+*  c1bridge.c16
+*  c1kitchen.c16
+*  c1caves.c16
+*  c1caveslighthouse.c16
+*  c1clock.c16
+*  c1coveredbridgeplatform.c16
+*  c1drop.c16
+*  c1ettintemple.c16
+*  c1fann.c16
+*  c1guardrails.c16
+*  c1nornpalace.c16
+*  c1oceanoverlays.c16
+*  c1penants.c16
+*  c1rockscoraletc.c16
+*  c1seabubble
+*  c1smoke.c16
+*  c1stove.c16
+*  c1stovetop.c16
+*  c1table.c16
+*  c1torches.c16
+*  c1vane.c16
+*  c1waterfall.c16
+*  c1windsock.c16
+*  c1xraymachine.c16
+*  bep2.wav
+*  c1c5.wav
+*  c1ca.wav
+*  c1fa.wav
+*  c1fl.wav
+*  c1st.wav
+*  c1ti.wav
+*  c1w1.wav
+*  c1w2.wav
+
+inst
+
+********************************
+* Installers		       *
+********************************
+doif game "C1_to_DS_Loaded" = 1 and totl 1 2 32333 = 0
+
+* C1 Waves
+	setv va03 128
+
+* far left ocean waves
+	setv va00 1564
+	loop
+		new: simp 1 2 32333 "c1wave" 9 0 300
+		mvto va00 10680
+		anim [0 1 2 3 4 5 6 7 8 255]
+		addv va00 va03
+	untl va00 > 1693
+
+	setv va00 541
+	addv va00 8351
+	loop
+		new: simp 1 2 32333 "c1wave" 9 0 300
+		mvto va00 10680
+		anim [0 1 2 3 4 5 6 7 8 255]
+		addv va00 va03
+	untl va00 > 9855
+
+* under dock
+	new: simp 1 2 32333 "c1wave" 9 0 300
+	tick rand 30 50
+
+	mvto 496 10680
+	anim [0 1 2 3 4 5 6 7 8 255]
+
+* under dock copy
+	new: simp 1 2 32333 "c1wave" 9 0 300
+	mvto 8847 10680
+	anim [0 1 2 3 4 5 6 7 8 255]
+
+* inner ocean with wreck
+	setv va00 7210
+	setv va04 1
+	loop
+		new: simp 1 2 32333 "c1wave" 9 0 300
+*		tick rand 180 220
+		mvto va00 10685
+		anim [0 1 2 3 4 5 6 7 8 255]
+		addv va00 va03
+		addv va04 1
+	untl va04 > 9
+
+* left most sub bay
+	setv va00 7148
+	setv va04 1
+	loop
+		new: simp 1 2 32333 "c1wave" 9 0 300
+*		tick rand 180 220
+		mvto va00 10967
+		anim [0 1 2 3 4 5 6 7 8 255]
+		addv va00 va03
+		addv va04 1
+	untl va04 > 2
+
+* right most sub bay
+	setv va00 8145
+	setv va04 1
+	loop
+		new: simp 1 2 32333 "c1wave" 9 0 300
+*		tick rand 180 220
+		mvto va00 10922
+		anim [0 1 2 3 4 5 6 7 8 255]
+		setv va05 va00
+		subv va05 8351
+		addv va00 va03
+		addv va04 1
+	untl va04 > 2
+
+*C1 Grendel Bridge
+
+* Bridge
+	new: simp 1 9 32332 "c1bridge" 1 3 6000
+	mvto 6009 10431
+
+* slanted bamboo
+	new: simp 1 9 32332 "c1bridge" 1 0 6000
+	mvto 5824 10430
+
+* upright bamboo
+	new: simp 1 9 32332 "c1bridge" 1 1 6000
+	mvto 5962 10430
+
+* suspended vine
+	new: simp 1 9 32332 "c1bridge" 1 2 6000
+	mvto 5995 10430
+
+* the bush next to Grendel Mutti
+	new: simp 1 9 32332 "c1bridge" 1 4 6000
+	mvto 6797 10269
+
+*C1 Kitchen Overlays
+* Kitchen lift hole covers, vents, and door covers
+
+* Lift floor hole
+	new: simp 1 10 32332 "c1kitchen" 1 0 6000
+	mvto 3462 10734
+
+* Grain pipe
+	new: simp 1 10 32332 "c1kitchen" 1 1 6000
+	mvto 3649 10724
+
+* Learning Computer Wall
+	new: simp 1 10 32332 "c1kitchen" 1 2 6000
+	mvto 3824 10652
+
+* Stove Vent
+	new: simp 1 10 32332 "c1kitchen" 1 3 6000
+	mvto 3846 10626
+
+* Cable Car Stop
+	new: simp 1 10 32332 "c1kitchen" 1 4 6000
+	mvto 3961 10626
+
+* Front door of norn house
+	new: simp 1 10 32332 "c1kitchen" 1 5 6000
+	mvto 4028 10797
+
+*C1 Lighthouse and Cave Stuff
+
+* ring
+	new: simp 1 14 32332 "c1caveslighthouse" 1 0 6000
+	mvto 1888 10772
+
+
+* metal lattice
+	new: simp 1 14 32332 "c1caveslighthouse" 1 1 6000
+	mvto 1869 10784
+
+* funnel
+	new: simp 1 14 32332 "c1caveslighthouse" 1 2 6000
+	mvto 1848 10832
+
+* wire cage
+	new: simp 1 14 32332 "c1caveslighthouse" 1 3 6000
+	mvto 1841 10956
+
+	new: simp 1 14 32332 "c1caveslighthouse" 1 3 6000
+	mvto 1867 10956
+
+	new: simp 1 14 32332 "c1caveslighthouse" 1 3 6000
+	mvto 1893 10956
+
+	new: simp 1 14 32332 "c1caveslighthouse" 1 4 6000
+	mvto 1922 10956
+
+	new: simp 1 14 32332 "c1caveslighthouse" 1 5 6000
+	mvto 1945 10956
+
+	new: simp 1 14 32332 "c1caveslighthouse" 1 5 6000
+	mvto 1970 10956
+
+	new: simp 1 14 32332 "c1caveslighthouse" 1 5 6000
+	mvto 1997 10956
+
+* wooden support beam
+	new: simp 1 14 32332 "c1caveslighthouse" 1 8 6000
+	mvto 2181 10685
+
+* left tower post
+	new: simp 1 14 32332 "c1caveslighthouse" 1 6 6000
+	mvto 1820 10799
+
+* right tower post
+	new: simp 1 14 32332 "c1caveslighthouse" 1 7 6000
+	mvto 2022 10797
+
+* C1 Overlays
+
+* X Ray Machine
+	new: simp 1 12 32332 "c1xraymachine" 1 0 7000
+	mvto 2527 10996
+
+	new: simp 1 12 32332 "c1xraymachine" 1 1 500
+	mvto 4444 10781
+
+	new: simp 1 12 32332 "c1xraymachine" 1 2 499
+	mvto 4514 10818.900391
+
+* c1rockscoraletc
+
+	new: simp 1 1 32333 "c1rockscoraletc" 1 0 7000
+	mvto 2591 10941
+
+	new: simp 1 1 32333 "c1rockscoraletc" 1 1 7000
+	mvto 3462 10545
+
+	new: simp 1 1 32333 "c1rockscoraletc" 1 2 7000
+	mvto 3419 10746
+
+	new: simp 1 1 32333 "c1rockscoraletc" 1 3 7000
+	mvto 8170 11015
+
+* I don't know where sprite 4 goes!
+
+	new: simp 1 1 32333 "c1rockscoraletc" 1 5 7000
+	mvto 7123 10724
+
+	new: simp 1 1 32333 "c1rockscoraletc" 1 6 7000
+	mvto 7375 10875
+
+	new: simp 1 1 32333 "c1rockscoraletc" 1 7 7000
+	mvto 7960 10870
+
+* I don't know where sprite 8 goes!
+
+	new: simp 1 1 32333 "c1rockscoraletc" 1 9 7000
+	mvto 8682 11099
+
+	new: simp 1 1 32333 "c1rockscoraletc" 1 10 7000
+	mvto 8389 10830
+
+	new: simp 1 1 32333 "c1rockscoraletc" 1 11 7000
+	mvto 8476 10883
+
+* not using sprite 12
+
+	new: simp 1 1 32333 "c1rockscoraletc" 1 13 7000
+	mvto 8467 10663
+
+	new: simp 1 1 32333 "c1rockscoraletc" 1 14 7000
+	mvto 8671 10663
+
+	new: simp 1 1 32333 "c1rockscoraletc" 1 15 7000
+	mvto 8836 10663
+
+	new: simp 1 1 32333 "c1rockscoraletc" 1 16 7000
+	mvto 8164 10625
+
+	new: simp 1 1 32333 "c1rockscoraletc" 1 17 7000
+	mvto 8619 10663
+
+	new: simp 1 1 32333 "c1rockscoraletc" 1 18 7000
+	mvto 8517 10783
+
+	new: simp 1 1 32333 "c1rockscoraletc" 1 19 7000
+	mvto 8104 10755
+
+* the tube
+	new: simp 1 1 32333 "c1rockscoraletc" 1 20 7000
+	mvto 9351 10969
+
+* 21 is unknown
+
+	new: simp 1 1 32333 "c1rockscoraletc" 1 22 7000
+	mvto 9453 10967
+
+	new: simp 1 1 32333 "c1rockscoraletc" 1 23 7000
+	mvto 9435 10863
+
+	new: simp 1 1 32333 "c1rockscoraletc" 1 24 7000
+	mvto 9847 10923
+
+*	new: simp 1 1 32333 "c1rockscoraletc" 1 25 6900
+*	mvto 10052 10996
+
+	new: simp 1 1 32333 "c1rockscoraletc" 1 26 7000
+	mvto 10449 10996
+
+	new: simp 1 1 32333 "c1rockscoraletc" 1 27 7000
+	mvto 8482 10941
+
+	new: simp 1 1 32333 "c1rockscoraletc" 1 28 7000
+	mvto 8766 10962
+
+
+* Ok, now put the same tube overlays on the other end of the world.
+	new: simp 1 1 32333 "c1rockscoraletc" 1 22 7000
+	mvto 1102 10967
+
+	new: simp 1 1 32333 "c1rockscoraletc" 1 23 7000
+	setv va00 9435
+	subv va00 8351
+	mvto va00 10863
+
+	new: simp 1 1 32333 "c1rockscoraletc" 1 24 7000
+	setv va00 9847
+	subv va00 8351
+	mvto va00 10923
+
+	new: simp 1 1 32333 "c1rockscoraletc" 1 25 6900
+	setv va00 10052
+	subv va00 8351
+	mvto va00 10996
+
+	new: simp 1 1 32333 "c1rockscoraletc" 1 26 7000
+	mvto 2098 10996
+
+*	Last minute additions - dock
+	new: simp 1 1 32333 "c1rockscoraletc" 1 29 7000
+	mvto 7176 10681
+
+	new: simp 1 1 32333 "c1rockscoraletc" 1 30 7000
+	mvto 7487 10774
+
+	new: simp 1 1 32333 "c1rockscoraletc" 1 31 7000
+	mvto 7221 10665
+
+
+	new: simp 1 1 64401 "c1vane" 8 0 0
+	mvto 3804 10520
+	mvto 1804 18520
+	anim [0 1 2 3 4 5 6 7 255]
+
+	new: simp 1 1 64401 "c1stove" 8 0 0
+	mvto 3767 10870
+	anim [0 1 2 3 4 5 6 7 255]
+	sndl "c1st"
+
+	new: simp 1 1 64401 "c1waterfall" 8 0 0
+	mvto 2664 10595
+	anim [0 1 2 3 4 5 6 7 255]
+	sndl "c1fa"
+
+	new: simp 1 1 64401 "c1waterfall" 8 0 0
+	mvto 11015 10595
+	anim [0 1 2 3 4 5 6 7 255]
+	sndl "c1fa"
+
+	new: simp 1 1 64401 "c1windsock" 8 0 0
+	mvto 10271 10184
+	anim [0 1 2 3 4 5 6 7 255]
+	sndl "c1fl"
+
+	new: simp 1 1 64401 "c1windsock" 8 0 0
+	mvto 1920 10184
+	anim [0 1 2 3 4 5 6 7 255]
+	sndl "c1fl"
+
+	new: simp 1 1 64401 "c1penants" 5 0 0
+	mvto 5384 10365
+	anim [0 1 2 3 4 255]
+	sndl "c1fl"
+
+	new: simp 1 1 64401 "c1smoke" 4 0 0
+	mvto 3924 10610
+	anim [0 1 2 3 255]
+
+	new: simp 1 1 64401 "c1fann" 1 0 1
+	mvto 3826 10594
+
+	new: simp 1 1 64401 "c1fann" 1 1 0
+	mvto 3724 10587
+
+	new: simp 1 1 64401 "c1fann" 1 2 2
+	mvto 3794 10588
+
+* Rocks
+	new: simp 1 13 32332 "c1seabubble" 1 0 7000
+	mvto 8828 10731
+
+* outer bubble
+	new: simp 1 13 32332 "c1seabubble" 1 1 7000
+	mvto 8906 10735
+
+* inner bubble
+	new: simp 1 13 32332 "c1seabubble" 1 2 5
+	mvto 8916 10825
+
+* New overlays 2002-12-10
+	new: simp 1 1 32333 "c1coveredbridgeplatform" 1 0 7000
+	mvto 5554 10435
+
+	new: simp 1 1 32333 "c1coveredbridgeplatform" 1 1 7000
+	mvto 5378 10398
+
+	new: simp 1 1 32333 "c1coveredbridgeplatform" 1 2 7000
+	mvto 5659 10364
+
+	new: simp 1 1 32333 "c1coveredbridgeplatform" 1 3 7000
+	mvto 6933 10526
+
+	new: simp 1 1 32333 "c1coveredbridgeplatform" 1 4 7000
+	mvto 5287 10750
+
+	new: simp 1 1 32333 "c1coveredbridgeplatform" 1 5 7000
+	mvto 5659 10221
+
+	new: simp 1 1 32333 "c1coveredbridgeplatform" 1 6 7000
+	mvto 5550 10343
+
+	new: simp 1 1 32333 "c1coveredbridgeplatform" 1 7 7000
+	mvto 5369 10417
+
+	new: simp 1 1 32333 "c1guardrails" 1 0 7000
+	mvto 1712 10519
+
+	new: simp 1 1 32333 "c1guardrails" 1 1 7000
+	mvto 2238 10914
+
+	new: simp 1 1 32333 "c1guardrails" 1 2 7000
+	mvto 2514 10519
+
+	new: simp 1 1 32333 "c1guardrails" 1 3 7000
+	mvto 2671 10526
+
+	new: simp 1 1 32333 "c1guardrails" 1 4 7000
+	mvto 2266 10417
+
+	new: simp 1 1 32333 "c1guardrails" 1 5 7000
+	mvto 1869 10433
+
+	new: simp 1 1 32333 "c1guardrails" 1 6 7000
+	mvto 1868 10591
+
+	new: simp 1 1 32333 "c1guardrails" 1 7 7000
+	mvto 2031 10485
+
+	new: simp 1 1 32333 "c1guardrails" 1 8 7000
+	mvto 2097 10552
+
+	new: simp 1 1 32333 "c1nornpalace" 1 0 7000
+	mvto 2767 10473
+
+	new: simp 1 1 32333 "c1nornpalace" 1 1 7000
+	mvto 3088 10481
+
+	new: simp 1 1 32333 "c1nornpalace" 1 2 7000
+	mvto 2769 10591
+
+	new: simp 1 1 32333 "c1nornpalace" 1 2 7000
+	mvto 3087 10591
+
+	new: simp 1 1 32333 "c1nornpalace" 1 3 7000
+	mvto 2769 10604
+
+	new: simp 1 1 32333 "c1nornpalace" 1 3 7000
+	mvto 2852 10604
+
+	new: simp 1 1 32333 "c1nornpalace" 1 3 7000
+	mvto 3086 10604
+
+	new: simp 1 1 32333 "c1nornpalace" 1 3 7000
+	mvto 3172 10604
+
+	new: simp 1 1 32333 "c1nornpalace" 1 4 7000
+	mvto 3088 10680
+
+	new: simp 1 1 32333 "c1nornpalace" 1 4 7000
+	mvto 2769 10680
+
+	new: simp 1 1 32333 "c1nornpalace" 1 5 7000
+	mvto 2854 10681
+
+	new: simp 1 1 32333 "c1nornpalace" 1 6 7000
+	mvto 3079 10681
+
+	new: simp 1 1 32333 "c1nornpalace" 1 7 7000
+	mvto 2384 11017
+
+	new: simp 1 1 32333 "c1nornpalace" 1 8 7000
+	mvto 3073 10928
+
+	new: simp 1 1 32333 "c1nornpalace" 1 9 7000
+	mvto 2944 10798
+
+	new: simp 1 1 32333 "c1nornpalace" 1 10 7000
+	mvto 2765 10799
+
+	new: simp 1 1 32333 "c1nornpalace" 1 11 7000
+	mvto 2848 10797
+
+	new: simp 1 1 32333 "c1nornpalace" 1 12 7000
+	mvto 3160 10800
+
+	new: simp 1 1 32333 "c1nornpalace" 1 13 7000
+	mvto 3069 10799
+
+	new: simp 1 1 32333 "c1nornpalace" 1 14 7000
+	mvto 2728 10295
+
+	new: simp 1 1 32333 "c1nornpalace" 1 15 7000
+	mvto 3048 10236
+
+	new: simp 1 1 32333 "c1nornpalace" 1 16 7000
+	mvto 2763 10786
+
+	new: simp 1 1 32333 "c1nornpalace" 1 17 7000
+	mvto 2876 10550
+
+	new: simp 1 1 32333 "c1nornpalace" 1 18 7000
+	mvto 2755 10931
+
+	new: simp 1 1 32333 "c1nornpalace" 1 19 7000
+	mvto 2227 10956
+
+	new: simp 1 1 32333 "c1nornpalace" 1 20 7000
+	mvto 3066 10787
+
+	new: simp 1 1 32333 "c1nornpalace" 1 21 7000
+	mvto 3185 10691
+
+* C1 Ettin Temple
+	new: simp 1 1 32333 "c1ettintemple" 1 0 7000
+	mvto 5833 10925
+
+	new: simp 1 1 32333 "c1ettintemple" 1 1 7000
+	mvto 6199 10926
+
+	new: simp 1 1 32333 "c1ettintemple" 1 2 7000
+	mvto 5836 11051
+
+	new: simp 1 1 32333 "c1ettintemple" 1 3 7000
+	mvto 6188 11060
+
+	new: simp 1 1 32333 "c1ettintemple" 1 4 7000
+	mvto 6028 10944
+
+	new: simp 1 1 32333 "c1ettintemple" 1 5 7000
+	mvto 5973 10800
+
+	new: simp 1 1 32333 "c1ettintemple" 1 6 7000
+	mvto 6290 10802
+
+	new: simp 1 1 32333 "c1ettintemple" 1 7 7000
+	mvto 6045 10882
+
+	new: simp 1 1 32333 "c1ettintemple" 1 8 7000
+	mvto 6190 11096
+
+	new: simp 1 1 32333 "c1ettintemple" 1 9 7000
+	mvto 5852 11096
+
+	new: simp 1 1 32333 "c1ettintemple" 1 10 7000
+	mvto 6279 10931
+
+	new: simp 1 1 32333 "c1ettintemple" 1 11 7000
+	mvto 6409 10876
+
+	new: simp 1 1 32333 "c1ettintemple" 1 12 7000
+	mvto 6952 10660
+
+* C1 Shelves
+
+* Sheif
+	new: vhcl 1 7 32332 "c1stovetop" 1 4 1
+
+	cabp 1
+	attr 520
+	accg 0
+	aero 100
+	fric 100
+	bhvr 0
+	elas 0
+	perm 60
+	mvto 3195 10607
+
+* stove shelf
+	new: vhcl 1 7 32332 "c1stovetop" 0 0 0
+	attr 520
+	cabn -60 0 105 103
+	accg 0
+	aero 100
+	fric 100
+	bhvr 0
+	elas 0
+	perm 60
+	mvto 3814 10766
+
+* stove vent
+	new: simp 1 7 32332 "c1stovetop" 1 1 200
+	mvto 3812 10764
+
+* Hooch shelf
+	new: vhcl 1 7 32332 "c1stovetop" 1 2 0
+	attr 520
+	accg 0
+	aero 100
+	fric 100
+	bhvr 0
+	elas 0
+	perm 60
+	mvto 2939 10941
+
+	new: simp 1 1 32333 "c1stovetop" 1 2 7000
+	mvto 2939 10941
+
+* Greenhouse
+	new: vhcl 1 7 32332 "c1stovetop" 1 3 7000
+	cabn 45 53 200 123
+	cabp 1
+	attr 520
+	accg 0
+	aero 100
+	fric 100
+	bhvr 0
+	elas 0
+	perm 60
+	mvto 4785 10759
+
+* Kitchen Table
+	new: vhcl 1 7 32332 "c1table" 1 0 0
+	attr 520
+	accg 0
+	aero 100
+	fric 100
+	bhvr 0
+	elas 0
+	perm 60
+	mvto 3949 10753
+
+* vent over table
+	new: simp 1 7 32332 "c1table" 1 1 200
+	mvto 3951 10754
+
+* C1 Clocks
+	new: comp 2 24 32392 "c1clock" 5 0 2
+	pat: dull 1 "c1clock" 5 18 13 1
+	attr 4
+	frat 1.65
+	mvto 3926 10780
+	anim [0 1 2 3 4 3 2 1 255]
+	tick 80
+	rnge 300
+	sndl "c1ti"
+
+	new: comp 2 24 32392 "c1clock" 5 0 2
+	pat: dull 1 "c1clock" 5 18 13 1
+	attr 4
+	frat 1.65
+	mvto 7072 10413
+	mvto 5072 18413
+	anim [0 1 2 3 4 3 2 1 255]
+	tick 80
+	rnge 300
+	sndl "c1ti"
+
+* Adding torches
+	new: simp 1 1 32333 "c1torches" 4 0 2
+	anim [0 1 2 3 255]
+	mvto 6003 10956
+
+	new: simp 1 1 32333 "c1torches" 4 0 2
+	anim [2 3 0 1 255]
+	mvto 6077 10954
+
+	new: simp 1 1 32333 "c1torches" 4 0 2
+	anim [1 2 3 0 255]
+	mvto 6158 10954
+
+	new: simp 1 1 32333 "c1torches" 4 0 2
+	anim [3 0 1 2 255]
+	mvto 6324 10954
+
+	new: simp 1 1 32333 "c1torches" 4 0 2
+	anim [3 0 1 2 255]
+	mvto 7077 11000
+
+	new: simp 1 1 32333 "c1torches" 4 0 2
+	anim [3 0 1 2 255]
+	mvto 7162 10824
+
+* Stalactites
+	new: simp 1 1 32333 "c1stalactites" 4 0 300
+	mvto 7161 10779
+
+* Drops
+	new: simp 1 5 32333 "c1drop" 6 0 2
+	frat 1.65
+	tick rand 41 61
+	mvto 7099 10906
+
+	new: simp 1 5 32333 "c1drop" 6 0 2
+	frat 1.65
+	tick rand 61 81
+	mvto 7120 10906
+
+	new: simp 1 5 32333 "c1drop" 6 0 2
+	frat 1.65
+	tick rand 81 101
+	mvto 6951 11120
+
+
+* c1caves (new 2002-12-21)
+	new: simp 1 1 32333 "c1caves" 1 0 7000
+	mvto 3172 10925
+
+	new: simp 1 1 32333 "c1caves" 1 1 7000
+	mvto 4256 10984
+
+	new: simp 1 1 32333 "c1caves" 1 2 7000
+	mvto 5289 10913
+
+	new: simp 1 1 32333 "c1oceanoverlays" 1 0 7000
+	mvto 2095 10794
+
+endi
+
+********************************
+* Scripts			       *
+********************************
+
+scrp 1 2 32333 9
+*	waves timer
+	rtar 1 2 32333
+*	doif rand 1 100 > 50
+	doif rand 1 2 = 1
+		snde "c1w1"
+	else
+		snde "c1w2"
+	endi
+*	endi
+endm
+
+scrp 1 5 32333 9
+*	cave drop timer
+	sndc "c1ca"
+	anim [0 1 2 3 4 5 0]
+endm
+
+scrp 1 7 32332 124
+	inst
+	lock
+	epas 0 0 0
+		setv va70 gnus
+		divv va70 100.00
+		addv va70 fmly
+		doif ov62 = 1
+*			it's Ok, I said so.
+		elif touc ownr pntr = 1 and va70 < 4 and va70 <> 3.04
+*			it's Ok, the hand put it here
+		else
+*			Eject any creatures and eggs or things the hand did not place here
+			rpas ownr targ
+		endi
+	next
+endm
+
+scrp 1 7 32332 1001
+	inst
+	gpas _p1_ _p2_ 0 0
+	targ pntr
+	sndc "bep2"
+*	delg ov62
+endm
+
+scrp 2 24 32392 1
+*	clock pushed
+	sndc "c1c5"
+	part 1
+	anim [1 1 2 2 3 3 4 4 5 5 5 5 5 5 5 4 3 2 1 0]
+	over
+	sndl "c1ti"
+endm
+
+scrp 2 24 32392 9
+*	clock timer
+	inst
+	esee 4 0 0
+		chem 158 -1.0
+		chem 160 -1.0
+		chem 162 -1.0
+	next
+endm
+
+
+********************************
+* Removers			       *
+********************************
+rscr
+inst
+lock
+
+* Basic overlays
+enum 1 1 64401
+	kill targ
+next
+
+* C1 Waves
+enum 1 2 32333
+	kill targ
+next
+
+* C1 drops
+enum 1 5 32333
+	kill targ
+next
+scrx 1 5 32333 9
+
+* Grendelbridge
+enum 1 9 32332
+	kill targ
+next
+
+* Kitchen
+enum 1 10 32332
+	kill targ
+next
+
+* C1 Lighthouse
+enum 1 14 32332
+	kill targ
+next
+
+* C1 Overlays
+enum 1 12 32332
+	kill targ
+next
+
+* C1 Rocks, Coral, Etc.
+enum 1 1 32333
+	kill targ
+next
+
+* Basic Overlays
+enum 1 1 64401
+	kill targ
+next
+
+* Sea Bubble
+enum 1 13 32332
+	kill targ
+next
+
+* Ettin Temple
+enum 1 1 32333
+	kill targ
+next
+
+* Shelves
+enum 1 7 32332
+	kill targ
+next
+scrx 1 7 32332 124
+scrx 1 7 32332 1001
+
+* Clocks
+enum 2 24 32392
+	kill targ
+next
+scrx 2 24 32392 1
+scrx 2 24 32392 9

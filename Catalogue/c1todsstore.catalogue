@@ -1,0 +1,117 @@
+TAG "C1toDS Store Quantity"
+"22"
+
+TAG "C1toDS Store 0"
+"new: vhcl 2 13 32302 "
+"c1carrotbeetle"
+" 18 0 600 attr 199 bhvr 57 accg 2 elas 0 aero 10 perm 60 tick rand 2 3 cabn -15 -25 16 47 rnge 1999 fric 20 setv ov50 8"
+
+TAG "C1toDS Store 1"
+"new: simp 2 21 32316 "
+"c1breakablejug" 
+" 7 0 200 attr 199 accg 3 bhvr 33 fric 90 aero 0 elas 40 perm 70"
+
+TAG "C1toDS Store 2"
+"new: simp 2 21 32319 "
+"c1teddy" 
+" 7 0 200 attr 199 accg 3 bhvr 33 fric 90 aero 0 elas 0 perm 70"
+
+TAG "C1toDS Store 3"
+"new: simp 2 11 32403 "
+"c1plants" 
+" 9 40 7001	pose 7 accg 3 attr 199 fric 100 elas 0 aero 0 bhvr 48 puhl 0 8 45 puhl 1 8 45 puhl 2 8 45 puhl 3 8 45 puhl 4 8 45 puhl 5 8 45 puhl 6 8 45 puhl 7 26 20 puhl 8 26 20 rnge 300 emit 8 .20 perm 60"
+
+TAG "C1toDS Store 4"
+"new: simp 2 11 32300 "
+"c1cheese"
+" 3 0 200 attr 199 accg 5 aero 10 fric 100 bhvr 48 elas 0 perm 60 pose 2 emit 8 .3"
+
+TAG "C1toDS Store 5"
+"new: simp 2 3 32315 "
+"c1coconut"
+" 6 0 200 attr 199 bhvr 48 accg 0 aero 0 elas 0 perm 0 emit 7 0.3"
+
+TAG "C1toDS Store 6"
+"new: simp 2 25 32302 "
+"c1coffeepot"
+" 2 0 200 attr 199 pose 1 bhvr 48 elas 1 accg 5 fric 95 perm 60"
+
+TAG "C1toDS Store 7"
+"new: simp 2 7 32396 "
+"c1plants"
+" 2 18 101 fric 100 aero 10 elas 0 bhvr 48 perm 60 pose 1 accg 3 attr 199 aero 10"
+
+TAG "C1toDS Store 8"
+"new: simp 2 7 32400 "
+"c1plants"
+" 2 29 7001 puhl 0 18 18 puhl 1 18 18 attr 199 fric 100 elas 0 aero 0 bhvr 48 perm 60 accg 3"
+
+TAG "C1toDS Store 9"
+"new: simp 2 11 32301 "
+"c1beehivehoney"
+" 3 13 502 attr 199 elas 0 fric 100 aero 10 accg 5 bhvr 48 perm 60 emit 8 0.5 setv ov99 5"
+
+TAG "C1toDS Store 10"
+"new: simp 2 9 32300 "
+"c1hoochcups"
+" 2 0 502 attr 199 elas 0 fric 100 aero 10 accg 5 bhvr 48 perm 60 setv ov62 1"
+
+TAG "C1toDS Store 11"
+"new: simp 2 21 32307 "
+"c1jackinthebox"
+" 19 0 200 attr 199 accg 5 bhvr 25 fric 12.5 aero 10 elas 30 perm 60 puhl 0 32 40 puhl 1 32 40 puhl 2 32 40 puhl 3 32 40 puhl 4 32 40 puhl 5 32 40 puhl 6 32 40 puhl 7 32 40 puhl 8 32 40"
+
+TAG "C1toDS Store 12"
+"new: vhcl 2 8 32390 "
+"c1plants"
+" 3 0 101 cabp 0 cabw 1 cabn -10 -25 34 4 pose 2 accg 5 attr 719 fric 100 elas 0 aero 10 bhvr 48 perm 60 emit 6 .20"
+
+TAG "C1toDS Store 13"
+"new: simp 2 7 32397 "
+"c1plants"
+" 2 21 101 mira 1 accg 5 attr 199 fric 100 elas 0 aero 10 bhvr 48 perm 60"
+
+TAG "C1toDS Store 14"
+"new: simp 2 5 32393 "
+"c1plants"
+" 2 10 101 puhl 0 16 16 puhl 1 16 16 accg 5 attr 199 fric 100 elas 0 aero 10 bhvr 48 perm 60"
+
+TAG "C1toDS Store 15"
+"new: simp 2 11 32391 "
+"c1plants"
+" 48 3 7002 pose 0 accg 3 attr 199 fric 100 elas 0 aero 0 bhvr 48 puhl 0 14 35 puhl 1 14 35 puhl 2 14 35 rnge 300 emit 8 .20 perm 60"
+
+TAG "C1toDS Store 16"
+"new: simp 2 21 32311 "
+"c1radio"
+" 0 0 200 attr 199 accg 5 bhvr 25 fric 12.5 aero 10 elas 0 perm 60 frat 1.5"
+
+TAG "C1toDS Store 17"
+"new: simp 2 21 32314 "
+"c1ball" 
+" 7 0 200 attr 199 accg 3 bhvr 33 fric 90 aero 0 elas 75 pose 6 perm 70 tick 2"
+
+TAG "C1toDS Store 18"
+"new: simp 2 21 32305 "
+"c1robot"
+" 8 0 200 attr 199 accg 5 bhvr 25 fric 12.5 aero 10 elas 25 perm 60"
+
+TAG "C1toDS Store 19"
+"new: simp 2 3 32314 "
+"c1seeds"
+" 4 1 200 setv ov99 1 attr 199 bhvr 48 accg .8 aero 0 elas 25 perm 60 emit 7 0.3"
+
+TAG "C1toDS Store 20"
+"new: simp 2 8 32398 "
+"c1plants"
+" 1 24 101 mira 1 emit 6 .20 accg 5 attr 199 fric 100 elas 0 aero 0 bhvr 48 perm 60"
+
+TAG "C1toDS Store 21"
+"new: simp 2 21 1160 "
+"c1top"
+" 0 0 5000 attr 199 bhvr 41 accg 5 elas 0 fric 90 aero 10 perm 60 tick 1 setv ov99 0 setv ov98 180 addv ov91 5"
+
+TAG "C1toDS Store 22"
+"new: simp 2 5 32394 "
+"c1plants"
+" 1 13 101 elas 0 bhvr 48 perm 60 accg 5 fric 100 aero 10 attr 199"

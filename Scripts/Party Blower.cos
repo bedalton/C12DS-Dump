@@ -1,0 +1,174 @@
+****************************
+* C1 PartyBlower
+****************************
+
+* Dependencies:
+*  c1partyblower.c16
+*  c1d2.wav
+*  c1p9.wav
+
+* Installers
+inst
+
+new: simp 2 21 32318 "c1partyblower" 0 0 200
+attr 199
+accg 2
+bhvr 41
+fric 90
+aero 10
+elas 0
+perm 60
+puhl 0 0 12
+puhl 1 0 12
+puhl 2 0 12
+puhl 3 0 12
+pupt 0 0 12
+pupt 1 0 12
+pupt 2 0 12
+pupt 3 0 12
+tick 20
+
+doif game "C1_to_DS_Loaded" = 1 and totl 2 21 32318 <= 1
+* 	PartyBlower in ocean tunnel
+	mvsf 8807 11056
+elif type game "ds_game_type" ne 2
+* 	it's NOT a string, this must be C3 only
+* 	choose a safe C3 location
+	setv va00 5440
+	setv va01 3580
+	velo rand 30 40 -5
+	mvsf va00 va01
+else
+* 	it IS a string, but what is the value?
+	doif game "ds_game_type" eq "undocked"
+* 		this is an undocked world, location needs to be DS safe
+		setv va00 6100
+		setv va01 9200
+		velo rand 30 40 -5
+		mvsf va00 va01
+	elif game "ds_game_type" eq "docked"
+* 		this is a docked world, location can be anywhere in the DS/C3 realm
+		setv va00 6100
+		setv va01 9200
+		velo rand 30 40 -5
+		mvsf va00 va01
+	endi
+endi
+
+****************************
+* Scripts
+
+
+scrp 2 21 32318 1
+*	PartyBlower is pushed
+	inst
+*	doif carr <> from and from <> pntr
+	stim writ from 97 1.0
+	targ from
+	doif crea targ = 1
+		zomb 1
+		setv va22 dirn
+		doif dirn = 0 or dirn = 1
+			dirn rand 2 3
+			setv va22 dirn
+		endi
+		urge writ targ 21 2.0 6 2.0
+		lock
+		wait 2
+		inst
+		targ ownr
+		stpc
+	endi
+	targ ownr
+	sndc "c1p9"
+	anim [0 1 2 3 2 1 0]
+	slow
+	targ from
+	doif crea targ = 1
+		done
+		zomb 0
+		urge writ targ -1 2.0 -1 2.0
+		wait rand 20 80
+	endi
+endm
+
+scrp 2 21 32318 3
+*	PartyBlower is hit
+	inst
+	lock
+	stim writ from 0 1
+	velo rand -10 10 rand -10 -20
+	sndc "c1d2"
+	setv ov00 0
+endm
+
+scrp 2 21 32318 4
+*	PartyBlower is picked up	
+endm
+
+scrp 2 21 32318 5
+*	PartyBlower is dropped
+endm
+
+scrp 2 21 32318 6
+*	PartyBlower collides
+	inst
+	lock
+	doif ov00 = 0
+		doif vely < 10 or vely > 10
+			stpc
+			sndc "c1d2"
+		elif vely > -2 and vely < 2
+			stpc
+		endi
+	endi
+	pose 0
+endm
+
+scrp 2 21 32318 9
+*	party blower timer
+	inst
+	doif carr <> null
+		targ carr
+		doif crea targ = 1
+			setv va22 dirn
+			doif va22 = 2
+				mira 0
+*				doif pose >= 4
+*					setv va23 pose
+*					subv va23 4
+*					pose va23
+*				endi
+			elif va22 = 3
+				mira 1
+*				doif pose < 4
+*					setv va23 pose
+*					addv va23 4
+*					pose va23
+*				endi
+			endi
+		endi
+	endi
+endm
+
+scrp 2 21 32318 12
+*	PartyBlower is bitten
+	inst
+	lock
+	stim writ from 0 1
+	setv ov00 0
+endm
+
+****************************
+* Removers
+
+* PartyBlower remover
+rscr
+enum 2 21 32318
+	kill targ
+next
+scrx 2 21 32318 1
+scrx 2 21 32318 3
+scrx 2 21 32318 4
+scrx 2 21 32318 6
+scrx 2 21 32318 12

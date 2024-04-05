@@ -1,0 +1,464 @@
+* Albian Carrot Beetle
+
+* Fixed bug: carrot beetle stopped farming in Albia if all carrots were consumed.
+
+* Install
+
+inst
+new: vhcl 2 13 32302 "c1carrotbeetle" 18 0 600
+attr 199
+bhvr 57
+accg 2
+elas 0
+aero 10
+perm 60
+tick rand 2 3
+cabn -15 -25 16 47
+rnge 1999
+fric 20
+
+* speed (default to 8)
+setv ov50 8
+
+doif game "C1_to_DS_Loaded" = 1 and totl 2 13 32302 <= 1
+*	C1 to DS
+	mvto 4580 10892
+elif type game "ds_game_type" ne 2
+* 	it's NOT a string, this must be C3 only
+* 	choose a safe C3 location
+	setv va00 5440
+	setv va01 3580
+	velo rand 30 40 -5
+	mvsf va00 va01
+else
+* 	it IS a string, but what is the value?
+	doif game "ds_game_type" eq "undocked"
+* 		this is an undocked world, location needs to be DS safe
+		setv va00 6100
+		setv va01 9200
+		velo rand 30 40 -5
+		mvsf va00 va01
+	elif game "ds_game_type" eq "docked"
+* 		this is a docked world, location can be anywhere in the DS/C3 realm
+		setv va00 6100
+		setv va01 9200
+		velo rand 30 40 -5
+		mvsf va00 va01
+	endi
+endi
+
+scrp 2 13 32302 1
+*	Play with carrot beetle (carrot beetle doesn't like that!)
+	inst
+	setv ov99 3
+	stim writ from 85 1.0
+	sndc "c1bg"
+	doif rand 0 1 = 0
+		mira 1
+		anim [6 16 15 14 13 12 11 10 255]
+		velo 15 -15
+	else
+		mira 0
+		anim [6 16 15 14 13 12 11 10 255]
+		velo -15 -15
+	endi
+endm
+
+scrp 2 13 32302 3
+*	hit carrot beetle
+	inst
+	setv ov99 3
+	stim writ from 87 1.0
+	slow
+	sndc "c1b5"
+*	look squished for a second	
+	anim [9 9 9 9 9 9 9 9 9 6]
+	over
+	inst
+	stpc
+	sndc "c1bg"
+	doif rand 0 1 = 0
+		mira 1
+		anim [6 16 15 14 13 12 11 10 255]
+		velo 15 -15
+	else
+		mira 0
+		anim [6 16 15 14 13 12 11 10 255]
+		velo -15 -15
+	endi
+endm
+
+scrp 2 13 32302 4
+*	pickup carrot beetle
+	inst
+	setv ov99 2
+	stpc
+	sndc "c1bg"
+	anim [6 10 6 16 6 7 255]
+endm
+
+scrp 2 13 32302 5
+*	dropped carrot beetle
+	inst
+	doif rand 0 1 = 0
+		mira 1
+		anim [6 16 15 14 13 12 11 10 255]
+		setv ov99 1
+	else
+		mira 0
+		anim [6 16 15 14 13 12 11 10 255]
+		setv ov99 -1
+	endi
+endm
+
+scrp 2 13 32302 6
+*	carrot beetle collides
+	inst
+	doif ov99 = 2
+		setv ov99 rand 0 1
+	endi
+	doif velx = 0 and vely = 0
+		pose 6
+	endi
+	stpc
+	doif wall = down
+		setv ov99 rand 0 1
+	endi
+	doif wall = left
+		setv ov99 1
+	elif wall = rght
+		setv ov99 -1
+	endi
+	tick rand 2 3
+endm
+
+scrp 2 13 32302 9
+*	carrot beetle timer
+	inst
+* 	move - and let's make sure you are near a carrot
+	doif movs = 4
+		anim [6 10 6 16 6 7 255]
+		setv ov99 2
+	elif movs = 0 and pose >= 10 and obst down < 5
+		pose 6
+		velo 0 -2
+	elif ov99 <= 1 and obst down < 5
+		setv va20 10000000
+		esee 2 11 1
+			addv va04 1
+			doif sqrt disq ownr < va20 and seee ownr targ = 1
+				seta va21 targ
+				setv va00 posl
+				setv va01 post
+				setv va02 posr
+				setv va03 posb
+				setv va20 sqrt disq ownr
+			endi
+		next
+		targ ownr
+		doif va04 >= 1 and va04 <= 8 and movs = 0
+*			critically low on C3 carrots
+			targ va21
+			seta va23 twin va21 0
+			addv va00 rand -50 50
+			targ va23
+			pose 0
+			bhvr 48
+			mvsf va00 va01
+			velo 0 1
+		endi
+		esee 2 11 9
+			addv va05 1
+			doif sqrt disq ownr < va20 and seee ownr targ = 1
+				seta va21 targ
+				setv va00 posl
+				setv va01 post
+				setv va02 posr
+				setv va03 posb
+				setv va20 sqrt disq ownr
+			endi
+		next
+		targ ownr
+		doif va05 >= 1 and va05 <= 8 and movs = 0
+*			critically low on DS carrots
+			targ va21
+			seta va23 twin va21 0
+			addv va00 rand -50 50
+			targ va23
+			pose 0
+			bhvr 48
+			attr 194
+			mvsf va00 va01
+			velo 0 1
+		endi
+		esee 2 11 32403
+			addv va06 1
+			doif sqrt disq ownr < va20 and seee ownr targ = 1
+				seta va21 targ
+				setv va00 posl
+				setv va01 post
+				setv va02 posr
+				setv va03 posb
+				setv va20 sqrt disq ownr
+			endi
+		next
+		enum 2 11 32403
+			doif posl >= 0 and posl <= 11520 and post >= 10000 and post <= 11196
+				addv va07 1
+			endi
+		next
+		esee 2 11 32302
+			addv va08 1
+			doif sqrt disq ownr < va20 and seee ownr targ = 1
+				seta va21 targ
+				setv va00 posl
+				setv va01 post
+				setv va02 posr
+				setv va03 posb
+				setv va20 sqrt disq ownr
+			endi
+		next
+		targ ownr
+		doif va07 <= 8
+*			critically low on C1 to DS carrots in Albia
+			new: simp 2 11 32403 "c1plants" 9 40 7001
+			pose 1
+			accg 3
+			attr 7
+			fric 100
+			elas 0
+			aero 0
+			bhvr 48
+			puhl 0 8 45
+			puhl 1 8 45
+			puhl 2 8 45
+			puhl 3 8 45
+			puhl 4 8 45
+			puhl 5 8 45
+			puhl 6 8 45
+			puhl 7 26 20
+			puhl 8 26 20
+			rnge 300
+			emit 8 .20
+			perm 60
+			setv va00 rand 4400 4780
+			tick rand 30 90
+			setv va01 10883
+			mvto va00 va01
+		endi
+		doif va07 >= 1 and va07 <= 8 and movs = 0
+*			critically low on C1 to DS carrots
+			new: simp 2 11 32403 "c1plants" 9 40 7001
+			pose 1
+			accg 3
+			attr 7
+			fric 100
+			elas 0
+			aero 0
+			bhvr 48
+			puhl 0 8 45
+			puhl 1 8 45
+			puhl 2 8 45
+			puhl 3 8 45
+			puhl 4 8 45
+			puhl 5 8 45
+			puhl 6 8 45
+			puhl 7 26 20
+			puhl 8 26 20
+			rnge 300
+			emit 8 .20
+			perm 60
+			setv va00 rand 4400 4780
+			tick rand 30 90
+			setv va01 10883
+			mvto va00 va01
+		endi
+		doif va08 >= 1 and va08 <= 8 and movs = 0 and game "C1_EC_Farm" = 1
+*			critically low on C1 to DS ec
+			new: simp 2 11 32302 "c1plants" 1 47 200
+			seta va04 targ
+			tint 128 255 128 2 145
+			accg 3
+			attr 199
+			fric 100
+			elas 0
+			aero 0
+			bhvr 48
+			puhl 0 26 20
+			rnge 300
+			emit 8 .20
+			perm 60
+			setv va03 0
+			setv va10 1
+			mvsf va00 va01
+			velo rand -10 10 rand -10 -5
+		endi
+
+		targ ownr
+		doif va20 >= 100 and va20 < 2000 and movs = 0
+			doif posl > va02
+				setv ov99 -1
+			endi
+			doif posr < va00
+				setv ov99 1
+			endi
+		else
+*			choose a direction	
+			inst
+			setv va22 rand 1 20
+			doif va22 >= 20
+				doif mira = 0
+					setv ov99 1
+				else
+					setv ov99 -1
+				endi
+			elif va22 <= 1
+				setv ov99 0
+			endi
+		endi
+* 	see if you are touching a known carrot type
+		ttar 2 11 32403
+		doif targ = null
+			ttar 2 11 32404
+			doif targ = null
+				ttar 2 11 9
+				doif targ = null
+					ttar 2 11 1
+					doif targ = null
+						ttar 2 11 32302
+					endi
+				endi
+			endi
+		endi
+
+		inst
+		seta va15 targ
+		targ ownr
+		doif va15 <> null and movs = 0
+*		yes, you are touching a viable carrot and you are moving about freely
+			targ va15
+			doif bhvr >= 32 and rand 1 6 = 6
+				spas ownr va15
+				targ ownr
+				inst
+				velo 0 0
+				fric 100
+				pose 6
+				wait rand 11 21
+				inst
+				targ va15
+				doif targ <> null
+					setv va50 posx
+					setv va51 posy
+					addv va50 rand -10 10
+					mesg writ targ 12
+				endi
+			endi
+		endi
+
+		inst
+*		turn if needed
+		targ ownr
+		doif velx < 0 and ov99 = 1
+			fric 100
+			anim [7 7 7 8 8 8]
+			over
+			inst
+			velo 0 0
+			mira 1
+			anim [7 7 7 6 6 6]
+			over
+			inst
+		elif velx > 0 and ov99 = -1
+			fric 100
+			anim [7 7 7 8 8 8]
+			over
+			inst
+			velo 0 0
+			mira 0
+			anim [7 7 7 6 6 6]
+			over
+			inst
+		endi
+
+		inst
+*		go forward or stop
+		doif ov99 = 1 or ov99 = -1
+			setv va60 rand 3 7
+			mulv va60 ov99
+			doif ov99 = 1
+				mira 1
+			else
+				mira 0
+			endi
+			anim [0 1 2 3 4 5 6 255]
+			fric 0
+			velo va60 -1
+			wait rand 7 11
+			inst
+		elif ov99 = 0
+			fric 100
+			velo 0 0
+			anim [7 7 7 8]
+			over
+			inst
+			wait rand 22 33
+			inst
+			tick rand 2 3
+			doif rand 0 1 = 1
+				setv ov99 1
+			else
+				setv ov99 -1
+			endi
+		endi
+
+*		hill holder
+		inst
+		targ ownr
+		doif velx < 0 and ov99 = 1
+			fric 100
+			velo 0 0
+		elif velx > 0 and ov99 = -1
+			fric 100
+			velo 0 0
+		endi
+		doif ov99 = -1
+			mira 0
+		elif ov99 = 1
+			mira 1
+		endi
+	endi
+endm
+
+scrp 2 13 32302 12
+*	carrot beetle is eaten
+	inst
+	stim writ from 80 1.0
+	anim [9 9 9 9 9 9 9 9 9 6]
+	over
+	inst
+	stpc
+	sndc "c1bg"
+	doif rand 0 1 = 0
+		mira 1
+		anim [6 16 15 14 13 12 11 10 255]
+		velo 15 -15
+	else
+		mira 0
+		anim [6 16 15 14 13 12 11 10 255]
+		velo -15 -15
+	endi
+endm
+
+
+rscr
+enum 2 13 32302
+	kill targ
+next
+scrx 2 13 32302 1
+scrx 2 13 32302 3
+scrx 2 13 32302 4
+scrx 2 13 32302 6
+scrx 2 13 32302 6
+scrx 2 13 32302 9
+scrx 2 13 32302 12

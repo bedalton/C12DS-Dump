@@ -1,0 +1,94 @@
+* C1 Telescope & Moon
+
+* Dependencies:
+*  c1telescope.c16
+
+
+inst
+lock
+
+doif game "C1_to_DS_Loaded" = 1 and totl 3 2 32319 = 0
+	new: simp 3 2 32319 "c1telescope" 2 1 10
+	seta va01 targ
+	setv ov00 1
+	attr 4
+	fric 100
+	accg 0
+	aero 100
+	tick 10
+	rnge 100
+	bhvr 1
+	mvto 9807 10118
+
+	new: simp 3 2 32319 "c1telescope" 1 0 2000
+	seta va02 targ
+	setv ov00 0
+	attr 4
+	fric 100
+	accg 0
+	aero 100
+	bhvr 1
+	mvto 1768 10360
+
+	targ va01
+	seta ov01 va02
+
+	targ va02
+	seta ov01 va01
+endi
+
+scrp 3 2 32319 1
+	inst
+	lock
+	stim writ from 96 1.0
+	targ ov01
+	setv va00 posr
+	subv va00 posl
+	divv va00 2
+	addv va00 posl
+	setv va01 posb
+	subv va01 post
+	divv va01 2
+	addv va01 post
+	addv va01 20
+	doif type from = 7
+		targ from
+		doif movs = 0
+*			mvsf va00 va01
+			mvft va00 va01
+		endi
+	else
+		etch 4 0 0
+			doif movs = 0
+*				mvsf va00 va01
+				mvft va00 va01
+			endi
+		next
+	endi
+	wait 30
+	inst
+endm
+
+scrp 3 2 32319 9
+	inst
+	lock
+	setv va00 0
+	esee 4 0 0
+		doif targ <> null
+			setv va00 1
+		endi
+	next
+	targ ownr
+	doif va00 = 1
+		pose 1
+	else
+		pose 0
+	endi
+endm
+
+rscr
+enum 3 2 32319
+	kill targ
+next
+scrx 3 2 32319 1
+scrx 3 2 32319 9

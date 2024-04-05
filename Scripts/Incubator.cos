@@ -1,0 +1,443 @@
+* C1 Incubator
+
+* Dependencies:
+*  C1Incu.c16
+*  c1i1.wav
+*  c1i2.wav
+
+
+* need to add population control portion
+* need to encourage creatures nearby to place eggs in machine
+* still hatches random gender!
+* I think ov01 holds the gender
+
+
+inst
+lock
+
+new: vhcl 2 22 32316 "c1incu" 1 1 200
+cabn 34 19 122 124
+cabp 1
+*cabw 0
+rnge 600
+attr 207
+accg 25
+aero 10
+fric 100
+bhvr 0
+elas 10
+perm 60
+clac 0
+tick 5
+setv ov61 100
+
+* interior
+pat: dull 1 "c1incu" 2 50 59 0
+
+* front doors
+pat: dull 2 "c1incu" 4 33 59 2
+
+* top window
+pat: dull 3 "c1incu" 7 51 18 0
+
+* meter at top
+pat: dull 4 "c1incu" 9 61 0 0
+
+* light at top
+pat: dull 5 "c1incu" 12 109 14 0
+
+* left traffic light display
+pat: dull 6 "c1incu" 16 17 82 0
+
+* thermo thing on left
+pat: dull 7 "c1incu" 20 13 102 0
+
+* neon light at bottom
+pat: dull 8 "c1incu" 24 105 157 0
+
+
+doif game "C1_to_DS_Loaded" = 1 and totl 2 22 32316 <= 1
+	mvsf 3283 10733
+elif type game "ds_game_type" ne 2
+* 		it's NOT a string, this must be C3 only
+* 		choose a safe C3 location
+	setv va00 5440
+	setv va01 3580
+	velo rand 30 40 -5
+	mvsf va00 va01
+else
+* 		it IS a string, but what is the value?
+	doif game "ds_game_type" eq "undocked"
+* 			this is an undocked world, location needs to be DS safe
+		setv va00 6100
+		setv va01 9200
+		velo rand 30 40 -5
+		mvsf va00 va01
+	elif game "ds_game_type" eq "docked"
+* 			this is a docked world, location can be anywhere in the DS/C3 realm
+		setv va00 6100
+		setv va01 9200
+		velo rand 30 40 -5
+		mvsf va00 va01
+	endi
+endi
+
+
+**********
+* Scripts
+
+* noun 0 = self
+* noun 22 = incubator
+* noun 29 = creature egg
+* verb 0 = look
+* verb 2 = get
+* verb 3 = drop
+* verb 6 = approach
+scrp 2 22 32316 9
+*	incubator timer
+	inst
+	enum 3 1 32317
+		doif touc ownr targ = 1
+			cabn -55 -240 128 0
+		else
+			cabn -5 -140 110 0
+		endi
+	next
+	setv va05 0
+	setv va06 0
+	setv va07 0
+	setv va08 0
+	setv va09 0
+	setv va10 0
+	setv va11 0
+	epas 0 0 0
+		doif fmly = 2
+			doif gnus = 21 and spcs = 1160
+*				got a top in incu
+				setv va05 1
+			elif gnus = 11 and spcs = 32302
+*				got an exploding carrot in incu			
+				setv va06 1
+			endi
+		endi
+	next
+	targ ownr
+	targ carr
+	doif fmly = 3 and gnus = 1 and spcs = 32317
+*		incu carried by cart
+		setv va07 1
+	endi
+	targ ownr
+	etch 2 24 32334
+		doif targ <> null
+*			touching the wetsuit
+			setv va08 1
+		endi
+	next
+	targ ownr
+	etch 4 1 0
+		doif targ <> null
+*			touching a norn
+			setv va09 1
+		endi
+	next
+	targ ownr
+	etch 2 25 32302
+		doif targ <> null
+*			touching a coffee pot
+			setv va10 1
+		endi
+	next
+
+	targ ownr
+	etch 1 1 32312
+		doif targ <> null
+*			touching the statue eye
+			setv va11 1
+		endi
+	next
+	targ ownr
+	doif va05 = 1 and va06 = 1 and va07 = 1 and va08 = 1 and va09 = 1 and va10 = 1 and va11 = 1
+*		Finale!!!
+		setv va00 posl
+		setv va01 post
+		new: simp 1 1 32338 "c1blueflash" 5 0 10000
+		attr 7
+		elas 0
+		fric 100
+		perm 0
+		mvto va00 va01
+		reps 5
+			snde "c102"
+		repe
+		anim [0 0 0 0 1 1 1 1 2 2 2 2 3 3 3 3 4 4 4 4]
+		over
+		kill targ
+		targ ownr
+		epas 2 21 1160
+			mesg writ targ 0
+		next
+		targ ownr
+		rtar 2 24 32304
+		mesg writ targ 1001
+		targ ownr
+		etch 2 11 32302
+			mesg writ targ 0
+		next
+		targ ownr
+		etch 4 1 0
+			rpas carr targ
+			mvsf 3821 10850
+		next
+		targ ownr
+		targ carr
+		etch 2 24 32334
+			rpas carr targ
+			attr 7
+			pose 0
+			elas 0
+			fric 100
+			accg 3
+			tick 5
+			rnge 500
+			perm 60
+			velo 0 0
+			mvto 6916 11135
+		next
+		targ carr
+		etch 2 25 32302
+			doif movs = 3
+				rpas carr targ
+				mvsf 3856 10836
+			endi
+		next
+		rpas targ ownr
+		targ ownr
+		mvsf 3283 10733
+	endi
+endm
+
+scrp 2 22 32316 1001
+*	hatch an egg
+	wait 5
+	inst
+	lock
+	attr 199
+	epas 3 4 0
+		doif gtos 1 = "" and targ <> null
+			kill targ
+		endi
+	next
+
+	epas 3 4 0
+** 		get egg agent
+		seta va99 targ
+		setv va01 ov01
+		doif gtos 1 = "" and targ <> null
+			kill targ
+		elif gtos 1 <> "" and targ <> null
+			attr 196
+			targ ownr
+			part 1
+			anim [0 1]
+			part 2
+			anim [0 1 2]
+			part 3
+			anim [0 1]
+			part 4
+			anim [1 2 1 2 2 2 255]
+			part 5
+			anim [0 1 2 3 2 1 255]
+			part 6
+			anim [0 1 2 3 255]
+			part 7
+			anim [0 1 2 3 255]
+			part 8
+			anim [0 1 2 3 2 1 255]
+			sndc "c1i1"
+			sndl "c1i2"
+			wait 5
+*			setv va03 attr
+*			andv va03 1020
+*			attr va03
+			doif va01 = 0 or va01 = 1 or va01 = 2
+				new: crea 4 va99 1 va01 0
+			else
+				new: crea 4 va99 1 0 0
+			endi
+			accg game "c3_creature_accg"
+			bhvr game "c3_creature_bhvr"
+			attr game "c3_creature_attr"
+			perm game "c3_creature_perm"
+			setv va91 11
+			addv va91 gnus
+			emit va91 0.5
+			drea 1
+			seta va05 targ
+			targ va99
+			wait 40
+			doif spcs = 1
+				anim [4 5 6 4 5 6 4 5 6 5 6 5 6 4 5 6 4 5 6 6 6 5 6 5 6 5 6 5 4 5 6 255]
+				wait 40
+			elif spcs <> 1
+				anim [4 5 4 5 4 5 5 5 4 5 4 5 5 5 5 5 4 5 255]
+				wait 40
+			endi
+			snde "crak"
+			wait 40
+			setv va00 posl
+			setv va01 posb
+			targ ownr
+			part 1
+			pose 0
+			part 3
+			pose 0
+			part 4
+			pose 0
+			part 5
+			pose 0
+			part 6
+			pose 0
+			part 7
+			pose 0
+			part 8
+			pose 0
+			targ va99
+			doif spcs = 1
+				anim [6 7]
+				wait 5
+			elif spcs <> 1
+				anim [5 6]
+				wait 5
+			endi
+			fade
+			targ va05
+			pose 75
+			subv va01 10
+			mvsf va00 va01
+			attr 199
+			aslp 0
+			born
+			over
+			targ ownr
+			part 2
+			pose 0
+			stpc
+		endi
+	next
+	dpas 3 4 0
+	slow
+	unlk
+	attr 207
+	wait rand 20 30
+	targ va99
+	kill targ
+endm
+
+
+scrp 2 22 32316 255
+*	error
+	inst
+	setv va00 posl
+	setv va01 post
+	addv va01 5
+	mvsf va00 va01
+endm
+
+
+scrp 2 22 32316 124
+* just got something
+*	wait 5
+	inst
+	lock
+	setv va10 0
+	setv va11 0
+	epas 0 0 0
+		doif fmly = 2 and gnus = 11 and spcs = 32403
+*			got carrot
+			setv va00 posl
+			setv va01 post
+			seta va02 targ
+			targ ownr
+			new: simp 2 11 32302 "c1plants" 1 47 200
+			seta va04 targ
+			tint 128 255 128 2 145
+			accg 3
+			attr 199
+			fric 100
+			elas 0
+			aero 0
+			bhvr 48
+			puhl 0 26 20
+			rnge 300
+			emit 8 .20
+			perm 60
+			setv va03 0
+			setv va10 1
+			mvsf va00 va01
+			slow
+			spas ownr va04
+			snde "c102"
+			targ va02
+			kill targ
+		elif fmly = 2 and gnus = 11 and spcs = 32302
+*			got ec
+			setv va10 1
+		elif fmly = 2 and gnus = 25 and spcs = 32302
+*			got coffee pot
+			setv va11 1
+		elif fmly = 2 and gnus = 21 and spcs = 1160
+*			got top
+			snde "c102"
+			setv va12 1
+		elif fmly <> 3 and gnus <> 4
+*			rpas ownr targ
+		else
+			plne 201
+			mesg wrt+ ownr 1001 255 0 0
+		endi
+	next
+	doif va10 = 1 and va11 = 1
+		epas 2 11 32302
+			mesg writ targ 0
+		next
+	endi
+	doif va11 = 1 and va12 = 1
+		targ ownr
+		setv va00 posl
+		setv va01 post
+*		dpas 2 21 0
+		doif movs = 3
+			targ carr
+			seta va05 targ
+			dpas 2 22 32316
+			targ ownr
+		endi
+		mvsf 0 0
+		targ pntr
+		snde "tele"
+		targ ownr
+		wait 120
+		mvsf va00 va01
+		velo 0 1
+		doif type va05 = 6
+			targ va05
+			spas va05 ownr
+		endi
+		snde "tele"
+	endi
+endm
+
+
+rscr
+enum 2 22 32316
+	kill targ
+next
+scrx 2 22 32316 4
+scrx 2 22 32316 5
+scrx 2 22 32316 6
+scrx 2 22 32316 9
+scrx 2 22 32316 124
+scrx 2 22 32316 255
+scrx 2 22 32316 1000
+scrx 2 22 32316 1001

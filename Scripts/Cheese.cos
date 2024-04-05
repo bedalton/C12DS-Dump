@@ -1,0 +1,200 @@
+* C1 Cheese
+
+* Dependencies:
+*  C1Cheese.c16
+*  C1D2.wav
+
+inst
+
+doif game "C1_to_DS_Loaded" = 1 and totl 2 11 32300 < 1
+
+* cheese on the main floor in norn house
+	new: simp 2 11 32300 "c1cheese" 3 0 200
+	attr 199
+	accg 5
+	aero 10
+	fric 100
+	bhvr 48
+	elas 0
+	perm 60
+	pose 2
+	emit 8 .3
+	mvsf 3675 10901
+
+* cheese on the main floor in norn house
+	new: simp 2 11 32300 "c1cheese" 3 0 200
+	attr 199
+	accg 5
+	aero 10
+	fric 100
+	bhvr 48
+	elas 0
+	perm 60
+	pose 2
+	emit 8 .3
+	mvsf 3685 10901
+
+* cheese upstairs in the norn house
+	new: simp 2 11 32300 "c1cheese" 3 0 200
+	attr 199
+	accg 5
+	aero 10
+	fric 100
+	bhvr 48
+	elas 0
+	perm 60
+	pose 2
+	emit 8 .3
+	mvsf 3625 10715
+
+* cheese on the kitchen table
+	new: simp 2 11 32300 "c1cheese" 3 0 200
+	attr 199
+	accg 5
+	aero 10
+	fric 100
+	bhvr 48
+	elas 0
+	perm 60
+	pose 2
+	emit 8 .3
+	mvsf 3985 10850
+	setv ov62 1
+	etch 1 7 32332
+		gpas 2 11 32300 0
+	next
+
+* cheese in the sea tower
+	new: simp 2 11 32300 "c1cheese" 3 0 200
+	attr 199
+	accg 5
+	aero 10
+	fric 100
+	bhvr 48
+	elas 0
+	perm 60
+	pose 2
+	emit 8 .3
+	mvsf 1810 10417
+
+* cheese in the treehouse
+	new: simp 2 11 32300 "c1cheese" 3 0 200
+	attr 199
+	accg 5
+	aero 10
+	fric 100
+	bhvr 48
+	elas 0
+	perm 60
+	pose 2
+	emit 8 .3
+	mvsf 5723 10509
+
+* cheese in the grendel tree
+	new: simp 2 11 32300 "c1cheese" 3 0 200
+	attr 199
+	accg 5
+	aero 10
+	fric 100
+	bhvr 48
+	elas 0
+	perm 60
+	pose 2
+	emit 8 .3
+	mvsf 6815 10509
+else
+	inst
+	doif type game "ds_game_type" ne 2
+* 	it's NOT a string, this must be C3 only
+* 	choose a safe C3 location
+		setv va00 5440
+		setv va01 3580
+	else
+* 	it IS a string, but what is the value?
+		doif game "ds_game_type" eq "undocked"
+* 		this is an undocked world, location needs to be DS safe
+			setv va00 6100
+			setv va01 9200
+		elif game "ds_game_type" eq "docked"
+* 		this is a docked world, location can be anywhere in the DS/C3 realm
+			setv va00 6100
+			setv va01 9200
+		endi
+	endi
+*	make some cheese at the agent injector
+	reps rand 3 5
+		new: simp 2 11 32300 "c1cheese" 3 0 200
+		attr 199
+		accg 5
+		aero 10
+		fric 100
+		bhvr 48
+		elas 0
+		perm 60
+		pose 2
+		emit 8 .3
+		mvsf va00 va01
+	repe
+endi
+
+***********************
+* Scripts
+
+scrp 2 11 32300 1
+*	Cheese gets clicked
+	inst
+	doif game "C1_Clickable_Food" = 1
+		setv va00 posl
+		setv va01 post
+		new: simp 2 11 32300 "c1cheese" 3 0 200
+		attr 199
+		accg 5
+		aero 10
+		fric 100
+		bhvr 48
+		elas 0
+		perm 60
+		pose 2
+		emit 8 .3
+		mvsf va00 va01
+		velo rand -15 15 rand -15 -5
+	endi
+endm
+
+scrp 2 11 32300 4
+*	pickup cheese
+	inst
+	accg 5
+	pose 1
+	mira rand 0 1
+endm
+
+scrp 2 11 32300 6
+*	cheese collision
+	inst
+	pose 2
+	doif _p2_ > 8 or _p2_ < -8
+		snde "c1d2"
+	endi
+endm
+
+scrp 2 11 32300 12
+*	eating cheese
+	inst
+	snde "chwp"
+*	chem 5 .5
+*	chem 10 1.0
+*	chem 12 1.0
+	chem 99 .05
+*	chem 150 .5
+	stim writ from 79 1
+	kill targ
+endm
+
+rscr
+enum 2 11 32300
+	kill targ
+next
+*scrx 2 11 32300 4
+*scrx 2 11 32300 6
+*scrx 2 11 32300 12

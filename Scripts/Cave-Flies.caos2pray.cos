@@ -1,0 +1,266 @@
+**CAOS2Pray Join
+*# DSAG-Name "C1 to DS Cave Flies"
+*# Agent Animation File = "c1cavefly.c16"
+*# Agent Animation Gallery = "c1cavefly"
+*# Agent Animation String = "0 1 255"
+*# Agent Description = "You can add the insidious cave flies to C1 to DS!"
+**# Attach "../Images/c1cavefly.c16"
+**# Attach "../Sounds/c1sg.wav"
+**# Attach "../Sounds/c1sp.wav"
+*# Depend "c1cavefly.c16"
+*# Depend "c1sp.wav"
+*# Depend "c1sg.wav"
+
+* Cave Fly
+*	ov00 = 0 is cruise mode
+*	ov00 = 1 is feed mode
+*	ov00 = 2 is retreat mode
+*	ov00 = 3 is final attack mode
+*	ov00 = 100 is die mode
+
+*	ov01 = targeted creature
+
+inst
+
+doif game "C1_to_DS_Loaded" = 1 and totl 2 14 32300 < 1
+*	C1 to DS
+    setv va00 rand 6950 7190
+    setv va01 rand 10717 10890
+    new: simp 2 14 32300 "c1cavefly" 3 0 8000
+    attr 199
+    bhvr 8
+    accg 0
+    aero 0
+    elas 0
+    fric 0
+    tick 6
+    anim [0 1 255]
+    perm 1
+    rnge 200
+    mvsf va00 va01
+    setv ov00 0
+    seta ov01 null
+elif type game "ds_game_type" ne 2
+* 	it's NOT a string, this must be C3 only
+* 	choose a safe C3 location
+    setv va00 5440
+    setv va01 3580
+*	don't inject
+*	velo rand 30 40 -5
+*	mvsf va00 va01
+else
+* 	it IS a string, but what is the value?
+    doif game "ds_game_type" eq "undocked"
+* 		this is an undocked world, location needs to be DS safe
+        setv va00 6100
+        setv va01 9200
+*		don't inject
+*		velo rand 30 40 -5
+*		mvsf va00 va01
+    elif game "ds_game_type" eq "docked"
+* 		this is a docked world, location can be anywhere in the DS/C3 realm
+        setv va00 6100
+        setv va01 9200
+*		don't inject
+*		velo rand 30 40 -5
+*		mvsf va00 va01
+    endi
+endi
+
+
+scrp 2 14 32300 1
+    inst
+    setv ov00 100
+    snde "c1sp"
+    pose 0
+    attr 199
+    accg 2
+    fric 100
+    wait rand 20 30
+endm
+
+scrp 2 14 32300 3
+    inst
+    setv ov00 100
+    snde "c1sp"
+    pose 0
+    attr 199
+    accg 2
+    fric 100
+    wait rand 20 30
+endm
+
+scrp 2 14 32300 6
+    inst
+    lock
+    doif mv00 = 1
+        setv mv00 0
+        seta mv01 null
+    endi
+endm
+
+scrp 2 14 32300 9
+    inst
+    lock
+    setv va40 rand 1.0 1.5
+    setv va41 rand 1.0 1.5
+
+    doif mv02 > 1
+        setv mv00 0
+        seta mv01 null
+        setv mv02 0
+    endi
+    doif mv00 = 100
+*		you were swatted, so die already!
+        targ ownr
+        kill targ
+    elif mv00 = 1
+*		feeding mode
+        doif mv01 <> null
+            doif seee ownr mv01 = 0
+*			if you can't see your target anymore, stop attacking
+                seta mv01 null
+                doif mv00 = 1
+                    setv mv00 0
+                    anim [0 1 255]
+                endi
+            else
+                pose 2
+*				sting
+                doif touc ownr mv01 = 1
+*				 and mv00 = 1
+                    snde "c1sg"
+                    stim writ from 76 1.0
+                    setv mv00 2
+                    targ mv01
+                    chem 148 .1
+                    targ ownr
+                endi
+                setv va40 4
+                setv va41 4
+            endi
+        endi
+    elif mv00 = 0
+*		normal mode
+        setv mv02 0
+        anim [0 1 255]
+*		see if there is a creature nearby
+        doif mv01 = null and mv00 = 0 and rand 1 6 = 6
+            star 4 0 0
+            seta mv01 targ
+            doif targ <> null
+                setv mv00 1
+            endi
+            targ ownr
+        endi
+        targ ownr
+    elif mv00 = 2
+*		retreat mode
+        setv mv00 0
+        seta mv01 null
+        velo rand -4.0 4.0 -4.0
+    endi
+
+    doif touc ownr mv01 = 1 and pose = 2
+        snde "c1sg"
+        stim writ from 76 1.0
+        setv mv00 2
+        targ mv01
+        chem 148 .1
+        targ ownr
+        seta mv01 null
+    endi
+
+*	move
+*	set parameters for target
+    targ ownr
+    doif mv01 <> null and mv00 = 1
+        targ mv01
+        setv va10 posl
+        setv va11 posb
+        setv va12 posr
+        setv va13 posb
+        mulv va40 4
+        mulv va41 4
+        targ ownr
+        pose 2
+        addv mv02 1
+    else
+        setv va10 6950
+        setv va11 10690
+        setv va12 7400
+        setv va13 10890
+        anim [0 1 255]
+    endi
+
+    targ ownr
+    doif posl > va12
+*		go left
+        mulv va40 -1
+    elif posr < va10
+*		go right
+        mulv va40 1
+    else
+        doif rand 0 1 = 1
+            mulv va40 -1
+        endi
+    endi
+    doif posb > va13
+*		go up
+        mulv va41 -1
+    elif post < va11
+*			go down
+        mulv va41 1
+    else
+        doif rand 0 1 = 1
+            mulv va41 -1
+        endi
+    endi
+    velo va40 va41
+
+*	face the right direction
+    doif velx < 0
+        mira 0
+    elif velx > 0
+        mira 1
+    endi
+    doif totl 2 14 32300 <> 6
+        mesg writ ownr 1000
+    endi
+endm
+
+scrp 2 14 32300 1000
+    inst
+    lock
+
+    doif totl 2 14 32300 < 6
+        setv va00 rand 6950 7190
+        setv va01 rand 10717 10890
+        new: simp 2 14 32300 "c1cavefly" 3 0 8000
+        attr 199
+        bhvr 8
+        accg 0
+        aero 0
+        elas 0
+        fric 0
+        tick 6
+        anim [0 1 255]
+        perm 1
+        rnge 200
+        mvsf va00 va01
+        setv ov00 0
+        seta ov01 null
+    elif totl 2 14 32300 > 6
+        rtar 2 14 32300
+        kill targ
+    endi
+endm
+
+rscr
+enum 2 14 32300
+    kill targ
+next
+scrx 2 14 32300 1
+scrx 2 14 32300 9
+scrx 2 14 32300 1000
+

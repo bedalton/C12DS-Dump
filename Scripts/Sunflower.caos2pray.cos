@@ -1,0 +1,30 @@
+**CAOS2Pray Join
+*# DSAG-Name "C1 to DS Sunflower"
+*# Agent Description = "The C1 Sunflower and Sunflower Seeds were created just for the nutritional needs of the modern Norn."
+*# Agent Animation File = "c1seeds.c16"
+*# Agent Animation Gallery = "c1seeds"
+*# Agent Animation String = "0"
+*# Web Icon = "thth"
+*# Web Icon Animation String = "0"
+*# Web Icon Base = "0"
+*# Web Label =  "Visit The High Tech Hand"
+*# Web URL = "www.hightechhand.com"
+**# Attach "../Images/thth.c16"
+**# Attach "../Images/c1seeds.c16"
+*# Depend "thth.c16"
+*# Depend "c1seeds.c16"
+*# Link "Sunflower Seeds.cos"
+
+rscr
+enum 2 4 32333
+    kill targ
+next
+scrx 2 4 32333 1
+scrx 2 4 32333 4
+scrx 2 4 32333 6
+scrx 2 4 32333 9
+enum 2 3 32314
+    kill targ
+next
+scrx 2 3 32314 4
+scrx 2 3 32314 12

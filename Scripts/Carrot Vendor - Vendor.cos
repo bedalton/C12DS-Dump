@@ -1,0 +1,146 @@
+****************************
+* C1 CarrotVendor
+****************************
+
+* Dependencies:
+*  C1CarrotVendor.c16
+*  c1carrotvendorcarrot.c16
+*  c1v1.wav
+*  c1d2.wav
+
+
+* Installers
+inst
+
+* 	CarrotVendor in music room
+new: simp 2 23 32302 "c1carrotvendor" 0 0 200
+attr 199
+accg 25
+bhvr 25
+fric 90
+aero 10
+elas 0
+perm 60
+frat 1.5
+
+doif game "C1_to_DS_Loaded" = 1 and totl 2 23 32302 <= 1
+	mvsf 8188 10361
+elif type game "ds_game_type" ne 2
+* 	it's NOT a string, this must be C3 only
+* 	choose a safe C3 location
+	setv va00 5440
+	setv va01 3580
+	velo rand 30 40 -5
+	mvsf va00 va01
+else
+* 	it IS a string, but what is the value?
+	doif game "ds_game_type" eq "undocked"
+* 		this is an undocked world, location needs to be DS safe
+		setv va00 6100
+		setv va01 9200
+		velo rand 30 40 -5
+		mvsf va00 va01
+	elif game "ds_game_type" eq "docked"
+* 		this is a docked world, location can be anywhere in the DS/C3 realm
+		setv va00 6100
+		setv va01 9200
+		velo rand 30 40 -5
+		mvsf va00 va01
+	endi
+endi
+
+
+****************************
+* Scripts
+
+scrp 2 23 32302 1
+*	CarrotVendor is pushed
+	inst
+	lock
+	setv va00 posl
+	setv va01 post
+	addv va00 19
+	addv va01 91
+	sndc "c1v1"
+	stim writ from 90 1
+	anim [1 2 3 4 5 6 7 8 9]
+	over
+	inst
+
+* 	Make Carrot
+	new: simp 2 11 32404 "c1carrotvendorcarrot" 3 0 7001
+	pose 1
+	accg 3
+	attr 199
+	bhvr 48
+	fric 100
+	elas 0
+	aero 0
+	seta va20 targ
+	setv va21 0
+*	carrot scent
+	emit 6 .20
+	emit 7 .20
+	emit 8 .20
+	perm 60
+	mira 1
+	mvsf va00 va01
+	velo rand -1 1 rand -1 1
+	targ ownr
+	pose 0
+endm
+
+scrp 2 23 32302 3
+*	CarrotVendor is hit
+	inst
+	lock
+	stim writ from 0 1
+	velo rand -10 10 rand -10 -20
+	sndc "c1d2"
+	setv ov00 0
+endm
+
+scrp 2 23 32302 4
+*	CarrotVendor is picked up	
+endm
+
+scrp 2 23 32302 5
+*	CarrotVendor is dropped
+endm
+
+scrp 2 23 32302 6
+*	CarrotVendor collides
+	inst
+	lock
+	doif ov00 = 0
+		doif vely < 10 or vely > 10
+			stpc
+			sndc "c1d2"
+		elif vely > -2 and vely < 2
+			stpc
+		endi
+	endi
+endm
+
+scrp 2 23 32302 12
+*	CarrotVendor is bitten
+	inst
+	lock
+	stim writ from 0 1
+	setv ov00 0
+endm
+
+
+****************************
+* Removers
+
+* CarrotVendor remover
+rscr
+enum 2 23 32302
+	kill targ
+next
+scrx 2 23 32302 1
+scrx 2 23 32302 3
+scrx 2 23 32302 4
+scrx 2 23 32302 6
+scrx 2 23 32302 12

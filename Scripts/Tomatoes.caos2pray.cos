@@ -1,0 +1,31 @@
+**CAOS2Pray Join
+*# DSAG-Name "C1 to DS Tomatoes"
+*# Agent Animation File = "c1plants.c16"
+*# Agent Animation Gallery = "c1plants"
+*# Agent Animation String = "24"
+*# Agent Description = "Add more C1 Tomato Plants to your world"
+*# Web Icon = "thth.c16"
+*# Web Icon Animation String = "0"
+*# Web Icon Base = "0"
+*# Web Label = "Visit The High Tech Hand"
+*# Web URL = "www.hightechhand.com"
+**# Attach "../Images/thth.c16"
+**# Attach "../Images/c1plants.c16"
+*# Depend "thth.c16"
+*# Depend "c1plants.c16"
+*# Link "Tomatoes.cos"
+
+rscr
+enum 2 4 32302
+    kill targ
+next
+scrx 2 4 32302 1
+scrx 2 4 32302 9
+scrx 2 4 32302 125
+scrx 2 4 32302 1000
+enum 2 8 32398
+    kill targ
+next
+scrx 2 8 32398 1
+scrx 2 8 32398 4
+scrx 2 8 32398 12

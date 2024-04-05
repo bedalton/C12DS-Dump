@@ -1,0 +1,129 @@
+****************************
+* C1 Toys
+****************************
+
+* Dependencies:
+*  C1GoldfishBowl.c16
+*  c1d2.wav
+
+
+* Installers
+inst
+
+* goldfish bowl in sea tower
+new: comp 2 21 32302 "c1goldfishbowl" 2 0 200
+attr 199
+accg 5
+bhvr 25
+fric 90
+aero 0
+elas 0
+perm 60
+pat: butt 2 "c1goldfishbowl" 2 2 0 0 0 [] 1001 0
+pat: butt 3 "c1goldfishbowl" 4 10 0 0 0 [] 1001 0
+part 3
+anim [0 1 2 3 4 5 6 7 8 9 255]
+frat rand 3.0 4.0
+
+doif game "C1_to_DS_Loaded" = 1 and totl 2 21 32302 <= 1
+
+	mvsf 1992 10738
+
+elif type game "ds_game_type" ne 2
+* 	it's NOT a string, this must be C3 only
+* 	choose a safe C3 location
+	setv va00 5440
+	setv va01 3580
+	velo rand 30 40 -5
+	mvsf va00 va01
+else
+* 	it IS a string, but what is the value?
+	doif game "ds_game_type" eq "undocked"
+* 		this is an undocked world, location needs to be DS safe
+		setv va00 6100
+		setv va01 9200
+		velo rand 30 40 -5
+		mvsf va00 va01
+	elif game "ds_game_type" eq "docked"
+* 		this is a docked world, location can be anywhere in the DS/C3 realm
+		setv va00 6100
+		setv va01 9200
+		velo rand 30 40 -5
+		mvsf va00 va01
+	endi
+endi
+
+
+****************************
+* Scripts
+
+* 0 = disappoint
+* 97 = played with toy
+
+scrp 2 21 32302 1
+*	Goldfish Bowl is pushed
+	inst
+	lock
+	stim writ from 97 1
+	setv va00 rand 0 1
+	part 0
+	pose va00
+	part 2
+	pose va00
+	mira va00
+*	update the display
+	frat rand 1.0 2.5
+	tick rand 21 37
+endm
+
+scrp 2 21 32302 3
+*	Goldfish Bowl is hit
+	lock
+	stim writ from 0 1
+endm
+
+scrp 2 21 32302 4
+*	Goldfish Bowl is picked up	
+endm
+
+scrp 2 21 32302 6
+*	Goldfish Bowl collides
+	inst
+	sndc "c1d2"
+endm
+
+scrp 2 21 32302 9
+*	Goldfish Bowl timer
+	inst
+	frat rand 3.0 4.0
+endm
+
+
+scrp 2 21 32302 12
+*	Goldfish Bowl is bitten
+	inst
+	stim writ from 0 1
+endm
+
+scrp 2 21 32302 1001
+*	Goldfish Bowl is pushed
+	inst
+	mesg writ targ 0
+endm
+
+
+****************************
+* Removers
+
+* Goldfish Bowl remover
+rscr
+enum 2 21 32302
+	kill targ
+next
+scrx 2 21 32302 1
+scrx 2 21 32302 3
+scrx 2 21 32302 4
+scrx 2 21 32302 6
+scrx 2 21 32302 9
+scrx 2 21 32302 12
+scrx 2 21 32302 1001

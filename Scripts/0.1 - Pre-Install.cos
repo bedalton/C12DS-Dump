@@ -1,0 +1,6 @@
+* C1 to DS Variables
+
+inst
+setv game "C1_to_DS_Loaded" 1
+setv game "C1_Clickable_Food" 0
+setv game "C1_Guardrails" 1

@@ -1,0 +1,200 @@
+* C1 Death Cap
+
+* Dependencies:
+*  C1Plants.c16
+
+
+inst
+lock
+
+doif game "C1_to_DS_Loaded" = 0 or totl 2 5 32304 > 0
+	new: vhcl 2 5 32304 "c1plants" 1 34 100
+	cabn 0 26 22 52
+	attr 735
+	accg 5
+	fric 100
+	aero 10
+	elas 0
+	bhvr 0
+	perm 60
+	tick rand 900 1000
+	doif type game "ds_game_type" ne 2
+* 		it's NOT a string, this must be C3 only
+* 		choose a safe C3 location
+		setv va00 5440
+		setv va01 3580
+		velo rand 30 40 -5
+		mvsf va00 va01
+	else
+* 		it IS a string, but what is the value?
+		doif game "ds_game_type" eq "undocked"
+* 			this is an undocked world, location needs to be DS safe
+			setv va00 6100
+			setv va01 9200
+			velo rand 30 40 -5
+			mvsf va00 va01
+		elif game "ds_game_type" eq "docked"
+* 			this is a docked world, location can be anywhere in the DS/C3 realm
+			setv va00 6100
+			setv va01 9200
+			velo rand 30 40 -5
+			mvsf va00 va01
+		endi
+	endi
+	mesg wrt+ targ 1000 0 0 10
+else
+
+* 	Death Cap
+	new: vhcl 2 5 32304 "c1plants" 1 34 100
+	cabn 0 26 22 52
+	attr 735
+	accg 5
+	fric 100
+	aero 10
+	elas 0
+	bhvr 0
+	perm 60
+	mvsf 7042 11060
+	tick rand 900 1000
+	mesg wrt+ targ 1000 0 0 10
+
+endi
+
+*******************************
+* Scripts
+
+scrp 2 5 32304 1
+*	Death Cap plant clicked
+	inst
+	doif game "C1_Clickable_Food" = 1
+		mesg wrt+ ownr 1000 1 0 0
+	endi
+endm
+
+scrp 2 5 32304 9
+*	Death Cap plant timer
+	inst
+	mesg wrt+ ownr 1000 0 0 0
+endm
+
+scrp 2 5 32304 125
+*	Death Cap plant timer
+	inst
+	mesg wrt+ ownr 1000 0 0 rand 20 90
+endm
+
+scrp 2 5 32304 1000
+*	Death Cap plant's timer
+	inst
+	setv va20 0
+	epas 2 5 32402
+		addv va20 1
+	next
+
+	doif va20 < 1 or _p1_ = 1
+*		no flower exists, so better make one
+		setv va00 posl
+		setv va01 post
+		new: simp 2 5 32402 "c1plants" 2 35 101
+		addv va00 1
+		addv va01 36
+		mvsf va00 va01
+		seta va20 targ
+		accg 0
+		attr 199
+		fric 100
+		elas 0
+		aero 100
+		bhvr 48
+		perm 60
+		targ ownr
+		doif _p1_ <> 1
+			setv va52 0
+			loop
+				spas ownr va20
+				wait 1
+				inst
+				addv va52 1
+				targ va20
+			untl targ = null or carr = ownr or va52 > 10
+			inst
+		else
+			targ va20
+			pose 1
+			velo rand -10 10 rand 1 5
+		endi
+		accg 3
+		fric 100
+		aero 10
+		attr 199
+	endi
+endm
+
+scrp 2 5 32402 1
+*	Death Cap clicked
+	inst
+	doif game "C1_Clickable_Food" = 1
+		setv va00 posl
+		setv va01 post
+		new: simp 2 5 32402 "c1plants" 2 35 101
+		elas 0
+		bhvr 48
+		perm 60
+		accg 3
+		fric 100
+		aero 10
+		attr 199
+		mvsf va00 va01
+		velo rand -10 10 rand 1 5
+	endi
+endm
+
+scrp 2 5 32402 4
+*	Death Cap - I've been picked up
+	inst
+	lock
+	pose 1
+	attr 199
+	accg 3
+	fric 90
+	aero 10
+endm
+
+scrp 2 5 32402 12
+*	eating a weed
+*	Death Cap
+	inst
+	lock
+	seta va20 norn
+	targ from
+	doif crea targ = 1
+		chem 148 1.0
+		chem 149 1.0
+		chem 150 1.0
+		chem 151 1.0
+		chem 153 1.0
+		chem 70 1.0
+*		chem 70 1.0
+*		chem 72 1.0	
+		snde "chwp"
+		stim writ from 83 1
+	endi
+	targ ownr
+	kill targ
+endm
+
+rscr
+
+enum 2 5 32304
+	kill targ
+next
+scrx 2 5 32304 1
+scrx 2 5 32304 9
+scrx 2 5 32304 125
+scrx 2 5 32304 1000
+
+enum 2 5 32402
+	kill targ
+next
+scrx 2 5 32402 4
+scrx 2 5 32402 12

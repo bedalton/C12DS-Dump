@@ -1,0 +1,98 @@
+**CAOS2Pray Join
+*# DSAG-Name "C1 to DS Toolbar"
+*# Agent Animation File = "c1toolbar.c16"
+*# Agent Animation Gallery = "c1toolbar"
+*# Agent Animation String = "4 6 8 10 12 14 255"
+*# Agent Description = "The C1 to DS Toolbar provides applets from Creatures 1. Reinject this agents if it breaks."
+*# Web Icon = "thth"
+*# Web Icon Animation String = "0"
+*# Web Icon Base = "0"
+*# Web Label =  "Visit The High Tech Hand"
+*# Web URL = "www.hightechhand.com"
+*# Depend "thth.c16"
+**# Attach "../Images/thth.c16"
+**# Attach "../Images/c1toolbar.c16"
+**# Attach "../Images/c1hatchery.c16"
+**# Attach "../Images/c1viewer.c16"
+**# Attach "../Images/c1discworldmap.c16"
+**# Attach "../Images/c1gender.c16"
+**# Attach "../Images/c1favoriteplaces.c16"
+**# Attach "../Images/c1shopkit.c16"
+**# Attach "../Sounds/c1co.wav"
+**# Attach "../Sounds/c1hf.wav"
+**# Attach "../Sounds/c1he.wav"
+**# Attach "../Sounds/c1ki.wav"
+*# Depend "c1toolbar.c16"
+*# Depend "c1hatchery.c16"
+*# Depend "c1viewer.c16"
+*# Depend "c1discworldmap.c16"
+*# Depend "c1gender.c16"
+*# Depend "c1favoriteplaces.c16"
+*# Depend "c1shopkit.c16"
+*# Depend "c1co.wav"
+*# Depend "c1hf.wav"
+*# Depend "c1he.wav"
+*# Depend "c1ki.wav"
+*# Link "Toolbar.cos"
+
+rscr
+enum 1 2 32300
+    kill targ
+next
+enum 1 1 32304
+    kill targ
+next
+scrx 1 1 32304 5
+scrx 1 1 32304 9
+scrx 1 1 32304 128
+scrx 1 1 32304 1001
+scrx 1 1 32304 1002
+scrx 1 1 32304 1003
+scrx 1 1 32304 1004
+enum 1 1 32305
+    kill targ
+next
+scrx 1 1 32305 125
+scrx 1 1 32305 1000
+scrx 1 1 32305 1001
+enum 1 1 32306
+    kill targ
+next
+scrx 1 1 32306 1
+scrx 1 1 32306 9
+scrx 1 1 32306 1000
+enum 1 1 32320
+    kill targ
+next
+scrx 1 1 32320 5
+scrx 1 1 32320 9
+enum 1 1 32316
+    kill targ
+next
+enum 1 1 32334
+    kill targ
+next
+scrx 1 1 32334 9
+enum 1 2 32300
+    kill targ
+next
+scrx 1 2 32300 1
+enum 1 2 32301
+    kill targ
+next
+scrx 1 2 32301 1
+scrx 1 2 32301 9
+targ null
+scam targ 0
+trck null 0 0 0 0
+rtar 1 2 32302
+enum 1 2 32302
+    dpas 0 0 0
+    kill targ
+next
+scrx 1 2 32302 1
+scrx 1 2 32302 9
+scrx 1 2 32302 124
+scrx 1 2 32302 1001
+scrx 1 2 32302 1002
+scrx 1 2 32302 1003
