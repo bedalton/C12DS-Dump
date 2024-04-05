@@ -1,0 +1,32 @@
+inst
+new: simp 1 1 62144 "blnk" 2 0 0
+attr 16
+bhvr 0
+
+*---
+*remove those walls!
+*---
+
+*music room
+setv VA00 GRAP 3125 10800
+setv VA01 GRAP 3125 10900
+
+*the walls
+setv VA02 GRAP 3250 10800
+setv VA03 GRAP 3250 10900
+
+*incubator room
+setv VA04 GRAP 3300 10800
+setv VA05 GRAP 3300 10900
+
+*lacota smash
+
+DOOR VA00 VA02 100
+DOOR VA02 VA04 100
+DOOR VA01 VA03 100
+DOOR VA03 VA05 100
+
+rscr
+enum 1 1 62144
+	kill targ
+next
