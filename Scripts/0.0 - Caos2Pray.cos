@@ -87,6 +87,9 @@
 *# Link "Trumpet.cos"
 *# Link "Ugly Tomatoes.cos"
 *# Link "Wizard - Easter Egg Controls.cos"
+*# Link "2018 - Map Fixes 1.cos"
+*# Link "2018 - Map Fixes 2.cos"
+*# Link "2018 - Map Fixes 3.cos"
 
 *# Join "Albian-Carrot-Beetle.caos2pray.cos"
 *# Join "Carrots.caos2pray.cos"
@@ -100,6 +103,7 @@
 *# Join "Tomatoes.caos2pray.cos"
 *# Join "Toolbar.caos2pray.cos"
 *# Join "Bad-Plants.caos2pray.cos"
+*# Join "2018 - Map Fixes.caos2pray.cos"
 
 *# rscr "C1 to DS-RemoverScript-1.cos"
 

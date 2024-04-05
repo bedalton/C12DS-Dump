@@ -1,0 +1,167 @@
+inst
+new: simp 1 1 62145 "blnk" 2 0 0
+attr 16
+bhvr 0
+*---
+*CA LINKS
+*---
+
+*---Icubator elevator
+*first floor
+setv VA14 GRAP 3580 10870
+
+*second floor
+setv VA15 GRAP 3580 10680
+
+LINK VA14 VA15 100
+
+*---Left Temple elevator
+
+*top floor
+setv VA16 GRAP 5900 10500
+*middle floor
+setv VA17 GRAP 5900 10850
+*bottom floor
+setv VA18 GRAP 5900 11040
+
+LINK VA16 VA17 100
+LINK VA17 VA18 100
+
+*---Right Temple Elevator
+*top floor
+setv VA19 GRAP 6200 10850
+*bottom floor
+setv VA20 GRAP 6200 11060
+
+LINK VA19 VA20 100
+
+*---Grendel elevator
+*top floor
+setv VA21 GRAP 7055 10470
+*middle floor
+setv VA22 GRAP 7055 10865
+*bottom floor
+setv VA23 GRAP 7055 11065
+*MISSED IT FLOOR
+setv VA54 GRAP 7055 10600
+
+LINK VA21 VA22 0
+LINK VA21 VA54 100
+LINK VA54 VA22 100
+LINK VA22 VA23 100
+
+*---Sub
+*left side
+setv VA24 GRAP 7280 10865
+*right side
+setv VA25 GRAP 8300 10865
+
+LINK VA24 VA25 100
+
+*---Boat
+*left side
+setv VA26 GRAP 7500 10600
+*right side
+setv VA27 GRAP 8225 10600
+
+LINK VA26 VA27 100
+
+*---coconut elevator left
+*top floor
+setv VA28 GRAP 8500 10600
+*bottom floor
+setv VA29 GRAP 8500 10800
+
+LINK VA28 VA29 100
+
+*---coconut elevator right
+*top floor 
+setv VA30 GRAP 8680 10600
+*middle floor 
+setv VA31 GRAP 8680 10900
+*bottom floor
+setv VA32 GRAP 8680 11050
+
+LINK VA30 VA31 100
+Link VA31 VA32 100
+
+*--- undersea cart
+*left side
+setv VA33 GRAP 8900 11050
+*right side
+setv VA34 GRAP 1750 11075
+LINK VA33 VA34 100
+
+*--Oceanside Elevator
+*top floor
+setv VA35 GRAP 1980 10400
+*second floor
+setv VA36 GRAP 1980 10550
+*first floor 
+setv VA37 GRAP 1980 10725
+*bottom floor
+setv VA38 GRAP 1980 11075
+
+LINK VA35 VA36 100
+LINK VA36 VA37 100
+LINK VA37 VA38 100
+
+
+*---little lake raft
+*left side
+setv VA39 GRAP 2450 10700
+*right side
+setv VA40 GRAP 2700 10700
+
+LINK VA39 VA40 100
+
+*---leftside music elevator
+*top floor
+setv VA41 GRAP 2800 10550
+*bottom floor 
+setv VA42 GRAP 2800 10700
+
+LINK VA41 VA42 100
+
+*---right side music elevator
+*top floor
+setv VA43 GRAP 3100 10550
+*middle floor
+setv VA44 GRAP 3100 10725
+*lower floor 
+setv VA45 GRAP 3100 10900
+*bottom floor
+setv VA46 GRAP 3100 11050
+
+LINK VA43 VA44 100
+LINK VA44 VA45 100
+LINK VA45 VA46 100
+
+*---Sky cart thing
+*left side
+setv VA47 GRAP 3800 10550
+*right side 
+setv VA48 GRAP 5300 10450
+
+LINK VA47 VA48 100
+
+*---swampy cart
+*left side
+setv VA49 GRAP 4100 11050
+*right side
+setv VA50 GRAP 5600 11050
+
+LINK VA49 VA50 100
+
+*---beehive fix
+setv VA51 GRAP 3333 10550
+setv VA52 GRAP 3333 10595
+Setv VA53 GRAP 3220 10595
+
+DOOR VA51 VA52 0
+DOOR VA51 VA53 0
+
+ rscr
+ enum 1 1 62125
+ 	kill targ
+ next

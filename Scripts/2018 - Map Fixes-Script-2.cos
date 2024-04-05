@@ -1,0 +1,103 @@
+* C1 shower Fix
+* Installers
+inst
+
+enum 2 21 32304
+	kill targ
+next
+scrx 2 21 32304 1
+scrx 2 21 32304 3
+scrx 2 21 32304 4
+scrx 2 21 32304 6
+scrx 2 21 32304 12
+
+doif game "C1_to_DS_Loaded" = 1
+* 	shower in underground
+	new: simp 2 21 62125 "c1shower" 3 0 200
+	attr 4
+	accg 0
+	bhvr 25
+	fric 100
+	aero 100
+	elas 0
+	perm 60
+	emit 3 1.0
+	emit 5 0.25
+	mvto 2281 10988
+endi
+
+****************************
+* Scripts
+
+scrp 2 21 62125 1
+*	shower is pushed
+	inst
+	lock
+	stim writ from 97 1
+	doif pose = 0
+		anim [1 2 255]
+		sndl "c1ss"
+*		reduce coldness & hotness and increase comfort
+		etch 4 0 0
+			chem 152 -1.0
+			chem 153 -1.0
+			chem 162 -1.0
+		next
+		inst
+		targ ownr
+		tick rand 80 120
+	else
+		stpc
+		pose 0
+		tick 0
+	endi
+endm
+
+scrp 2 21 62125 3
+*	shower is hit
+	inst
+	lock
+	stim writ from 0 1
+endm
+
+scrp 2 21 62125 4
+*	shower is picked up	
+endm
+
+scrp 2 21 62125 6
+*	shower collides
+	inst
+	lock
+	sndc "c1d2"
+endm
+
+scrp 2 21 62125 9
+*	shower timer
+	inst
+	stpc
+	pose 0
+	tick 0
+endm
+
+scrp 2 21 62125 12
+*	shower is bitten
+	inst
+	lock
+	stim writ from 0 1
+endm
+
+
+
+****************************
+* Removers
+
+* shower remover
+rscr
+enum 2 21 62125
+	kill targ
+next
+scrx 2 21 62125 1
+scrx 2 21 62125 3
+scrx 2 21 62125 4
+scrx 2 21 62125 6
+scrx 2 21 62125 12
