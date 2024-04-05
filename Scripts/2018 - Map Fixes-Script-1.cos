@@ -1,0 +1,137 @@
+**CAOS2PRAY
+*# Pray-File "c12ds2018.agents"
+*# DS-Name "C12DS 2018 map fixes"
+*# desc = "Map fixes and CA links"
+
+inst
+new: simp 1 1 62142 "blnk" 2 0 0
+attr 16
+bhvr 0
+*---
+*collision fixes
+*---
+
+*find the temple rooms involved 
+
+*bottom left room
+setv VA00 GRAP 6000 10855
+
+*top left room
+setv VA01 GRAP 6000 10750
+
+*middle top room
+setv VA02 GRAP 6150 10750
+
+*right bottom room
+setv VA03 GRAP 6340 10855
+
+*right top room
+setv VA04 GRAP 6340 10750
+
+*link the rooms to 100 percent permiability for no more headbonks
+
+*left side shelf
+door VA00 VA01 100
+
+*left side upper wall
+door VA01 VA02 100
+
+*right side shelf
+door VA03 VA04 100
+
+*right side upper wall
+door VA02 VA04 100
+
+*umbrella fixes
+
+*bottom left brown umbrella top
+setv VA05 GRAP 8382 10550
+
+*bottom left brown umbrella bottom
+setv VA06 GRAP 8382 10500
+
+*top left brown umbrella bottom
+setv VA07 GRAP 8336 10310
+*top left brown umbrella top
+setv VA08 GRAP 8336 10400
+
+*blue umbrella top left
+setv VA10 GRAP 8580 10500
+*blue umbrella bottom left
+setv VA11 GRAP 8580 10560
+*blue umbrella top right
+setv VA12 GRAP 8680 10500
+*blue umbrella bottom right
+setv VA13 GRAP 8680 10560
+
+*make them passable
+door VA05 VA06 100
+door VA07 VA08 100
+door VA10 VA11 100
+door VA12 VA13 100
+
+*-----first round wasn't enough, take two
+*---top brown umbrella
+*leftmost section
+setv VA13 GRAP 8200 10375
+setv VA14 GRAP 8200 10290
+door VA13 VA14 100
+*2nd left
+setv VA15 GRAP 8240 10375
+setv VA16 GRAP 8240 10290
+door VA15 VA16 100
+*2nd right
+setv VA17 GRAP 8290 10375
+setv VA18 GRAP 8290 10290
+door VA17 VA18 100
+
+*---orange umbrella
+*leftmost
+setv VA19 GRAP 8820 10470
+setv VA20 GRAP 8820 10570
+door VA19 VA20 100
+*2nd left
+setv VA21 GRAP 8860 10470
+setv VA22 GRAP 8860 10570
+door VA21 VA22 100
+*2nd right
+setv VA23 GRAP 8900 10470
+setv VA24 GRAP 8900 10570
+door VA23 VA24 100
+*right most
+setv VA25 GRAP 8950 10470
+setv VA26 GRAP 8950 10570
+door VA25 VA26 100
+
+*---bottom left brown umbrella
+*leftmost
+setv VA27 GRAP 8190 10480
+setv VA28 GRAP 8190 10570
+door VA27 VA28 100
+*second left
+setv VA29 GRAP 8265 10480
+setv VA30 GRAP 8265 10570
+door VA29 VA30 100
+*second right
+setv VA31 GRAP 8333 10480
+setv VA32 GRAP 8333 10570
+door VA31 VA32 100
+
+
+*--well cover
+*left
+setv VA33 GRAP 2280 10410
+setv VA34 GRAP 2280 10510
+door VA33 VA34 100
+*right 
+setv VA35 GRAP 2350 10410
+setv VA36 GRAP 2350 10510
+door VA35 VA36 100
+
+
+
+ rscr
+ enum 1 1 62142
+ 	kill targ
+ next
+
