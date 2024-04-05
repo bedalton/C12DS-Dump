@@ -7,7 +7,7 @@
 *# bioenergy = 0
 *# Agent Description = "Your creatures have come home! Albia is back for Docking Station."
 **# Attach "thth.c16"
-**# Attach "c1_fav_place.c16"
+**# Attach "../Images/c1_fav_place.c16"
 **# Attach "../Catalogue/c1tods.catalogue"
 **# Attach "../Catalogue/c1todsstore.catalogue"
 *# Depend "../Catalogue/c1tods.catalogue"
