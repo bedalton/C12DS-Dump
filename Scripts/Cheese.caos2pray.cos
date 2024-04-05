@@ -1,0 +1,27 @@
+**CAOS2Pray Join
+*# DSAG-Name "C1 to DS Cheese"
+*# Agent Animation File = "c1cheese.c16"
+*# Agent Animation Gallery = "c1cheese"
+*# Agent Animation String = "2"
+*# Agent Description = "C1 Cheese is a tasty food for creatures."
+**# Attach "../Images/c1cheese.c16"
+**# Attach "../Sounds/c1d2.wav"
+*# Depend "c1cheese.c16"
+*# Depend "c1d2.wav"
+*# Link "Cheese.cos"
+
+rscr
+enum 2 11 32300
+    kill targ
+next
+*scrx 2 11 32300 4
+*scrx 2 11 32300 6
+*scrx 2 11 32300 12
+
+
+enum 2 11 32300
+    kill targ
+next
+scrx 2 11 32300 4
+scrx 2 11 32300 6
+scrx 2 11 32300 12

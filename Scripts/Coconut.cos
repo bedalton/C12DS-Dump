@@ -1,0 +1,302 @@
+* Check the state of the clickable cheat. 
+* If not cheating, make hand swat coconuts.
+
+* C1 Coconut
+
+* Dependencies:
+*  c1coconut.c16
+
+
+inst
+lock
+
+* 	Coconut plant 
+new: simp 2 4 32307 "blank" 1 0 200
+perm 0
+rnge 300
+tick rand 103 205
+*mesg wrt+ targ 1001 0 0 10
+
+
+doif game "C1_to_DS_Loaded" = 1 and totl 2 4 32307 <= 1
+* 	Coconut palm left
+	mvto 8273 10253
+	mesg writ targ 9
+
+* 	Coconut palm right
+	new: comp 2 4 32307 "blank" 1 0 200
+	perm 0
+	rnge 300
+	tick rand 103 205
+	mvto 8713 10243
+	mesg writ targ 9
+
+elif type game "ds_game_type" ne 2
+* 	it's NOT a string, this must be C3 only
+* 	choose a safe C3 location
+	setv va00 5440
+	setv va01 3580
+	velo rand 30 40 -5
+	mvsf va00 va01
+else
+* 	it IS a string, but what is the value?
+	doif game "ds_game_type" eq "undocked"
+* 		this is an undocked world, location needs to be DS safe
+		setv va00 6100
+		setv va01 9200
+		velo rand 30 40 -5
+		mvsf va00 va01
+	elif game "ds_game_type" eq "docked"
+* 		this is a docked world, location can be anywhere in the DS/C3 realm
+		setv va00 6100
+		setv va01 9200
+		velo rand 30 40 -5
+		mvsf va00 va01
+	endi
+endi
+
+
+
+***********
+* Scripts
+
+scrp 2 4 32307 9
+*	Coconut plant timer
+	inst
+	setv va00 0
+	esee 2 3 32315
+		doif ov99 = 0
+			addv va00 1
+		endi
+	next
+	setv va03 3
+	subv va03 va00
+	setv va01 posl
+	setv va02 post
+
+	doif va03 >= 1
+		reps va03
+			new: simp 2 3 32315 "c1coconut" 6 0 200
+			attr 199
+			bhvr 48
+			accg 0
+			aero 0
+*			elas 0
+			elas 25
+			perm 0
+			emit 7 0.3
+			pose rand 0 2
+			tick rand 900 1200
+			setv va08 va01
+			setv va09 va02
+			addv va08 rand -40 40
+			addv va09 rand -25 25
+			setv ov99 0
+			mvto va08 va09
+		repe
+	endi
+endm
+
+scrp 2 3 32315 1
+*	Coconut clicked by hand
+	inst
+	doif game "C1_Clickable_Food" = 1
+		doif ov99 = 0
+			setv va01 posl
+			setv va02 post
+			new: simp 2 3 32315 "c1coconut" 6 0 200
+			attr 199
+			bhvr 48
+			accg 6
+			aero 0
+*		elas 0
+			elas 25
+			perm rand 40 60
+			emit 7 0.3
+			setv ov99 0
+			tick rand 900 1200
+			mvsf va01 va02
+			velo rand -15 15 rand -15 -5
+		else
+			setv va01 posl
+			setv va02 post
+			new: simp 2 3 32315 "c1coconut" 2 6 201
+			attr 199
+			bhvr 48
+			accg 6
+			aero 0
+			elas 25
+			perm 60
+			emit 7 0.3
+			pose rand 0 1
+			mira rand 0 1
+			tick rand 900 1200
+			setv ov99 1
+			mvsf va01 va02
+			velo rand -15 15 rand -15 -5
+		endi
+	else
+		attr 199
+		bhvr 48
+		accg 6
+		aero 0
+*		elas 0
+		elas 25
+		perm rand 40 60
+		emit 7 0.3
+		setv ov99 0
+		tick rand 900 1200
+		velo rand -2 2 1
+
+		snde "spnk"
+		targ pntr
+		frat 1
+		anim [10 11 12 11 10 0]
+	endi
+endm
+
+scrp 2 3 32315 4
+*	Coconut picked up
+	inst
+	doif ov99 = 0
+		accg 6
+		perm rand 40 60
+	endi
+endm
+
+scrp 2 3 32315 5
+*	Coconut dropped
+	inst
+	doif ov99 = 0
+		accg 6
+	endi
+endm
+
+
+scrp 2 3 32315 6
+*	Coconut collides
+	inst
+	doif ov99 = 0
+		tick rand 80 120
+		setv va10 velx
+		setv va11 vely
+		doif vely < 3.0 and vely > -3.0
+*			soft landing
+			snde "c1dr"
+		else
+			attr 192
+			bhvr 0
+			inst
+			setv ov99 -1
+			setv va01 posl
+			setv va02 post
+			addv va01 10
+			esee 2 3 32315
+				doif ov99 = 1
+					addv va03 1
+				endi
+			next
+			doif va03 < 30
+				snde "c1cr"
+				anim [3 4 5]
+				reps rand 7 13
+					new: simp 2 3 32315 "c1coconut" 2 6 201
+					attr 199
+					bhvr 48
+					accg 6
+					aero 0
+					elas 25
+					perm 60
+					emit 7 0.3
+					pose rand 0 1
+					mira rand 0 1
+					tick rand 900 1200
+					setv ov99 1
+					mvsf va01 va02
+					setv va12 va10
+					setv va13 va11
+					addv va12 rand -3 3
+					addv va13 rand -5 1
+					velo va12 va13
+				repe
+			else
+				snde "c1cr"
+				pose 4
+			endi
+		endi
+	else
+		snde "c1dr"
+	endi
+endm
+
+scrp 2 3 32315 9
+*	Coconut seed timer
+	inst
+	doif pose >= 3
+		kill targ
+	elif pose <= 2 and ov99 = 0
+		accg 6
+		perm rand 40 60
+		velo 0 1
+	else
+		kill targ
+	endi
+endm
+
+
+scrp 2 3 32315 12
+*	eating a seed
+*	Coconut
+	inst
+	lock
+	seta va20 norn
+	targ from
+	doif crea targ = 1
+*		chem 34 1.0
+*		chem 98 0.5
+		chem 100 0.5
+		snde "chwp"
+		stim writ from 77 1
+	endi
+	targ ownr
+	kill targ
+endm
+
+scrp 2 3 32315 255
+	inst
+	kill targ
+endm
+
+rscr
+*door 754 1222 50
+*door 755 1222 50
+*door 1149 1222 50
+*door 1141 1145 50
+*door 1144 1148 50
+*door 1143 1147 50
+*door 1142 1146 50
+*door 1145 1155 50
+*door 1148 1155 50
+*door 1148 1156 50
+*door 1147 1157 50
+*door 1146 1157 50
+*door 1147 1157 50
+*door 1069 1152 50
+*door 1086 1170 50
+*door 1086 1171 50
+*door 1086 1172 50
+*door 1086 1173 50
+*door 1086 1064 50
+
+enum 2 4 32307
+	kill targ
+next
+
+scrx 2 4 32307 9
+
+enum 2 3 32315
+	kill targ
+next
+*scrx 2 3 32315 4
+*scrx 2 3 32315 12
+*scrx 2 3 32315 255

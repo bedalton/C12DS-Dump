@@ -1,0 +1,11 @@
+*****************************
+* C1 Metaroom 3 - post-injection script
+
+	inst
+doif game "C1_to_DS_Loaded" = 1
+*	favorite place stuff (DS)
+	new: simp 1 3 64401 "c1_fav_place" 1 0 1
+	attr 272
+	mvto 3622 10842
+	tick 10
+endi

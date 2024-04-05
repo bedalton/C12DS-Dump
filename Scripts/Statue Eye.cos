@@ -1,0 +1,38 @@
+* Statue Eye
+* Dependenxies:
+*  c1statueeye.c16
+inst
+
+setv va00 9310
+setv va01 10835
+
+* Cover eye in original background
+new: simp 1 1 32312 "c1statueeye" 4 9 5
+attr 0
+anim [0 1 2 3 2 1 255]
+frat 5.0
+mvto va00 va01
+
+* Eyelid
+new: comp 1 1 32312 "c1statueeye" 9 0 7
+attr 4
+frat 2
+mvto va00 va01
+
+scrp 1 1 32312 1
+	inst
+*	Eyelid clicked
+	doif pose = 0
+		anim [0 1 2 3 4 5 6 7 8]
+	elif pose = 8
+		anim [8 7 6 5 4 3 2 1 0]
+	else
+*		do nothing	
+	endi
+endm
+
+rscr
+enum 1 1 32312
+	kill targ
+next
+scrx 1 1 32312 1

@@ -1,0 +1,4 @@
+*.agents
+.idea
+Body Data
+[a-zA-Z][0-7][0-7][a-zA-Z].[Cc]16

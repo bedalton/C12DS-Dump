@@ -1,0 +1,27 @@
+**CAOS2Pray Join
+*# DSAG-Name "C1 to DS Albian Carrot Beetle"
+*# Agent Bioenergy Value = 0
+*# Agent Animation File = "c1carrotbeetle.c16"
+*# Agent Animation Gallery = "c1carrotbeetle"
+**# Attach "../images/c1carrotbeetle.c16"
+**# Attach "../images/c1plants.c16"
+**# Attach "../sounds/c1bg.c16"
+**# Attach "../sounds/c1b5.c16"
+*# Depend "c1carrotbeetle.c16"
+*# Depend "c1plants.c16"
+*# Depend "c1bg.c16"
+*# Depend "c1b5.c16"
+
+*# Link "Albian Carrot Beetle.cos"
+
+rscr
+enum 2 13 32302
+    kill targ
+next
+scrx 2 13 32302 1
+scrx 2 13 32302 3
+scrx 2 13 32302 4
+scrx 2 13 32302 6
+scrx 2 13 32302 6
+scrx 2 13 32302 9
+scrx 2 13 32302 12

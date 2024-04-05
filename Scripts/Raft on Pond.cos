@@ -1,0 +1,234 @@
+* C1 Raft on Pond
+
+* Dependencies:
+*  c1raft.c16
+*  c1r5.wav
+
+
+inst
+
+doif game "C1_to_DS_Loaded" = 1 and totl 1 14 32399 = 0
+
+	new: simp 1 14 32399 "c1raft" 1 3 7000
+	tick rand 350 450
+	mvto 2426 10785
+	setv game "C1_Raft_Speed" 2
+
+	new: vhcl 3 1 32318 "c1raft" 1 0 100
+
+*	left position
+	setv ov97 2443
+
+*	right position
+	setv ov98 2673
+
+*	Y position
+	setv ov93 10680
+
+	setv ov99 0
+	cabp 0
+	cabv 146
+	cabw 10
+	cabn -5 -40 110 100
+
+	accg 0
+	aero 100
+	fric 100
+	bhvr 1
+	elas 0
+	perm 0
+	tick rand 350 450
+	clac 0
+	attr 4
+	setv ov61 100
+	mvto ov97 ov93
+endi
+
+scrp 1 14 32399 9
+	rtar 3 1 32318
+	mesg writ targ 0
+endm
+
+scrp 3 1 32318 2
+	mesg writ ownr 0
+endm
+
+scrp 3 1 32318 1
+	inst
+	lock
+	stim writ from 94 1.0
+	doif posl = ov97
+		doif ov99 = 0 and posl >= ov97 and posl <> ov98
+*		currently not going anywhere
+*		hide the vehicle from creatures
+			attr 540
+			doif type from = 7
+				targ from
+				doif movs = 0
+					setv va21 0
+					loop
+						spas ownr from
+						wait 1
+						inst
+						addv va21 1
+					untl movs <> 0 or va21 > 10
+				endi
+			else
+				etch 4 0 0
+					doif movs = 0
+						setv va21 0
+						loop
+							spas ownr targ
+							wait 1
+							inst
+							addv va21 1
+						untl movs <> 0 or va21 > 10
+					endi
+				next
+			endi
+			targ ownr
+			setv ov99 1
+			sndl "c1r5"
+		elif ov99 <> 0 and from = pntr
+			targ ownr
+			setv ov99 1
+		elif ov99 = 0 and posl = ov98
+			stim writ from 0 1.0
+		endi
+		doif ov99 <> 0
+			targ ownr
+			tick 1
+		endi
+	endi
+	doif posl = ov98
+		doif ov99 = 0 and posl <= ov98 and posl <> ov97
+*		currently not going anywhere
+*		hide the vehicle from creatures
+			attr 540
+			doif type from = 7
+				setv va21 0
+				loop
+					spas ownr from
+					wait 1
+					inst
+					addv va21 1
+				untl movs <> 0 or va21 > 100
+			else
+				etch 4 0 0
+					setv va21 0
+					loop
+						spas ownr targ
+						wait 1
+						inst
+						addv va21 1
+					untl movs <> 0 or va21 > 100
+				next
+			endi
+			targ ownr
+			setv ov99 -1
+			sndl "c1r5"
+		elif ov99 <> 0 and from = pntr
+			targ ownr
+			setv ov99 -1
+		elif ov99 = 0 and posl = ov98
+			stim writ from 0 1.0
+		endi
+		doif ov99 <> 0
+			targ ownr
+			tick 1
+		endi
+	endi
+	rtar 1 14 32399
+	tick rand 350 450
+	slow
+	unlk
+endm
+
+scrp 3 1 32318 2001
+	inst
+	lock
+
+	doif posl >= ov97 and posl <= ov98 and ov99 = -1 and post >= ov93
+		setv va00 posl
+		subv va00 game "C1_Raft_Speed"
+		setv va01 ov93
+		mvto va00 va01
+	else
+		setv ov99 0
+		setv va00 ov97
+		setv va01 ov93
+		mvto va00 va01
+		stpc
+		mesg writ ownr 3002
+	endi
+endm
+
+scrp 3 1 32318 2002
+	inst
+	lock
+	doif posl >= ov97 and posl <= ov98 and ov99 = 1 and post >= ov93
+		setv va00 posl
+		addv va00 game "C1_Raft_Speed"
+		setv va01 ov93
+		mvto va00 va01
+	else
+		setv ov99 0
+		setv va00 ov98
+		setv va01 ov93
+		mvto va00 va01
+		stpc
+		mesg writ ownr 3002
+	endi
+endm
+
+scrp 3 1 32318 3002
+*	drop creatures
+	inst
+	lock
+	attr 516
+	setv va00 posl
+	doif posl <= ov97
+		setv va00 -10
+	elif posl >= ov98
+		setv va00 10
+	endi
+	epas 4 0 0
+		rpas ownr targ
+	next
+endm
+
+
+scrp 3 1 32318 9
+	inst
+	lock
+	epas 4 0 0
+		chem 24 -10.0
+		chem 29 10.0
+		chem 30 10.0
+	next
+	doif ov99 = -1
+		attr 540
+		mesg writ ownr 2001
+	elif ov99 = 1
+		attr 540
+		mesg writ ownr 2002
+	elif ov99 = 0
+		attr 516
+		tick rand 350 450
+	endi
+endm
+
+rscr
+enum 3 1 32318
+	kill targ
+next
+scrx 3 1 32318 1
+scrx 3 1 32318 2
+scrx 3 1 32318 1001
+scrx 3 1 32318 2001
+scrx 3 1 32318 2002
+scrx 3 1 32318 3002
+
+enum 1 14 32399
+	kill targ
+next

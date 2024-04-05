@@ -1,0 +1,604 @@
+* C1 sam
+
+* test out the pyramid
+*inst
+*rtar 2 24 32304
+*mesg writ targ 1001
+
+inst
+
+* wetsuit installer
+doif game "C1_to_DS_Loaded" = 1
+	new: simp 2 24 32334 "c1sheewetsuit" 2 0 200
+	attr 7
+	mvto 6916 11135
+	pose 0
+	elas 0
+	fric 100
+	accg 3
+	tick 5
+	rnge 500
+	perm 60
+*	see incubator for creation of ec
+*	pyramid installer
+	doif game "C1_to_DS_Loaded" = 1 and totl 2 24 32304 < 1
+		new: vhcl 2 24 32304 "c1sam2" 1 0 100
+*******
+* Add buttons here:
+*		deadly/non-deadly exp. carrot switch
+		pat: butt 1 "c1switch" 0 4 240 85 0 [] 1002 0
+		part 1
+		pose 3
+		setv game "C1_EC_Deadly" 1
+
+*		carrot beetle can farm exp. carrots
+		pat: butt 2 "c1switch" 0 4 328 85 0 [] 1003 0
+		part 2
+		pose 3
+		setv game "C1_EC_Farm" 1
+
+*		kill all creatures
+		pat: butt 3 "c1switch" 0 4 416 85 0 [] 1004 0
+*******
+
+		cabn 238 114 423 240
+*		core 238 114 423 240
+		cabw 200
+		attr 10
+		fric 100
+		aero 100
+		elas 0
+		mvto 7494 11196
+	endi
+endi
+
+* exploding carrot vendor installer
+doif game "C1_to_DS_Loaded" = 1 and totl 2 24 32304 = 1
+	rtar 2 24 32304
+	seta va05 targ
+
+*	exploding carrot Vendor
+	new: vhcl 2 23 32307 "c1ecvendor" 1 0 100
+	attr 711
+	accg 7
+	bhvr 1
+	fric 90
+	aero 0
+	elas 20
+	perm 70
+	cabn 10 0 66 70
+	doif game "C1_to_DS_Loaded" = 1 and totl 2 21 32316 <= 1
+* 	new exploding carrot Vendor in Pyramid
+*		mvsf 6323 11068
+		spas va05 targ
+	elif type game "ds_game_type" ne 2
+* 	it's NOT a string, this must be C3 only
+* 	choose a safe C3 location
+		setv va00 5440
+		setv va01 3580
+		velo rand 5 10 -2
+		mvsf va00 va01
+	else
+* 	it IS a string, but what is the value?
+		doif game "ds_game_type" eq "undocked"
+* 		this is an undocked world, location needs to be DS safe
+			setv va00 6100
+			setv va01 9200
+			velo rand 5 10 -2
+			mvsf va00 va01
+		elif game "ds_game_type" eq "docked"
+* 		this is a docked world, location can be anywhere in the DS/C3 realm
+			setv va00 6100
+			setv va01 9200
+			velo rand 5 10 -2
+			mvsf va00 va01
+		endi
+	endi
+endi
+setv game "C1_EC_Deadly" 1
+
+* Love cheese vendor installer
+doif game "C1_to_DS_Loaded" = 1 and totl 2 24 32304 = 1
+	rtar 2 24 32304
+	seta va05 targ
+
+*	Love Cheese Vendor
+	new: vhcl 2 23 32306 "c1lovecheese" 1 1 200
+	attr 711
+	accg 7
+	bhvr 1
+	fric 90
+	aero 0
+	elas 20
+	perm 70
+	cabn 0 0 58 70
+	doif game "C1_to_DS_Loaded" = 1 and totl 2 21 32316 <= 1
+* 	new Love Cheese Vendor in Pyramid
+*		mvsf 6323 11068
+		spas va05 targ
+*		velo 20 -5
+	elif type game "ds_game_type" ne 2
+* 	it's NOT a string, this must be C3 only
+* 	choose a safe C3 location
+		setv va00 5440
+		setv va01 3580
+		velo rand 5 10 -2
+		mvsf va00 va01
+	else
+* 	it IS a string, but what is the value?
+		doif game "ds_game_type" eq "undocked"
+* 		this is an undocked world, location needs to be DS safe
+			setv va00 6100
+			setv va01 9200
+			velo rand 5 10 -2
+			mvsf va00 va01
+		elif game "ds_game_type" eq "docked"
+* 		this is a docked world, location can be anywhere in the DS/C3 realm
+			setv va00 6100
+			setv va01 9200
+			velo rand 5 10 -2
+			mvsf va00 va01
+		endi
+	endi
+endi
+* mario installer
+rtar 2 24 32304
+seta va05 targ
+
+new: simp 2 21 32320 "c1mario" 7 0 400
+attr 199
+accg 3
+bhvr 33
+fric 90
+aero 0
+elas 0
+perm 70
+doif game "C1_to_DS_Loaded" = 1 and totl 2 21 32316 <= 1
+* 	new Love Cheese Vendor in Pyramid
+*		mvsf 6323 11068
+	spas va05 targ
+	velo -20 -10
+elif type game "ds_game_type" ne 2
+* 	it's NOT a string, this must be C3 only
+* 	choose a safe C3 location
+	setv va00 5440
+	setv va01 3580
+	velo rand 5 10 -2
+	mvsf va00 va01
+else
+* 	it IS a string, but what is the value?
+	doif game "ds_game_type" eq "undocked"
+* 		this is an undocked world, location needs to be DS safe
+		setv va00 6100
+		setv va01 9200
+		velo rand 5 10 -2
+		mvsf va00 va01
+	elif game "ds_game_type" eq "docked"
+* 		this is a docked world, location can be anywhere in the DS/C3 realm
+		setv va00 6100
+		setv va01 9200
+		velo rand 5 10 -2
+		mvsf va00 va01
+	endi
+endi
+
+*************************************************
+
+scrp 2 24 32334 4
+*	wetsuit pickup
+	pose 1
+	attr 199
+endm
+
+scrp 2 24 32334 6
+*	wetsuit collides
+	snde "c1d2"
+endm
+
+scrp 2 24 32334 9
+*	wetsuit timer
+	inst
+	esee 4 0 0
+		doif chem 30 < 0.50
+			chem 30 10.0
+
+		endi
+	next
+endm
+
+scrp 2 11 32302 1
+*	ec pushed
+	doif type _p1_ > 2
+		targ _p1_
+	else
+		targ from
+	endi
+	snde "c1c2"
+	doif from <> pntr
+		setv va00 posl
+		setv va01 post
+	else
+		targ ownr
+		setv va00 posl
+		setv va01 post
+
+		targ from
+	endi
+	new: simp 2 21 32300 "c1cannon" 7 2 9000
+	mvto va00 va01
+	anim [1 2 3 4 5 6 0]
+	doif type _p1_ > 2
+		targ _p1_
+	else
+		targ from
+	endi
+
+	inst
+	lock
+	doif targ <> null
+		doif crea targ = 1 and game "C1_EC_Deadly" = 1
+			dead
+		elif crea targ = 1 and game "C1_EC_Deadly" = 0
+			inst
+			lock
+			setv va89 3
+			setv va90 0
+			zomb 1
+			doif rand 0 1 = 0
+				setv va88 2
+			else
+				setv va88 3
+			endi
+			zomb 1
+			pose 75
+			dirn va88
+			loop
+				zomb 1
+				wait 1
+				doif va89 < 0
+					setv va89 3
+				endi
+				pose va89
+				subv va89 1
+				addv va90 1
+			untl va90 >= 30
+			inst
+			loop
+				zomb 0
+			untl zomb = 0
+		elif fmly = 2 and gnus = 13 and spcs = 32302
+			sndc "c1bg"
+			doif rand 0 1 = 0
+				mira 1
+				anim [6 16 15 14 13 12 11 10 255]
+				velo 15 -15
+			else
+				mira 0
+				anim [6 16 15 14 13 12 11 10 255]
+				velo -15 -15
+			endi
+		elif game "C1_EC_Deadly" = 1
+			doif type targ <> 6 and type targ <> 7 and targ <> pntr
+				kill targ
+			endi
+		endi
+	endi
+	targ ownr
+	kill targ
+endm
+
+scrp 2 11 32302 4
+*	ec pick up
+endm
+
+
+scrp 2 11 32302 6
+*	ec drop
+	sndc "c1dr"
+endm
+
+scrp 2 11 32302 12
+*	eat ec
+	lock
+	inst
+	snde "chwp"
+	wait rand 10 30
+	stim writ from 79 1.0
+	mesg wrt+ ownr 0 from 0 0
+endm
+
+scrp 2 24 32304 1001
+*	Pyramid zoom
+	inst
+	sndc "c102"
+	rtar 2 24 32304
+	doif targ <> null
+		doif post >= 11196
+			mvto 7494 10057
+		endi
+		setv va00 posx
+		setv va01 posy
+		cmrp va00 va01 0
+	endi
+	rtar 1 1 32304
+	seta va06 targ
+	doif targ <> null
+		part 7
+		pose 15
+	endi
+endm
+
+scrp 2 11 32303 1
+*	Love Cheese gets clicked
+	inst
+	doif game "C1_Clickable_Food" = 1
+		setv va00 posl
+		setv va01 post
+		new: simp 2 11 32303 "c1cheese" 3 0 200
+		tint 165 -10 6 128 128
+		attr 199
+		accg 5
+		aero 10
+		fric 100
+		bhvr 48
+		elas 0
+		perm 60
+		pose 2
+		emit 8 .3
+		mvsf va00 va01
+		velo rand -15 15 rand -15 -5
+	endi
+endm
+
+scrp 2 11 32303 4
+*	pickup love cheese
+	inst
+	accg 5
+	pose 1
+	mira rand 0 1
+endm
+
+scrp 2 11 32303 6
+*	love cheese collision
+	inst
+	pose 2
+	doif _p2_ > 8 or _p2_ < -8
+		snde "c1d2"
+	endi
+endm
+
+scrp 2 11 32303 12
+*	eating love cheese
+	inst
+	snde "chwp"
+*	chem 5 .5
+*	chem 10 1.0
+*	chem 12 1.0
+	chem 99 .05
+	chem 150 .5
+	chem 161 10.0
+	stim writ from 79 1
+	kill targ
+endm
+
+scrp 2 23 32306 1
+*	love cheese vendor pushed
+	inst
+	stim writ from 90 1.0
+	setv va02 0
+	epas 0 0 0
+		addv va02 1
+	next
+	doif va02 < 10
+		sndc "c1v1"
+		setv va00 posl
+		setv va01 post
+		addv va00 18
+		addv va01 48
+* love cheese on the pyramid floor
+		new: simp 2 11 32303 "c1cheese" 3 0 200
+		tint 165 -10 6 128 128
+		attr 199
+		accg 5
+		aero 10
+		fric 100
+		bhvr 48
+		elas 0
+		perm 60
+		pose 2
+		emit 8 .3
+		mvsf va00 va01
+		spas ownr targ
+		velo 0 0
+	endi
+endm
+
+scrp 2 23 32306 6
+*	love cheese vendor collides
+	stpc
+	doif vely > 3 or vely < -3 and obst down <= 10
+		sndc "c1d2"
+		epas 2 21 32316
+			doif targ <> null
+				inst
+				rpas ownr targ
+				tick rand 30 40
+				velo 0 0
+				elas 0
+				sndc "c1ba"
+				attr 192
+				bhvr 0
+				anim [1 2 3 4]
+			endi
+		next
+	endi
+endm
+
+scrp 2 21 32320 1
+*	mario doll is played with
+	inst
+	lock
+	sndc "c1ns"
+	stim writ from 97 1
+	doif carr <> from and from <> pntr
+		targ from
+		zomb 1
+		mesg writ from 22
+		zomb 0
+		targ ownr
+	endi
+	targ ownr
+	slow
+	unlk
+endm
+
+scrp 2 21 32320 4
+*	mario doll is picked up
+endm
+
+scrp 2 21 32320 6
+*	mario doll collides
+	inst
+	lock
+	sndc "c1d2"
+endm
+
+scrp 2 21 32320 12
+*	mario doll is eaten
+	stim writ from 0 1
+endm
+
+scrp 2 23 32307 1
+*	exploding carrot vendor pushed
+	inst
+	stim writ from 90 1.0
+	setv va02 0
+	epas 0 0 0
+		addv va02 1
+	next
+	doif va02 < 10
+		sndc "c1v1"
+		setv va00 posl
+		setv va01 post
+		addv va00 18
+		addv va01 38
+		seta va02 targ
+		targ ownr
+		new: simp 2 11 32302 "c1plants" 1 47 200
+		seta va04 targ
+		tint 128 255 128 2 145
+		accg 3
+		attr 199
+		fric 100
+		elas 0
+		aero 0
+		bhvr 48
+		puhl 0 26 20
+		rnge 300
+		emit 8 .20
+		perm 60
+		setv va03 0
+		setv va10 1
+		mvsf va00 va01
+		slow
+		spas ownr va04
+	endi
+endm
+
+scrp 2 23 32307 6
+*	exploding carrot vendor collides
+	stpc
+	doif vely > 3 or vely < -3 and obst down <= 10
+		sndc "c1d2"
+		epas 2 21 32316
+			doif targ <> null
+				inst
+				rpas ownr targ
+				tick rand 30 40
+				velo 0 0
+				elas 0
+				sndc "c1ba"
+				attr 192
+				bhvr 0
+				anim [1 2 3 4]
+			endi
+		next
+	endi
+endm
+
+scrp 2 24 32304 1002
+*	Pyramid
+*	deadly/non-deadly exp. carrot switch
+	part 1
+	doif game "C1_EC_Deadly" = 1
+		setv game "C1_EC_Deadly" 0
+		anim [3 2 1 0]
+	else
+		setv game "C1_EC_Deadly" 1
+		anim [0 1 2 3]
+	endi
+endm
+
+scrp 2 24 32304 1003
+*	Pyramid
+*	carrot beetle can farm exp. carrots
+	part 2
+	doif game "C1_EC_Farm" = 1
+		setv game "C1_EC_Farm" 0
+		anim [3 2 1 0]
+	else
+		setv game "C1_EC_Farm" 1
+		anim [0 1 2 3]
+	endi
+
+endm
+
+scrp 2 24 32304 1004
+*	Pyramid
+*	kill all creatures
+	part 3
+	anim [3 2 1 0 1 2 3 2 1 0]
+	inst
+	enum 4 0 0
+		dead
+	next
+endm
+
+
+rscr
+enum 2 24 32334
+	kill targ
+next
+scrx 2 24 32334 6
+
+enum 2 11 32302
+	kill targ
+next
+scrx 2 11 32302 1
+scrx 2 11 32302 6
+scrx 2 11 32302 12
+enum 2 24 32304
+	kill targ
+next
+scrx 2 24 32304 1001
+scrx 2 24 32304 1002
+scrx 2 24 32304 1003
+scrx 2 24 32304 1004
+enum 2 11 32303
+	kill targ
+next
+enum 2 21 32316
+	kill targ
+next
+enum 2 23 32306
+	kill targ
+next
+enum 2 21 32320
+	kill targ
+next
+enum 2 23 32307
+	kill targ
+next
+enum 1 1 32338
+	kill targ
+next

@@ -1,0 +1,460 @@
+* C1 Discworld
+
+* Dependencies:
+*  C1DiscWorldBorder.c16
+
+
+
+* Warning!!
+*  If the startup window size is less than 400 wide 
+*  or less than 300 high, the discworld will look not line up properly!
+
+* Fixes:
+*  Added event to realign cameras upon world load to fix 'blank' areas after reloading the world.
+*  When agents crossed the line from right to left & cursor was on the right, 
+*     agents'disappeared' until the right part crossed the line. Changed threshold to follow right 
+*     edge of agent. Now only have to worry about picking agent up that really is on right on fake left side.
+
+* Notes: 1633 is the far left playable x coordinate.
+*	   9984 is the far right playable x coordinate.
+
+
+inst
+
+doif game "C1_to_DS_Loaded" = 1 and totl 1 11 32332 < 1
+
+	scam null 0
+	setv game "C1_Metaroom_ID" gmap 0 10000
+	setv game "C1_cam_width" 400
+	setv game "C1_top_cam_height" 50
+	setv game "C1_mid_cam_height" 300
+	setv game "C1_low_cam_height" 245
+	setv game "C1_physical_map_width" 8351
+
+*** 	Left Viewscreens and right cameras
+* 	top row needs to be 50 high
+	setv va00 33
+	loop
+		setv va01 10000
+*		make camera
+		setv va02 va00
+		addv va02 game "C1_physical_map_width"
+		new: comp 1 11 32332 "blank" 1 0 1
+		pat: cmra 1 "blank" 0 0 0 0 game "C1_cam_width" game "C1_top_cam_height" game "C1_cam_width" game "C1_top_cam_height"
+		attr 0
+		accg 0
+		fric 100
+		aero 0
+		mvto va00 va01
+		scam targ 1
+		cmra va02 va01 0
+		addv va01 300
+		addv va00 400
+	untl va00 > 1233
+
+* 	middle rows need to be 300 high
+	setv va00 33
+	loop
+		setv va01 10050
+		loop
+*		make camera
+			setv va02 va00
+			addv va02 game "C1_physical_map_width"
+			new: comp 1 11 32332 "blank" 1 0 1
+			pat: cmra 1 "blank" 0 0 0 0 game "C1_cam_width" game "C1_mid_cam_height" game "C1_cam_width" game "C1_mid_cam_height"
+			attr 0
+			accg 0
+			fric 100
+			aero 0
+			mvto va00 va01
+			scam targ 1
+			cmra va02 va01 0
+			addv va01 300
+		untl va01 > 10650
+		addv va00 400
+	untl va00 > 1233
+
+* 	bottom row needs to be 246 high
+	setv va00 33
+	loop
+		setv va01 10950
+*		make camera
+		setv va02 va00
+		addv va02 game "C1_physical_map_width"
+		new: comp 1 11 32332 "blank" 1 0 1
+		pat: cmra 1 "blank" 0 0 0 0 game "C1_cam_width" game "C1_low_cam_height" game "C1_cam_width" game "C1_low_cam_height"
+		attr 0
+		accg 0
+		fric 100
+		aero 0
+		mvto va00 va01
+		scam targ 1
+		cmra va02 va01 0
+		addv va01 300
+		addv va00 400
+	untl va00 > 1233
+
+*** 	Right Viewscreens and left cameras
+* 	top row needs to be 50 high
+	setv va00 8384
+	loop
+		setv va01 10000
+*		make camera
+		setv va02 va00
+		subv va02 game "C1_physical_map_width"
+		new: comp 1 11 32332 "blank" 1 0 1
+		pat: cmra 1 "blank" 0 0 0 0 game "C1_cam_width" game "C1_top_cam_height" game "C1_cam_width" game "C1_top_cam_height"
+		attr 0
+		accg 0
+		fric 100
+		aero 0
+		mvto va00 va01
+		scam targ 1
+		cmra va02 va01 0
+		addv va01 300
+		addv va00 400
+	untl va00 > 11200
+
+* 	middle rows need to be 300 high
+	setv va00 8384
+	loop
+		setv va01 10050
+		loop
+*			make camera
+			setv va02 va00
+			subv va02 game "C1_physical_map_width"
+			new: comp 1 11 32332 "blank" 1 0 1
+			pat: cmra 1 "blank" 0 0 0 0 game "C1_cam_width" game "C1_mid_cam_height" game "C1_cam_width" game "C1_mid_cam_height"
+			attr 0
+			accg 0
+			fric 100
+			aero 0
+			mvto va00 va01
+			scam targ 1
+			cmra va02 va01 0
+			addv va01 300
+		untl va01 > 10650
+		addv va00 400
+	untl va00 > 11200
+
+* 	bottom row needs to be 246 high
+	setv va00 8384
+	loop
+		setv va01 10950
+*		make camera
+		setv va02 va00
+		subv va02 game "C1_physical_map_width"
+		new: comp 1 11 32332 "blank" 1 0 1
+		pat: cmra 1 "blank" 0 0 0 0 game "C1_cam_width" game "C1_low_cam_height" game "C1_cam_width" game "C1_low_cam_height"
+		attr 0
+		accg 0
+		fric 100
+		aero 0
+		mvto va00 va01
+		scam targ 1
+		cmra va02 va01 0
+		addv va01 300
+		addv va00 400
+	untl va00 > 11200
+
+	doif totl 1 15 32332 = 0
+*		discworld left border	
+		new: simp 1 15 32332 "c1discworldborder" 1 0 1
+		attr 0
+		accg 0
+		tick 1
+		fric 100
+		aero 0
+		mvto 1434 10000
+	endi
+
+	doif totl 1 16 32332 = 0
+*		discworld right border	
+		new: simp 1 16 32332 "c1discworldborder" 1 0 1
+		attr 0
+		accg 0
+		tick 1
+		fric 100
+		aero 0
+		mvto 9985 10000
+	endi
+
+	doif totl 1 17 32332 = 0
+*		mouse pointer tracker
+		new: simp 1 17 32332 "blank" 1 0 1
+		attr 0
+		accg 0
+		tick 1
+		fric 100
+		aero 0
+	endi
+
+*	link all of the rooms
+	setv va00 1633
+	setv va01 10000
+	setv va10 9984
+	loop
+		setv va05 grap va00 va01
+		setv va06 grap va10 va01
+		doif va05 <> -1 and va06 <> -1
+			doif link va05 va06 = 0
+				link va05 va06 100
+			endi
+		endi
+		addv va01 1
+	untl va01 > 11196
+endi
+
+**************************
+* Scripts
+
+scrp 1 15 32332 9
+*	discworld border left
+	inst
+	lock
+
+	etch 0 0 0
+		doif targ <> pntr and attr >= 64 and movs = 0 and posr < 1631
+			doif crea targ <> 1
+				setv va00 posl
+				setv va01 post
+				addv va01 5
+				addv va00 8351
+				mvsf va00 va01
+			else
+				setv va00 dftx
+				setv va01 dfty
+				addv va01 5
+				addv va00 8351
+				mvsf va00 va01
+			endi
+		endi
+	next
+endm
+
+scrp 1 16 32332 9
+*	discworld border right
+	inst
+	lock
+	etch 0 0 0
+		doif targ <> pntr and attr >= 64 and movs = 0 and posr > 9981
+			doif crea targ <> 1
+				setv va00 posl
+				setv va01 post
+				addv va01 5
+				subv va00 8351
+				mvsf va00 va01
+			else
+				setv va00 dftx
+				setv va01 dfty
+				addv va01 5
+				subv va00 8351
+				mvsf va00 va01
+			endi
+		endi
+	next
+endm
+
+scrp 1 17 32332 9
+	targ pntr
+	setv va00 posl
+	setv va01 post
+	inst
+	doif game "C1_Metaroom_ID" = gmap va00 va01
+		targ pntr
+		doif posl <= 1633
+			scam null 0
+			setv va04 wndl
+			addv va04 8351
+			setv va05 wndt
+			doif gmap va04 va05 <> -1
+				cmra va04 va05 0
+			endi
+		endi
+		targ pntr
+		doif posl >= 9984
+			scam null 0
+			setv va04 wndl
+			subv va04 8351
+			setv va05 wndt
+			doif gmap va04 va05 <> -1
+				cmra va04 va05 0
+			endi
+		endi
+	endi
+endm
+
+scrp 1 17 32332 128
+	enum 1 11 32332
+		kill targ
+	next
+*** Left Viewscreens and right cameras
+* top row needs to be 50 high
+	setv va00 33
+	loop
+		setv va01 10000
+*	make camera
+		setv va02 va00
+		addv va02 game "C1_physical_map_width"
+		new: comp 1 11 32332 "blank" 1 0 1
+		pat: cmra 1 "blank" 0 0 0 0 game "C1_cam_width" game "C1_top_cam_height" game "C1_cam_width" game "C1_top_cam_height"
+		attr 0
+		accg 0
+		fric 100
+		aero 0
+		mvto va00 va01
+		scam targ 1
+		cmra va02 va01 0
+		addv va01 300
+		addv va00 400
+	untl va00 > 1233
+
+* middle rows need to be 300 high
+	setv va00 33
+	loop
+		setv va01 10050
+		loop
+*	make camera
+			setv va02 va00
+			addv va02 game "C1_physical_map_width"
+			new: comp 1 11 32332 "blank" 1 0 1
+			pat: cmra 1 "blank" 0 0 0 0 game "C1_cam_width" game "C1_mid_cam_height" game "C1_cam_width" game "C1_mid_cam_height"
+			attr 0
+			accg 0
+			fric 100
+			aero 0
+			mvto va00 va01
+			scam targ 1
+			cmra va02 va01 0
+			addv va01 300
+		untl va01 > 10650
+		addv va00 400
+	untl va00 > 1233
+
+* bottom row needs to be 246 high
+	setv va00 33
+	loop
+		setv va01 10950
+*	make camera
+		setv va02 va00
+		addv va02 game "C1_physical_map_width"
+		new: comp 1 11 32332 "blank" 1 0 1
+		pat: cmra 1 "blank" 0 0 0 0 game "C1_cam_width" game "C1_low_cam_height" game "C1_cam_width" game "C1_low_cam_height"
+		attr 0
+		accg 0
+		fric 100
+		aero 0
+		mvto va00 va01
+		scam targ 1
+		cmra va02 va01 0
+		addv va01 300
+		addv va00 400
+	untl va00 > 1233
+
+
+*** Right Viewscreens and left cameras
+* top row needs to be 50 high
+	setv va00 8384
+	loop
+		setv va01 10000
+*	make camera
+		setv va02 va00
+		subv va02 game "C1_physical_map_width"
+		new: comp 1 11 32332 "blank" 1 0 1
+		pat: cmra 1 "blank" 0 0 0 0 game "C1_cam_width" game "C1_top_cam_height" game "C1_cam_width" game "C1_top_cam_height"
+		attr 0
+		accg 0
+		fric 100
+		aero 0
+		mvto va00 va01
+		scam targ 1
+		cmra va02 va01 0
+		addv va01 300
+		addv va00 400
+	untl va00 > 11200
+
+* middle rows need to be 300 high
+	setv va00 8384
+	loop
+		setv va01 10050
+		loop
+*	make camera
+			setv va02 va00
+			subv va02 game "C1_physical_map_width"
+			new: comp 1 11 32332 "blank" 1 0 1
+			pat: cmra 1 "blank" 0 0 0 0 game "C1_cam_width" game "C1_mid_cam_height" game "C1_cam_width" game "C1_mid_cam_height"
+			attr 0
+			accg 0
+			fric 100
+			aero 0
+			mvto va00 va01
+			scam targ 1
+			cmra va02 va01 0
+			addv va01 300
+		untl va01 > 10650
+		addv va00 400
+	untl va00 > 11200
+
+* bottom row needs to be 246 high
+	setv va00 8384
+	loop
+		setv va01 10950
+*	make camera
+		setv va02 va00
+		subv va02 game "C1_physical_map_width"
+		new: comp 1 11 32332 "blank" 1 0 1
+		pat: cmra 1 "blank" 0 0 0 0 game "C1_cam_width" game "C1_low_cam_height" game "C1_cam_width" game "C1_low_cam_height"
+		attr 0
+		accg 0
+		fric 100
+		aero 0
+		mvto va00 va01
+		scam targ 1
+		cmra va02 va01 0
+		addv va01 300
+		addv va00 400
+	untl va00 > 11200
+
+
+endm
+
+scrp 1 17 32332 255
+*	error
+	inst
+	nohh
+	targ pntr
+	setv va00 posl
+	setv va01 post
+	doif va00 > 9984
+		subv va00 8351
+	elif va00 < 1633
+		addv va00 8351
+	endi
+endm
+
+**************************
+
+rscr
+enum 1 11 32332
+	kill targ
+next
+enum 1 15 32332
+	kill targ
+next
+scrx 1 15 32332 9
+
+enum 1 16 32332
+	kill targ
+next
+scrx 1 16 32332 9
+
+enum 1 17 32332
+	kill targ
+next
+scrx 1 17 32332 9
+scrx 1 17 32332 123
+scrx 1 17 32332 128
+scrx 1 17 32332 255
+enum 1 31 32332
+	kill targ
+next

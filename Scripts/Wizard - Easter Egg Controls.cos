@@ -1,0 +1,104 @@
+* C1 Wizard (Easter Egg Controls)
+
+**********
+* Dependencies
+*	c1switch.c16
+*	c1wizard.c16
+*	c1treehatch.c16
+*	c1r1.wav
+*	c1r2.wav
+
+
+
+**********
+* Install
+
+inst
+doif game "C1_to_DS_Loaded" = 1 and totl 1 1 32308 = 0
+*	Background
+	new: simp 1 1 32308 "c1wizard" 1 9 1
+	attr 0
+	mvsf 3458 11007
+
+* 	Movable Wizard Painting
+	new: simp 1 1 32307 "c1wizard" 9 0 3
+	attr 20
+	accg 0
+	fric 100
+	aero 100
+	bhvr 0
+	mvsf 3460 11009
+
+*	 Grendel tree hatch
+	new: simp 2 24 32333 "c1treehatch" 22 0 10
+	attr 20
+	accg 0
+	elas 0
+	fric 100
+	aero 100
+	mvsf 7153 10540
+
+	new: simp 1 1 32317 "c1treehatch" 1 21 8
+	attr 20
+	accg 0
+	elas 0
+	fric 100
+	aero 100
+	mvsf 7153 10540
+endi
+
+scrp 2 24 32333 1
+	inst
+	lock
+	doif pose = 0
+		snde "c1r1"
+		anim [1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20]
+	else
+		snde "c1r2"
+		anim [19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 0]
+	endi
+endm
+
+**********
+* Scripts
+
+scrp 1 1 32307 1
+	inst
+	doif pose = 0
+		sndc "c1r1"
+		anim [0 1 2 3 4 5 6 7 8]
+	else
+		sndc "c1r2"
+		anim [8 7 6 5 4 3 2 1 0]
+	endi
+endm
+
+scrp 1 1 32317 1
+	inst
+	rtar 2 24 32333
+	mesg writ targ 0
+endm
+
+
+**********
+* Remover
+
+rscr
+enum 1 1 32307
+	kill targ
+next
+scrx 1 1 32307 1
+
+enum 1 1 32308
+	kill targ
+next
+
+enum 2 24 32333
+	kill targ
+next
+scrx 2 24 32333 1
+
+enum 1 1 32317
+	kill targ
+next
+scrx 1 1 32317 1

@@ -1,0 +1,312 @@
+* C1 to DS Remover
+
+inst
+
+* find the metaroom number
+setv va02 gmap 0 10000
+
+** Remove the favorite place icon
+*enum 1 4 64401
+*	kill targ
+*next
+
+* remove the scenton emitters
+enum 1 7 32316
+	kill targ
+next
+
+* Remove the 'C1 to DS is loaded' variable
+delg "C1_to_DS_Loaded"
+
+* Get a safe spot
+doif type game "ds_game_type" ne 2
+	setv va00 5440
+	setv va01 3580
+else
+	doif game "ds_game_type" eq "undocked"
+		setv va00 6100
+		setv va01 9200
+	elif game "ds_game_type" eq "docked"
+		setv va00 6100
+		setv va01 9200
+	endi
+endi
+
+* move the camera to the safe spot
+cmrp va00 va01 0
+
+* Remove teleporters to prevent movement in and out of the room
+enum 3 2 64401
+	kill targ
+next
+enum 3 2 32318
+	kill targ
+next
+enum 3 2 32319
+	kill targ
+next
+
+* remove all discworld agents
+enum 1 11 32332
+	kill targ
+next
+enum 1 15 32332
+	kill targ
+next
+scrx 1 15 32332 9
+
+enum 1 16 32332
+	kill targ
+next
+scrx 1 16 32332 9
+
+enum 1 17 32332
+	kill targ
+next
+scrx 1 17 32332 9
+scrx 1 17 32332 123
+scrx 1 17 32332 128
+enum 1 31 32332
+	kill targ
+next
+
+* Move all creatures and eggs from the metaroom
+enum 4 0 0
+	setv va03 gmap posl post
+	doif va03 = va02
+		loop
+			doif movs = 3
+				rpas carr targ
+			endi
+		untl movs = 0
+		mvft va00 va01
+	endi
+next
+enum 3 4 0
+	setv va03 gmap posl post
+	doif va03 = va02
+		loop
+			doif movs = 3
+				rpas carr targ
+			endi
+		untl movs = 0
+		mvsf va00 va01
+	endi
+next
+
+* Move DS teleporters in the metaroom to the safe spot
+enum 3 2 3
+	doif gmap posx posy = va02
+		mvsf va00 va01
+	endi
+next
+
+* Move C3 teleporters in the metaroom to the safe spot
+enum 3 2 1
+	doif gmap posx posy = va02
+		mvsf va00 va01
+	endi
+next
+
+
+* move any random teleporters in the metaroom 
+enum 3 2 4
+	doif gmap posx posy = va02
+		mvsf va00 va01
+	endi
+next
+
+* move any DS cameras
+enum 3 8 50
+	doif gmap posx posy = va02
+		mvsf va00 va01
+	endi
+next
+
+* move any C3 cameras
+enum 3 3 34
+	doif gmap posx posy = va02
+		mvsf va00 va01
+	endi
+next
+
+
+* Move portals to safe spot
+enum 3 9 1
+	doif gmap posx posy = va02
+		mvsf va00 va01
+		doif ov03 eq 1 or ov03 eq 2
+* 			Close portal
+			lock
+			bhvr 0
+			setv ov03 0
+			pose 0
+			attr 199
+			clac 2
+		endi
+	endi
+next
+
+* remove all agents in the metaroom
+enum 0 0 0
+	doif gmap posx posy = va02
+		kill targ
+	endi
+next
+
+* unlink the discworld rooms
+setv va00 1633
+setv va01 10000
+setv va10 9984
+loop
+	setv va05 grap va00 va01
+	setv va06 grap va10 va01
+	doif va05 <> -1 and va06 <> -1
+		link va05 va06 0
+	endi
+	addv va01 1
+untl va01 > 11196
+
+* get all rooms in metaroom
+sets va03 erid va02
+adds va03 " "
+* get the first room in the list
+setv va04 1
+loop
+	addv va04 1
+	sets va07 subs va03 va04 1
+untl va04 > strl va03 or va07 = " "
+
+* now iterate through all remaining rooms
+loop
+*	get room number
+	subv va04 1
+	sets va05 subs va03 2 va04
+* 	got room number, now delete * (here's where it explodes)
+	delr stoi va05
+*	get the next room
+	setv va06 strl va03
+	subv va06 va04
+	addv va06 1
+	sets va05 subs va03 va04 va06
+	sets va03 va05
+	loop
+		addv va04 1
+		doif va04 <= va06
+			sets va07 subs va03 va04 1
+		endi
+	untl va04 > va06 or va07 = " "
+untl va04 > va06
+
+* Delete the last room
+delr stoi va03
+
+* Delete the metaroom
+delm va02
+
+* Find a safe spot for the camera
+doif type game "ds_game_type" ne 2
+	setv va00 2873
+	setv va01 1000
+else
+	doif game "ds_game_type" eq "undocked"
+		setv va00 523
+		setv va01 9200
+	elif game "ds_game_type" eq "docked"
+		setv va00 523
+		setv va01 9200
+	endi
+endi
+cmrp va00 va01 0
+
+* Remove the favorite place icon and reorder the rest
+rtar 1 4 64401
+doif targ <> null
+	setv va00 ov50
+endi
+* renumerate icons
+setv va50 0
+setv va10 145
+setv va03 gmap mopx mopy
+enum 1 4 0
+	doif spcs = 64401
+		kill targ
+	else
+		setv ov50 va50
+		mesg wrt+ targ 1000 va03 0 0
+		flto va10 flty
+		addv va10 50
+		addv va50 1
+	endi
+next
+setv game "ds_favourites" va50
+rtar 1 3 64401
+doif targ <> null
+	setv ov00 0
+	setv ov50 0
+endi
+
+* remove the toolbar
+rscr
+enum 1 1 32304
+	kill targ
+next
+scrx 1 1 32304 5
+scrx 1 1 32304 9
+scrx 1 1 32304 128
+scrx 1 1 32304 1001
+scrx 1 1 32304 1002
+scrx 1 1 32304 1003
+scrx 1 1 32304 1004
+
+enum 1 1 32305
+	kill targ
+next
+scrx 1 1 32305 125
+scrx 1 1 32305 1000
+scrx 1 1 32305 1001
+
+enum 1 1 32306
+	kill targ
+next
+scrx 1 1 32306 1
+scrx 1 1 32306 9
+scrx 1 1 32306 1000
+
+enum 1 1 32320
+	kill targ
+next
+scrx 1 1 32320 5
+scrx 1 1 32320 9
+
+enum 1 1 32316
+	kill targ
+next
+enum 1 1 32334
+	kill targ
+next
+scrx 1 1 32334 9
+
+enum 1 2 32300
+	kill targ
+next
+scrx 1 2 32300 1
+enum 1 2 32301
+	kill targ
+next
+scrx 1 2 32301 1
+scrx 1 2 32301 9
+targ null
+scam targ 0
+trck null 0 0 0 0
+rtar 1 2 32302
+enum 1 2 32302
+	dpas 0 0 0
+	kill targ
+next
+scrx 1 2 32302 1
+scrx 1 2 32302 9
+scrx 1 2 32302 124
+scrx 1 2 32302 1001
+scrx 1 2 32302 1002
+scrx 1 2 32302 1003

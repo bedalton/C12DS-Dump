@@ -1,0 +1,71 @@
+* Bed Time Bear
+* Encourages creatues to sleep if they are too tired or sleepy
+
+inst
+new: simp 2 21 32319 "c1teddy" 7 0 200
+attr 199
+accg 3
+bhvr 33
+fric 90
+aero 0
+elas 0
+perm 70
+mvto 3660 10670
+
+
+scrp 2 21 32319 1
+*	bed time bear is played with
+	inst
+	lock
+	sndc "c1tg"
+	stim writ from 97 1
+	doif carr <> from and from <> pntr
+		targ from
+		zomb 1
+		mesg writ from 22
+		zomb 0
+		targ ownr
+	endi
+	doif from <> pntr
+		targ from
+		doif drv! = 7 or drv! = 8
+*			zomb 1
+*			drop
+*			mesg writ targ 4
+*			zomb 0
+			doif aslp = 0
+				driv 8 10.0
+			endi
+		endi
+	endi
+	targ ownr
+	slow
+	unlk
+endm
+
+scrp 2 21 32319 4
+*	bed time bear is picked up
+endm
+
+scrp 2 21 32319 6
+*	bed time bear collides
+	inst
+	lock
+	sndc "c1d2"
+endm
+
+scrp 2 21 32319 12
+*	bed time bear is eaten
+*	stim writ from 0 255
+*	0 0 40 50 42 50 23 50 34 50
+	stim writ from 0 1
+endm
+
+rscr
+enum 2 21 32319
+	kill targ
+next
+*scrx 2 21 32319 1
+*scrx 2 21 32319 4
+*scrx 2 21 32319 6
+*scrx 2 21 32319 12

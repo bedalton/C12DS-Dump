@@ -1,0 +1,53 @@
+**CAOS2Pray Join
+*# DSAG-Name "C1 to DS Refrigerator"
+*# Agent Animation File = "c1fridgeicon.c16"
+*# Agent Animation Gallery = "c1fridgeicon"
+*# Agent Animation String = "0"
+*# Agent Description = "The C1 refrigerator vends food, fruit, and seeds for a nutritionally balanced diet."
+*# Web Icon = "thth"
+*# Web Icon Animation String = "0"
+*# Web Icon Base = "0"
+*# Web Label =  "Visit The High Tech Hand"
+*# Web URL = "www.hightechhand.com"
+**# Attach "../Images/thth.c16"
+*# Depend "thth.c16"
+**# Attach "../Images/c1fridgeicon.c16"
+**# Attach "../Images/c1refrigerator.c16"
+**# Attach "../Images/c1beehivehoney.c16"
+**# Attach "../Images/c1carrotvendorcarrot.c16"
+**# Attach "../Images/c1plants.c16"
+**# Attach "../Images/c1seeds.c16"
+**# Attach "../Images/c1coconut.c16"
+**# Attach "../Sounds/c1d2.wav"
+**# Attach "../Sounds/c1h1.wav"
+**# Attach "../Sounds/c1r1.wav"
+**# Attach "../Sounds/c1r2.wav"
+**# Attach "../Images/c1cheese.c16"
+*# Depend "c1fridgeicon.c16"
+*# Depend "c1refrigerator.c16"
+*# Depend "c1beehivehoney.c16"
+*# Depend "c1carrotvendorcarrot.c16"
+*# Depend "c1cheese.c16"
+*# Depend "c1plants.c16"
+*# Depend "c1seeds.c16"
+*# Depend "c1coconut.c16"
+*# Depend "c1d2.wav"
+*# Depend "c1h1.wav"
+*# Depend "c1r1.wav"
+*# Depend "c1r2.wav"
+
+*# Link "Refrigerator.cos"
+
+rscr
+rtar 2 23 32303
+enum 2 23 32303
+    kill targ
+next
+scrx 2 23 32303 0
+scrx 2 23 32303 1
+scrx 2 23 32303 1001
+scrx 2 23 32303 1002
+scrx 2 23 32303 2000
+enum 1 1 32303
+    mesg writ targ 9
+next

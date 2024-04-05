@@ -1,0 +1,23 @@
+**CAOS2Pray Join
+*# DSAG-Name "C1 to DS Carrots"
+*# Agent Animation File = "c1plants.c16"
+*# Agent Animation Gallery = "c1plants"
+*# Agent Animation String = "47"
+*# Agent Description = "C1 Carrots are delicious and nutritious."
+**# Attach "../Images/c1plants.c16"
+**# Attach "../Sounds/c1dr.wav"
+*# Depend "c1plants.c16"
+*# Depend "c1dr.wav"
+* LINK Actual Script
+*# Link "Carrots.cos"
+
+enum 2 11 32403
+    kill targ
+next
+scrx 2 11 32403 1
+scrx 2 11 32403 4
+scrx 2 11 32403 6
+scrx 2 11 32403 9
+scrx 2 11 32403 12
+scrx 2 11 32403 1000
+

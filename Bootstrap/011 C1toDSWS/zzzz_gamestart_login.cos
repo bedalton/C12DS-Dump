@@ -1,0 +1,696 @@
+*$Id: zzz_gamestart_login.Scripts,v 1.16 2001/03/12 10:12:22 aharman Exp $
+**
+** zzz_GameStart_Login
+**
+** Pauses all agents, keeping the screen focus on the DS Splash background. Asks you to log in. If successful, then it unpauses all
+** agents, creates the Welcome Screen and then moves the camera to the Meso.
+**
+** Game Variables
+** ==============
+**
+** Game Status = Offline
+
+inst
+* get rid of the normal login screen agents
+ject "zzz_gamestart_login" 1
+enum 1 2 206
+	kill targ
+next
+enum 1 2 26
+	kill targ
+next
+
+sets game "status" "offline"
+** User of this World = Not Set
+sets game "user_of_this_world" ""
+** Assumes that th DS User's Password will be saved.
+setv game "engine_netbabel_save_passwords" 1
+** Refresh game variables
+rgam
+** Move to Docking Station Hub
+rtar 2 2 26
+cmrt 0
+** Create Connect GUI
+new: comp 1 2 206 "connect gui" 0 0 9000
+attr 304
+*** ask for the user id...
+pat: text 1 "connect gui" 8 90 118 10 1000 "WhiteOnTransparentChars"
+part 1
+frmt 1 5 0 1 1 1 0
+fcus
+** ask for the password..
+pat: text 2 "connect gui" 8 90 170 0 1020 "whiteontransparentpasswordchars"
+part 2
+frmt 1 5 0 1 1 1 0
+** Save password?
+pat: butt 3 "connect gui" 5 2 84 215 5 [] 1010 0
+** Info / Error Display
+pat: fixd 4 "connect gui" 7 0 0 0 "GreyOnTransChars"
+** Save the Password display
+pat: fixd 5 "connect gui" 9 117 215 0 "GreyOnTransChars"
+
+part 5
+frmt 0 7 0 0 0 0 0
+ptxt read "Login Misc Messages" 6
+** Tick Button
+pat: butt 6 "connect gui" 1 2 80 248 1 [] 1021 0
+** Cancel Button
+pat: butt 7 "connect gui" 3 2 252 248 1 [] 1022 0
+** Enter Nickname
+pat: fixd 8 "connect gui" 8 54 96 1 "GreyOnTransChars"
+** Enter Password
+pat: fixd 9 "connect gui" 8 54 149 1 "GreyOnTransChars"
+** Click here to get a Nickname and Password - TEXT
+pat: fixd 10 "connect gui" 10 20 84 1 "GreyOnTransChars"
+** Click here to get a Nickname and Password - BUTTON
+pat: butt 11 "connect gui" 10 0 20 84 2 [] 1050 0
+
+** Make a 100% Offline world
+pat: butt 12 "connect gui 2" 0 0 140 250 5 [] 1025 0
+
+doif game "engine_netbabel_save_passwords" = 0
+	part 3
+	pose 1
+elif game "engine_netbabel_save_passwords" = 1
+	part 3
+	pose 0
+endi
+
+part 4
+frmt 25 22 19 0 2 0 0
+ptxt read "Login Misc Messages" 12
+
+part 8
+frmt 1 5 0 1 1 1 0
+ptxt read "Login Misc Messages" 1
+
+part 9
+frmt 1 5 0 1 1 1 0
+ptxt read "Login Misc Messages" 2
+
+part 10
+frmt 2 2 0 0 0 0 2
+ptxt read "Login Misc Messages" 7
+
+
+* Move!
+setv va90 wndw
+divv va90 2
+setv va91 wndh
+divv va91 2
+setv va92 wdth
+divv va92 2
+setv va93 hght
+divv va93 2
+
+subv va90 va92
+subv va91 va93
+
+flto va90 va91
+setv ov99 1
+
+imsk 12
+
+tick 1
+
+** Window Resize
+scrp 1 2 206 123
+	inst
+	setv va90 wndw
+	divv va90 2
+	setv va91 wndh
+	divv va91 2
+	setv va92 wdth
+	divv va92 2
+	setv va93 hght
+	divv va93 2
+	subv va90 va92
+	subv va91 va93
+	flto va90 va91
+endm
+
+** Link to get Nickname and Password
+scrp 1 2 206 1050
+	inst
+	lock
+	webb read "Login Link" 0
+endm
+
+
+
+** Timer Script
+** All this does is count up a little bit, then pauses everything. I did have the pause in the install script, but I think
+** it was stopping some essential things from occuring - such as, powering up the Light and Heat emitters! eeek!
+scrp 1 2 206 9
+	addv ov01 1
+** Pausing...
+	doif ov01 >= 10 and ov99 = 1
+** Pause Everything
+		wpau 1
+		inst
+		enum 1 0 0
+			doif gnus eq 1 and spcs eq 193
+				paus 0
+			elif gnus = 2 and spcs = 26
+				paus 0
+			elif gnus = 2 and spcs = 206
+			else
+				paus 1
+			endi
+		next
+		enum 2 0 0
+			doif gnus eq 1 and spcs eq 1
+				paus 0
+			else
+				paus 1
+			endi
+		next
+		enum 3 0 0
+			paus 1
+		next
+		enum 4 0 0
+			paus 1
+		next
+		targ ownr
+		setv ov99 2
+		tick 0
+	endi
+endm
+
+* Mouse Movements
+scrp 1 2 206 75
+	inst
+	seta va00 hots
+* Over "get a nickname online" link?
+	setv va01 hotp
+	doif va00 = ownr and va01 = 11
+		part 10
+		ptxt read "Login Misc Messages" 8
+	else
+		part 10
+		ptxt read "Login Misc Messages" 7
+	endi
+endm
+
+** Pressed the Tick Button (first login attempt)
+scrp 1 2 206 1021
+	inst
+	sndc "lg_1"
+	part 6
+	anim [1 0 255]
+	mesg writ ownr 1020
+endm
+** Pressed the Cancel Button (first time connect)
+scrp 1 2 206 1022
+	sndc "lg_1"
+	part 7
+	anim [1 0 1 0]
+	over
+	part 7
+	anim [0]
+	inst
+	save
+	load "Startup"
+endm
+
+** Pressed the Cancel Button (non-first time connect)
+scrp 1 2 206 1024
+	sndc "lg_1"
+	part 7
+	anim [1 0 1 0]
+	over
+	part 7
+	anim [0]
+	sets game "status" "offline"
+	setv va90 0
+	loop
+		addv va90 32
+		part -1
+		alph va90 1
+	untl va90 >= 256
+	kill ownr
+endm
+
+** Change focus to Password (all modes)
+scrp 1 2 206 1000
+	sndc "lg_1"
+	part 2
+	fcus
+endm
+
+
+** Save Password or not? (all modes)
+scrp 1 2 206 1010
+	inst
+	doif game "engine_netbabel_save_passwords" = 0
+		part 3
+		pose 0
+		setv game "engine_netbabel_save_passwords" 1
+	else
+		part 3
+		pose 1
+		setv game "engine_netbabel_save_passwords" 0
+	endi
+endm
+
+
+** Pressed the Tick Button (non-first time login)
+scrp 1 2 206 1023
+	sndc "lg_1"
+	part 6
+	anim [1 0 1 0]
+	over
+	mesg writ ownr 1002
+endm
+
+** Attempt to Connect (first login attempt)
+scrp 1 2 206 1020
+	inst
+	part 6
+	pose 1
+	sndc "lg_1"
+** Put the focus back on Text Entry
+	targ game "c3_default_focus"
+	part game "c3_default_focus_part"
+	fcus
+	targ ownr
+**	Check that a UserID and Password have been entered.
+	part 1
+	sets va00 ptxt
+	part 2
+	sets va01 ptxt
+	doif va00 = ""
+		part 1
+		ptxt ""
+		fcus
+		part 6
+		pose 0
+		wait 5
+		stop
+	endi
+	doif va01 = ""
+		part 2
+		ptxt ""
+		fcus
+		part 6
+		pose 0
+		wait 5
+		stop
+	endi
+** If it makes it this far, then everything is ready to try and connect!
+	net: pass va00 va01
+	slow
+	lock
+** show the intent
+	part 4
+	frmt 25 22 19 0 2 0 10
+	ptxt read "Login Misc Messages" 9
+	wait 25
+** attempt the connection
+	net: line 1
+	doif net: line = 1
+** show the success
+		part 4
+		frmt 25 22 19 0 2 0 10
+		sets va44 read "Login Misc Messages" 10
+		adds va44 wnam
+		adds va44 read "Login Misc Messages" 11
+		ptxt va44
+		targ ownr
+		wait 25
+		slow
+		setv va90 0
+		loop
+			addv va90 16
+			part -1
+			alph va90 1
+		untl va90 >= 256
+		alph 256 1
+		inst
+** Go offline again! 
+		net: line 0
+** UnPause the World
+		wpau 0
+		enum 1 0 0
+			paus 0
+		next
+		enum 2 0 0
+			paus 0
+		next
+		enum 3 0 0
+			paus 0
+		next
+		enum 4 0 0
+			paus 0
+		next
+*** Set the GAME variable "status" to "online"
+*		sets game "status" "online"
+*		targ game "ds_gui_topleft"
+*		part 7
+*		pose 1
+		sets game "user_of_this_world" va00
+** update hand
+		rtar 1 2 12
+		part 11
+		ptxt va00
+		targ ownr
+		hand va00
+** Create the Welcome Screen
+** Docked or Undocked?
+		doif eame "engine_no_auxiliary_bootstrap_1" = 0
+			sets va40 read "DS Welcome Screen" 2
+		elif eame "engine_no_auxiliary_bootstrap_1" = 1
+			sets va40 read "DS Welcome Screen" 1
+		endi
+** What is the World's name?
+		sets va41 wnam
+** Create the Welcome Screen
+		new: comp 1 2 26 "ds welcome screen" 1 0 8950
+		attr 288
+		clac 0
+** Starter Family Button
+		pat: butt 1 "ds welcome screen" 2 2 122 172 0 [0 1 0 1 0 1] 1001 0
+		part 1
+		anim [0]
+** Eggs Button
+		pat: butt 2 "ds welcome screen" 2 2 122 211 0 [0 1 0 1 0 1] 1002 0
+		part 2
+		anim [0]
+** Exit Button
+		pat: butt 3 "ds welcome screen" 2 2 122 250 0 [0 1 0 1 0 1] 1003 0
+		part 3
+		anim [0]
+** Create the introduction text.
+		pat: fixd 4 "ds welcome screen" 1 60 110 1 "WhiteOnTransparentChars"
+		part 4
+		sets va42 read "DS Welcome Screen" 0
+		adds va42 va40
+		sets va43 read "DS Welcome Screen" 3
+		adds va43 va41
+		adds va43 read "DS Welcome Screen" 4
+		adds va42 va43
+		frmt 5 10 5 5 3 1 0
+		ptxt va42
+** Starter Family
+		pat: fixd 5 "ds welcome screen" 4 160 177 1 "WhiteOnTransparentChars"
+		part 5
+		frmt 0 0 0 0 0 0 0
+		ptxt read "DS Welcome Screen" 5
+** Eggs
+		pat: fixd 6 "ds welcome screen" 4 160 216 1 "WhiteOnTransparentChars"
+		part 6
+		frmt 0 0 0 0 0 0 0
+		ptxt read "DS Welcome Screen" 6
+** Exit
+		pat: fixd 7 "ds welcome screen" 4 160 260 1 "WhiteOnTransparentChars"
+		part 7
+		frmt 0 0 0 0 0 0 0
+		ptxt read "DS Welcome Screen" 7
+** Window Positioning
+		setv va50 wndw
+		setv va51 wndh
+		divv va50 2
+		subv va50 260
+		divv va51 2
+		subv va51 157
+		flto va50 va51
+** Move the Camera
+		rtar 2 22 4
+		doif targ ne null
+			cmrt 0
+		endi
+		kill ownr
+	else
+		snde "buzz"
+		part 4
+		frmt 25 22 19 0 2 0 0
+** What is the Error code?
+** 0 = Unknown Reason
+		doif net: erra = 0
+			ptxt read "Login Error Messages" 0
+** 1 = Connection OK
+		elif net: erra = 1
+			ptxt read "Login Error Messages" 1
+** 2 = Either the client computer is offline or the server is offline.
+		elif net: erra = 2
+			ptxt read "Login Error Messages" 2
+** 3 = An invalid nickname or password was entered.
+		elif net: erra = 3
+			ptxt read "Login Error Messages" 3
+** 4 = This nickname is already logged on.
+		elif net: erra = 4
+			ptxt read "Login Error Messages" 4
+** 5 = Too many users are connected to the server.
+		elif net: erra = 5
+			ptxt read "Login Error Messages" 5
+** 6 = An internal error has occured.
+		elif net: erra = 6
+			ptxt read "Login Error Messages" 6
+** 7 = Client software needs updating.
+		elif net: erra = 7
+			ptxt read "Login Error Messages" 7
+** ELSE = Extremely Weird Error :o)
+		else
+			ptxt read "Login Error Messages" 8
+		endi
+** Reset the Login and Password Fields
+		part 2
+		ptxt ""
+		part 1
+		ptxt ""
+		fcus
+	endi
+	part 6
+	pose 0
+endm
+
+
+
+** Attempt to Connect (non-first time login)
+scrp 1 2 206 1002
+	inst
+	part 6
+	pose 1
+** Put the focus back on Text Entry
+	targ game "c3_default_focus"
+	part game "c3_default_focus_part"
+	fcus
+	targ ownr
+** Save UserID to va00
+	sets va00 game "user_of_this_world"
+** Check password
+	part 2
+	sets va01 ptxt
+	doif va01 = ""
+		part 2
+		fcus
+		wait 4
+		part 6
+		pose 0
+		stop
+	endi
+** If it makes it this far, then everything is ready to try and connect!
+	net: pass va00 va01
+	lock
+	net: line 1
+	doif net: line = 1
+		sets game "status" "online"
+		targ game "ds_gui_topleft"
+		part 7
+		pose 1
+		kill ownr
+	else
+		snde "buzz"
+		part 4
+		frmt 25 22 19 0 2 0 0
+** What is the Error code?
+** 0 = Unknown Reason
+		doif net: erra = 0
+			ptxt read "Login Error Messages" 0
+** 1 = Connection OK
+		elif net: erra = 1
+			ptxt read "Login Error Messages" 1
+** 2 = Either the client computer is offline or the server is offline.
+		elif net: erra = 2
+			ptxt read "Login Error Messages" 2
+** 3 = An invalid nickname or password was entered.
+		elif net: erra = 3
+			ptxt read "Login Error Messages" 3
+** 4 = This nickname is already logged on.
+		elif net: erra = 4
+			ptxt read "Login Error Messages" 4
+** 5 = Too many users are connected to the server.
+		elif net: erra = 5
+			ptxt read "Login Error Messages" 5
+** 6 = An internal error has occured.
+		elif net: erra = 6
+			ptxt read "Login Error Messages" 6
+** 7 = Client software needs updating.
+		elif net: erra = 7
+			ptxt read "Login Error Messages" 7
+** ELSE = Extremely Weird Error :o)
+		else
+			ptxt read "Login Error Messages" 8
+		endi
+** Reset the Login and Password Fields
+		part 2
+		ptxt ""
+		fcus
+	endi
+	part 6
+	pose 0
+endm
+
+scrp 1 2 206 1025
+* 	Clucky's Play 100% Offline button clicked
+	inst
+	lock
+	targ pntr
+	sndc "bep2"
+	targ ownr
+	part 4
+	frmt 25 22 19 0 2 0 10
+	sets va44 read "Login Misc Messages" 10
+	adds va44 wnam
+	adds va44 read "Login Misc Messages 2" 0
+	ptxt va44
+	targ ownr
+	wait 25
+	slow
+	setv va90 0
+	loop
+		addv va90 16
+		part -1
+		alph va90 1
+	untl va90 >= 256
+	alph 256 1
+	inst
+
+** 	UnPause the World
+	wpau 0
+	enum 1 0 0
+		paus 0
+	next
+	enum 2 0 0
+		paus 0
+	next
+	enum 3 0 0
+		paus 0
+	next
+	enum 4 0 0
+		paus 0
+	next
+
+** Save UserID to va00
+	doif type game "user_of_this_world" <> 2
+		sets game "user_of_this_world" ""
+	endi
+	sets va00 game "user_of_this_world"
+** update hand
+	rtar 1 2 12
+	part 11
+	ptxt va00
+	targ ownr
+	hand va00
+** Create the Welcome Screen
+** Docked or Undocked?
+	doif eame "engine_no_auxiliary_bootstrap_1" = 0
+		sets va40 read "DS Welcome Screen" 2
+	elif eame "engine_no_auxiliary_bootstrap_1" = 1
+		sets va40 read "DS Welcome Screen" 1
+	endi
+** What is the World's name?
+	sets va41 wnam
+** Create the Welcome Screen
+	new: comp 1 2 26 "ds welcome screen" 1 0 8950
+	attr 288
+	clac 0
+** Starter Family Button
+	pat: butt 1 "ds welcome screen" 2 2 122 172 0 [0 1 0 1 0 1] 1001 0
+	part 1
+	anim [0]
+** Eggs Button
+	pat: butt 2 "ds welcome screen" 2 2 122 211 0 [0 1 0 1 0 1] 1002 0
+	part 2
+	anim [0]
+** Exit Button
+	pat: butt 3 "ds welcome screen" 2 2 122 250 0 [0 1 0 1 0 1] 1003 0
+	part 3
+	anim [0]
+** Create the introduction text.
+	pat: fixd 4 "ds welcome screen" 1 60 110 1 "WhiteOnTransparentChars"
+	part 4
+	sets va42 read "DS Welcome Screen" 0
+	adds va42 va40
+	sets va43 read "DS Welcome Screen" 3
+	adds va43 va41
+	adds va43 read "DS Welcome Screen" 4
+	adds va42 va43
+	frmt 5 10 5 5 3 1 0
+	ptxt va42
+** Starter Family
+	pat: fixd 5 "ds welcome screen" 4 160 177 1 "WhiteOnTransparentChars"
+	part 5
+	frmt 0 0 0 0 0 0 0
+	ptxt read "DS Welcome Screen" 5
+** Eggs
+	pat: fixd 6 "ds welcome screen" 4 160 216 1 "WhiteOnTransparentChars"
+	part 6
+	frmt 0 0 0 0 0 0 0
+	ptxt read "DS Welcome Screen" 6
+** Exit
+	pat: fixd 7 "ds welcome screen" 4 160 260 1 "WhiteOnTransparentChars"
+	part 7
+	frmt 0 0 0 0 0 0 0
+	ptxt read "DS Welcome Screen" 7
+** Window Positioning
+	setv va50 wndw
+	setv va51 wndh
+	divv va50 2
+	subv va50 260
+	divv va51 2
+	subv va51 157
+	flto va50 va51
+** Move the Camera
+	rtar 2 22 4
+	doif targ ne null
+		cmrt 0
+	endi
+
+*	clean up some other things that may not work
+
+*	reminder to purchase
+	enum 1 1 228
+		kill targ
+	next
+
+	kill ownr
+	part 6
+	pose 0
+	
+endm
+
+rscr
+enum 1 2 206
+	kill targ
+next
+enum 1 2 26
+	kill targ
+next
+** UnPause the World
+wpau 0
+enum 1 0 0
+	paus 0
+next
+enum 2 0 0
+	paus 0
+next
+enum 3 0 0
+	paus 0
+next
+enum 4 0 0
+	paus 0
+next
+
+** Go offline
+net: line 0

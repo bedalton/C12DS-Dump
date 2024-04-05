@@ -1,0 +1,408 @@
+* C1 Scenton Emitters
+*	1 7 32316
+
+
+********************************
+* Installers		       *
+********************************
+
+* Dependencies:
+*  c1pixel.c16
+
+inst
+doif game "C1_to_DS_Loaded" = 1 and totl 1 7 32316 = 0
+
+*******************************
+*	Miscellaneous Environmental scents
+
+*     heat - stove
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 3790 10894
+	emit 2 .9
+*     heat - greenhouse
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 4904 10868
+	emit 2 .7
+*     heat - island
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 8586 10594
+	emit 2 1.2
+*     heat - garden
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 4559 10783
+	emit 2 1.1
+*     heat - lighthouse
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 2065 10532
+	emit 2 .9
+*     heat - nornhouse playroom lowest
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 2973 10871
+	emit 2 .7
+*     heat - nornhouse playroom middle
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 2973 10711
+	emit 2 .7
+*     heat - nornhouse playroom top
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 2973 10521
+	emit 2 .7
+*     heat - nornhouse millroom
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 3666 10663
+	emit 2 .7
+*     heat - ettin house
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 6182 10870
+	emit 2 .7
+*     heat - grendel tree ground
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 7000 10849
+	emit 2 .2
+*     heat - grendel tree dock
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 7100 10613
+	emit 2 .2
+*     heat - underground norn house
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 3555 11023
+	emit 2 .2
+*     heat - underground ettin house
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 6147 11023
+	emit 2 .2
+*     heat - underground island
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 8503 10829
+	emit 2 .2
+
+*	light - whole sky
+	setv va00 1600
+	loop
+		new: simp 1 7 32316 "c1pixel" 0 0 6000
+		mvto va00 10010
+		emit 1 0.9
+		addv va00 200
+	untl va00 >= 9800
+*	light - underground under norn house
+	setv va00 3559
+	loop
+		new: simp 1 7 32316 "c1pixel" 0 0 6000
+		mvto va00 11033
+		emit 1 0.1
+		addv va00 200
+	untl va00 >= 4153
+*	light - underground water tunnel
+	setv va00 4432
+	loop
+		new: simp 1 7 32316 "c1pixel" 0 0 6000
+		mvto va00 11033
+		emit 1 0.3
+		addv va00 200
+	untl va00 >= 5222
+*	light - ettin underground	
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 6164 11033
+	emit 1 0.1
+
+*	soil moisture - garden
+	setv va00 4000
+	loop
+		new: simp 1 7 32316 "c1pixel" 0 0 6000
+		mvto va00 10900
+		emit 3 0.3
+		addv va00 200
+	untl va00 >= 5300
+*	soil moisture - left of norn house
+	setv va00 2153
+	loop
+		new: simp 1 7 32316 "c1pixel" 0 0 6000
+		mvto va00 10555
+		emit 3 0.3
+		addv va00 200
+	untl va00 >= 2774
+*	soil moisture - norn house hives area
+	setv va00 3191
+	loop
+		new: simp 1 7 32316 "c1pixel" 0 0 6000
+		mvto va00 10555
+		emit 3 0.25
+		addv va00 100
+	untl va00 >= 3473
+*	soil moisture - under ettin house and grendel tree
+	setv va00 6410
+	loop
+		new: simp 1 7 32316 "c1pixel" 0 0 6000
+		mvto va00 10942
+		emit 3 0.30
+		addv va00 100
+	untl va00 >= 7100
+*	soil moisture - pond
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 2621 10850
+	emit 3 0.30
+*	soil moisture - island
+	setv va00 8344
+	loop
+		new: simp 1 7 32316 "c1pixel" 0 0 6000
+		mvto va00 10640
+		emit 3 0.20
+		addv va00 100
+	untl va00 >= 8813
+
+*	soil nutrients - garden
+	setv va00 4000
+	loop
+		new: simp 1 7 32316 "c1pixel" 0 0 6000
+		mvto va00 10900
+		emit 4 0.3
+		addv va00 200
+	untl va00 >= 5300
+
+
+
+*	Water smell - small sea
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 7841 10841
+	emit 5 .5
+
+*	Water smell - large ocean
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 9697 10851
+	emit 5 .5
+
+*	Water smell - large ocean left
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 1696 10818
+	emit 5 .5
+
+*	Water smell - underground
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 4911 11140
+	emit 5 .4
+
+*	Water smell - pond
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 2613 10818
+	emit 5 .2
+
+
+
+
+*******************************
+*	Norn home scents
+
+*	sky level high 
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 3384 10088
+	emit 15 .13
+
+*	sky level mid
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 3384 10188
+	emit 15 .15
+
+*	top level mid
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 3485 10245
+	emit 15 .19
+
+*	top level high
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 3485 10431
+	emit 15 .21
+
+*	top level high left
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 3137 10450
+	emit 15 .20
+
+*     top level low left
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 3137 10540
+	emit 15 .19
+
+*     top level low
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 3351 10545
+	emit 15 .23
+
+*	waterfall room level high
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 3140 10611
+	emit 15 .19
+
+*	mid level high
+	new: simp 1 7 32316 "c1pixel" 0 0 0
+	mvto 3600 10620
+	emit 15 .25
+
+*	mid level low
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 3615 10680
+	emit 15 .3
+
+*	waterfall room level low
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 3140 10740
+	emit 15 .18
+
+*	lower level high
+	new: simp 1 7 32316 "c1pixel" 0 0 0
+	mvto 3600 10760
+	emit 15 .4
+
+*	island level high 
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 8728 10776
+	emit 15 .005
+
+*	music room level high
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 3140 10825
+	emit 15 .17
+
+*	lower level low
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 3600 10860
+	emit 15 .5
+
+*	music room level low
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 3140 10890
+	emit 15 .16
+
+*	island level low
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 8728 10894
+	emit 15 .004
+
+*	underground level high
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 3050 10959
+	emit 15 .15
+
+*	underground level low
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 3050 11034
+	emit 15 .14
+
+
+*******************************
+*	Grendel home scents
+
+*	sky high
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 6870 10189
+	emit 16 .3
+
+*	sky low
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 6870 10265
+	emit 16 .4
+
+*	tree top high
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 6870 10390
+	emit 16 .5
+
+*	tree top low
+	new: simp 1 7 32316 "c1pixel" 0 0 200
+	mvto 6870 10460
+	emit 16 .5
+
+*	dock high
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 7000 10530
+	emit 16 .4
+
+*	dock low
+	new: simp 1 7 32316 "c1pixel" 0 0 200
+	mvto 7000 10600
+	emit 16 .35
+
+*	jungle floor high
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 7000 10670
+	emit 16 .30
+
+*	jungle floor low
+	new: simp 1 7 32316 "c1pixel" 0 0 200
+	mvto 7000 10835
+	emit 16 .28
+
+*	underground high
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 7000 10980
+	emit 16 .15
+
+*	underground floor low
+	new: simp 1 7 32316 "c1pixel" 0 0 200
+	mvto 7000 11090
+	emit 16 .13
+
+
+*******************************
+*	Ettin scents
+
+*	sky high
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 5900 10182
+	emit 17 .09
+
+*	above bridge high
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 5900 10265
+	emit 17 .10
+
+*	sky low
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 5900 10304
+	emit 17 .11
+
+*	above bridge high
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 5900 10439
+	emit 17 .25
+
+*	bridge low 
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 5900 10480
+	emit 17 .30
+
+*	underbridge high
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 5900 10565
+	emit 17 .35
+
+*	above Ettin home low
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 5900 10639
+	emit 17 .48
+
+*	floor level high
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 5900 10772
+	emit 17 .5
+
+*	floor level low 
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 5900 10880
+	emit 17 .5
+
+*	underground high
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 5900 10946
+	emit 17 .4
+
+*	underground low 
+	new: simp 1 7 32316 "c1pixel" 0 0 6000
+	mvto 5900 11024
+	emit 17 .35
+
+endi
+
+rscr
+enum 1 7 32316
+	kill targ
+next

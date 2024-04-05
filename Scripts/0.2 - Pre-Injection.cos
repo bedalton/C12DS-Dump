@@ -1,0 +1,26 @@
+* C1 Metaroom 1 - pre-injection script
+
+*****************************
+* Get the dimensions of the current map
+	setv va00 mapw
+	setv va01 maph
+
+* if the map is less wide than the metaroom to add,
+	doif va00 < 11520
+*	then specify the room to add's width
+		setv va00 11520
+	endi
+
+* if the map is less tall than the metaroom to add,
+	doif va01 < 11196
+*	then specify the room to add's height
+		setv va01 11196
+	endi
+
+* If we changed any dimensions,
+	doif va00 > mapw or va01 > maph
+*	Change the size of the map
+		mapd va00 va01
+	endi
+*****************************
+

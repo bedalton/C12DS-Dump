@@ -1,0 +1,1043 @@
+* C1 World Switcher add-on
+
+***************************************************************************
+* Begin install
+***************************************************************************
+
+inst
+lock
+
+scrx 1 2 1000 800
+scrx 1 2 1000 2000
+scrx 1 2 1001 1000
+ject "DS world switcherC1.cos" 2
+
+rtar 1 2 1001
+doif targ <> null
+	setv ov00 3
+	mesg writ targ 1000
+else
+*	Ok, it doesn't exist yet. Let's make one!	
+** 	make new world switcher monitor
+	new: comp 1 2 1001 "ds world switcher" 30 0 0
+	setv ov00 3
+	mesg writ targ 1001
+endi
+
+doif totl 1 1 32302 <> 1
+	enum 1 1 32302
+		kill targ
+	next
+	new: simp 1 1 32302 "C1Enabled" 1 0 0
+	attr 0
+	mvto 460 0
+	tick 40
+	mesg writ targ 301
+endi
+
+***************************************************************************
+* End install
+***************************************************************************
+
+scrp 1 1 32302 301
+*	Make C1 Enabled Sound
+	inst
+	lock
+	stpc
+	sndc "C102"
+endm
+
+scrp 1 2 1001 1000
+	doif ov00 = 1
+		gsub reinject
+	elif ov00 = 2
+		gsub dock_this
+	elif ov00 = 3
+		rtar 1 2 1000
+		kill targ
+		gsub reinject
+	endi
+	subr reinject
+** 		destroy existing world switcher
+		enum 1 2 1000
+			kill targ
+		next
+		mesg wrt+ targ 300 0 0 2
+		tick 40
+		mesg writ targ 301
+
+		inst
+		doif totl 1 1 32302 <> 1
+			enum 1 1 32302
+				kill targ
+			next
+			new: simp 1 1 32302 "C1Enabled" 1 0 0
+			attr 0
+			mvto 460 0
+		endi
+
+** 		Reinject the World Switcher
+		new: comp 1 2 1000 "ds world switcher" 30 0 0
+		part -1
+* 		Invisible ready for fade in 
+		alph 256 1
+		part 0
+		pose 29
+
+* 		Set current configuration of the screen to "none"
+		setv ov00 0
+
+		mvto 115 92
+
+		setv ov02 nwld
+		setv ov03 0
+
+		setv ov04 -1
+		file iope 0 "World Switcher Persistent State Entries"
+		doif inok = 1
+			setv ov04 wnti innl
+			setv ov02 nwld
+			setv ov03 ov04
+			modv ov03 6
+			subv ov03 ov04
+			negv ov03
+		endi
+		file iclo
+* 		Tell ourselves to calculate and enter an initial state (scripted for use after delete etc)
+
+		imsk 64
+
+		mesg wrt+ targ 300 0 0 2
+		tick 40
+		mesg writ targ 301
+
+*		C1 to DS Custom reinject stuff
+		inst
+		doif totl 1 1 32302 <> 1
+			enum 1 1 32302
+				kill targ
+			next
+			new: simp 1 1 32302 "C1Enabled" 1 0 0
+			attr 0
+			mvto 460 0
+		endi
+
+** 		Weird! :O) If I don't have the wait 1 here then the tick 40 is never set (it seems).
+** 		And if the mesg wrt+ has a delay then it is never sent (the OWNR gets killed).
+		wait 1
+		tick 40
+		kill ownr
+	retn
+	subr dock_this
+** 		ov04 contains the world to be docked
+*		hide dialog and hand
+		mvto -1000 -1000
+		targ pntr
+		pose 19
+		targ ownr
+* 		write to this new world's directory to show whether docked or undocked
+		sets va00 wrld ov04
+		sets game "engine_other_world" va00
+		file oope 2 "wtype" 0
+		outs "docked"
+		file oclo
+** 		set the EAME and then load
+		setv eame "engine_no_auxiliary_bootstrap_1" 0
+		load wrld ov04
+		kill ownr
+	retn
+endm
+
+
+scrp 1 2 1000 2000
+* This is the configuration entry..
+* ov00 is current configuration of the screen
+* ov00 == 0    No parts defined
+* ov00 == 1    The parts for the "create new world" set
+* ov00 == 2    The parts for the "create first world" set
+* ov00 == 3    The parts for the "worldswitcher" set
+* ov00 == 4    The parts for the "enter password" set (To load a world)
+* ov00 == 5    The parts for the "delete world" set
+* ov00 == 6    The parts for the "loading world" set
+* ov00 == 7    The parts for the "change password" set (To change pwd and load world)
+
+* ov01 is the desired state to be in
+* We can't be having with our relocation code interruptednessity
+	inst
+	lock
+	tick 0
+* Remembering that switching into the same mode re-initialises (e.g. the UI)
+
+* Right then, first of all, destroy current state...
+	gsub kill_parts
+* next we have to define ourselves..
+
+	setv ov00 ov01
+	doif ov00 = 1
+		gsub make_new_world
+	elif ov00 = 2
+		gsub make_first_world
+	elif ov00 = 3
+		gsub make_switcher
+		tick 20
+	elif ov00 = 4 or ov00 = 7
+		gsub make_password
+	elif ov00 = 5
+		gsub make_delete_screen
+	elif ov00 = 6
+		gsub make_loading_screen
+	endi
+
+	part 0
+	pose 0
+
+* Fade in
+	doif ov74 = 0
+		lock
+		part -1
+		setv va00 256
+		buzz 25
+		loop
+			alph va00 1
+			wait 1
+			inst
+			subv va00 16
+		untl va00 <= 0
+		buzz 50
+		alph va00 0
+		setv ov74 1
+	endi
+
+* All done - so let's stop here
+	stop
+
+* and here are the kill routines
+
+* Generic kill routine for the parts
+	subr kill_parts
+*		If you make parts above 100 - please let me know...
+		setv va99 100
+		loop
+			pat: kill va99
+			subv va99 1
+		untl va99 = 0
+	retn
+* and here are the make routines
+
+
+
+	subr make_delete_screen
+*		Here we make the screen for deleting world in ov04
+*		Make the Dull Background from the Blank Page
+		pat: dull 1 "ds world switcher2" 19 22 20 0
+
+		pat: fixd 2 "ds world switcher2" 26 45 120 0 "whiteontransparentchars"
+		part 2
+		frmt 0 0 0 0 2 0 2
+		sets va00 read "World Switcher" 3
+		adds va00 wrld ov04
+		adds va00 read "World Switcher" 4
+		ptxt va00
+*		Continue (I.E. Yes)
+		pat: butt 4 "ds world switcher2" 22 2 125 232 0 [0] 3000 0
+*		Back (I.E. return to switcher)
+		pat: butt 5 "ds world switcher2" 24 2 374 232 0 [0] 502 0
+	retn
+
+	subr make_loading_screen
+**********
+***** ADDED FOR DOCKING STATION - ARH
+
+* Is this a Docked world or not?
+* read from the world's journal directory what type of world it is
+		sets game "engine_other_world" wrld ov04
+		file iope 2 "wtype"
+		sets va00 innl
+		doif va00 = ""
+* possibly a c3 world
+			sets va00 "c3"
+* write build number
+			file oope 2 "build" 0
+			outs read "build_number" 0
+			file oclo
+		endi
+		file iclo
+
+** Then check to see if Creatures 3 is installed
+		doif reaq "patch_level" = 1
+			setv va33 1
+		else
+			setv va33 0
+		endi
+
+** Check build number
+		setv va88 0
+		sets va44 ""
+		sets game "engine_other_world" wrld ov04
+		file iope 2 "build"
+		sets va44 innl
+		doif va44 = ""
+* Build number unknown, definitely needs to be warned of possible problems.
+			sets va44 read "World Switcher old build" 3
+			setv va88 1
+		elif va44 < "144"
+* Build was before 144 - definitely needs to be warned of possible problems
+			setv va88 1
+		else
+			setv va45 stoi va44
+			doif va45 < 144
+				setv va88 1
+			else
+* Build is 144 or above, and so *should* be fine with new style world-updating... *gulp*
+				setv va88 0
+			endi
+		endi
+		file oclo
+
+		doif va88 = 1
+			doif va00 <> "c3" and stoi va44 <> stoi read "build_number" 0
+				inst
+				new: comp 1 2 1001 "useful_screen" 0 0 5
+				mvto 250 150
+				pat: fixd 1 "useful_screen" 1 25 59 0 "whiteontransparentchars"
+				pat: butt 2 "useful_screen" 16 2 57 290 0 [1] 1001 0
+				pat: butt 4 "useful_screen" 18 2 201 290 0 [1] 1000 0
+* the name of agent text
+				pat: fixd 3 "useful_screen" 12 39 22 1 "WhiteOnTransparentChars"
+				part 2
+				anim [0]
+				part 4
+				anim [0]
+** ov00 tells the info agent what it is here for
+				setv ov00 3
+** display info text
+				sets va45 read "World Switcher old build" 0
+				adds va45 va44
+				adds va45 read "World Switcher old build" 1
+				adds va45 read "build_number" 0
+				adds va45 read "World Switcher old build" 2
+
+				part 1
+				frmt 7 8 7 0 3 0 0
+				ptxt va45
+				part 3
+				frmt 0 8 0 0 0 0 2
+				ptxt read "World Switcher - Extra" 3
+
+				targ ownr
+				flto -1000 -1000
+
+				setv name "waiting" 1
+				loop
+					wait 1
+				untl name "waiting" = 0
+			endi
+		endi
+
+
+** ==================		
+** C3 / Docked Checks
+** ==================
+* How this world is treated depends on a number of factors:
+* > Undocked DS Worlds load with no problems no matter what.
+* > Undocked C3 Worlds can load if C3 is installed but must be Docked.
+* > Docked DS/C3 Worlds can only load if C3 is still installed.
+
+		doif va00 = "c1"
+** This world is a C1 to DS world. This world is OK to load.
+*		hide dialog and hand
+			mvto -1000 -1000
+			targ pntr
+			pose 19
+			targ ownr
+** set the EAME and then load
+			setv eame "engine_no_auxiliary_bootstrap_1" 1
+			setv eame "C1_to_DS_Loaded" 1
+			load wrld ov04
+			kill ownr
+
+		elif va00 = "c1c3" and va33 = 1
+** This world is a C1 to DS world plus C3. C3 is loaded. This world is OK to load.
+*		hide dialog and hand
+			mvto -1000 -1000
+			targ pntr
+			pose 19
+			targ ownr
+** set the EAME and then load
+			setv eame "engine_no_auxiliary_bootstrap_1" 0
+			setv eame "C1_to_DS_Loaded" 1
+			load wrld ov04
+			kill ownr
+		elif va00 = "c1c3" and va33 = 0
+** This world is a C1 to DS world plus C3. C3 is not loaded This world is NOT OK to load.
+** this world can be loaded again. Inform the user.
+			inst
+			setv eame "C1_to_DS_Loaded" 0
+			new: comp 1 2 1001 "useful_screen" 0 0 5
+			mvto 250 150
+			pat: fixd 1 "useful_screen" 1 25 59 0 "whiteontransparentchars"
+			pat: butt 2 "useful_screen" 13 2 122 290 0 [1] 1000 0
+* the name of agent text
+			pat: fixd 3 "useful_screen" 12 39 22 1 "WhiteOnTransparentChars"
+			part 2
+			anim [0]
+** ov00 tells the info agent what it is here for
+			setv ov00 1
+** display info text
+			sets va00 read "World Switcher" 19
+			part 1
+			frmt 7 8 7 0 3 0 0
+			ptxt va00
+			part 3
+			frmt 0 8 0 0 0 0 2
+			ptxt read "World Switcher - Extra" 2
+			kill ownr
+
+		elif va00 = "docked" and va33 = 1
+** C3 is installed and this world is docked. This world is OK to load.
+*		hide dialog and hand
+			mvto -1000 -1000
+			targ pntr
+			pose 19
+			targ ownr
+** set the EAME and then load
+			setv eame "engine_no_auxiliary_bootstrap_1" 0
+			setv eame "C1_to_DS_Loaded" 0
+			load wrld ov04
+			kill ownr
+		elif va00 = "undocked"
+** This world is an undocked DS world. This world is OK to load.
+*		hide dialog and hand
+			mvto -1000 -1000
+			targ pntr
+			pose 19
+			targ ownr
+** set the EAME and then load
+			setv eame "engine_no_auxiliary_bootstrap_1" 1
+			setv eame "C1_to_DS_Loaded" 0
+			load wrld ov04
+			kill ownr
+		elif va00 = "docked" and va33 = 0
+** C3 is not installed and this world is docked. C3 will need to be reinstalled before
+** this world can be loaded again. Inform the user.
+			inst
+			setv eame "C1_to_DS_Loaded" 0
+			new: comp 1 2 1001 "useful_screen" 0 0 5
+			mvto 250 150
+			pat: fixd 1 "useful_screen" 1 25 59 0 "whiteontransparentchars"
+			pat: butt 2 "useful_screen" 13 2 122 290 0 [1] 1000 0
+* the name of agent text
+			pat: fixd 3 "useful_screen" 12 39 22 1 "WhiteOnTransparentChars"
+			part 2
+			anim [0]
+** ov00 tells the info agent what it is here for
+			setv ov00 1
+** display info text
+			sets va00 read "World Switcher" 19
+			part 1
+			frmt 7 8 7 0 3 0 0
+			ptxt va00
+			part 3
+			frmt 0 8 0 0 0 0 2
+			ptxt read "World Switcher - Extra" 2
+			kill ownr
+		elif va00 = "c3" and va33 = 0
+** C3 is not installed and this world was made in C3 which
+** will need to be reinstalled and then this world needs to be docked. Inform the user.
+			inst
+			setv eame "C1_to_DS_Loaded" 0
+			new: comp 1 2 1001 "useful_screen" 0 0 5
+			mvto 250 150
+			pat: fixd 1 "useful_screen" 1 25 59 0 "whiteontransparentchars"
+			pat: butt 2 "useful_screen" 13 2 122 290 0 [1] 1000 0
+* the name of agent text
+			pat: fixd 3 "useful_screen" 12 39 22 1 "WhiteOnTransparentChars"
+			part 2
+			anim [0]
+** ov00 tells the info agent what it is here for
+			setv ov00 1
+** display info text
+			sets va00 read "World Switcher" 20
+			part 1
+			frmt 7 8 7 0 3 0 0
+			ptxt va00
+			part 3
+			frmt 0 8 0 0 0 0 2
+			ptxt read "World Switcher - Extra" 2
+			kill ownr
+		elif va00 = "c3" and va33 = 1
+** C3 is installed and this world was made in C3 and must be docked before loading. Inform the user.
+* save the world! ;)
+			setv va04 ov04
+			inst
+			setv eame "C1_to_DS_Loaded" 0
+			new: comp 1 2 1001 "useful_screen" 0 0 5
+			mvto 250 150
+			pat: fixd 1 "useful_screen" 1 25 59 0 "whiteontransparentchars"
+			pat: butt 2 "useful_screen" 13 2 122 290 0 [1] 1000 0
+* the name of agent text
+			pat: fixd 3 "useful_screen" 12 39 22 1 "WhiteOnTransparentChars"
+			part 2
+			anim [0]
+** ov00 tells the info agent what it is here for
+			setv ov00 2
+** display info text
+			sets va00 read "World Switcher - Extra" 0
+			part 1
+			frmt 7 8 7 0 3 0 0
+			ptxt va00
+** save the world again! ;)
+			setv ov04 va04
+			part 3
+			frmt 0 8 0 0 0 0 2
+			ptxt read "World Switcher - Extra" 1
+			kill ownr
+		else
+			dbg: asrt "something is" = "wrong"
+			setv eame "C1_to_DS_Loaded" 0
+		endi
+*****
+**********
+	retn
+
+	subr make_new_world
+		gsub make_first_world
+*		Also we need a back button to return to the switcher, not to quit....
+		pat: kill 6
+** Cancel making New World
+		pat: butt 6 "ds world switcher2" 24 2 374 232 0 [0] 502 0
+		part 6
+		anim [0]
+	retn
+
+	subr make_first_world
+* Here we make the parts necessary for the "first world" display
+		part 0
+
+** Background Image
+		pat: dull 1 "ds world switcher2" 19 22 20 0
+** Expected World Name text part
+		pat: text 3 "ds world switcher2" 17 189 184 2 503 "whiteontransparentchars"
+		part 3
+		ptxt ""
+		fcus
+
+
+******************************
+*******************************
+
+** UPDATED FOR DOCKING STATION
+
+
+
+** World Type Button: Docked or Undocked World?
+***		pat: butt 7 "ds world switcher2" 30 3 254 228 2 [] 800 0
+		pat: butt 7 "ds world switcher2" 30 23 254 228 2 [] 800 0
+		part 7
+		pose 2
+
+** Text entry dull part, to cut down on graphics size
+		pat: dull 8 "ds world switcher2" 46 134 171 0
+
+** World Type display
+		pat: fixd 9 "ds world switcher2" 18 80 315 1 "whiteontransparentchars"
+
+		sets va00 read "World Switcher" 1
+* Is C3 Installed?
+		reaf
+		doif reaq "patch_level" = 1
+** 			Set WTYP Name Variable
+			sets name "wtype" "undocked"
+			setv name "dsc1" 0
+** 			Creatures 3 (patched as it should be) is installed.
+			adds va00 read "World Switcher" 17
+** 			Show World Type Button
+			part 7
+			pose 1
+** 			Make Info Fixed-Text part (higher for C3 machines)
+			pat: fixd 4 "ds world switcher2" 26 46 40 1 "whiteontransparentchars"
+		elif reaq "patch_level" <> 1 and totl 1 1 32302 > 0
+*			DS with NO C3, but may have C1
+** 			Set WTYP Name Variable
+			sets name "wtype" "undocked"
+			setv name "dsc1" 1
+** 			Creatures 3 (patched as it should be) is installed.
+*			adds va00 read "World Switcher" 17
+			adds va00 "You appear to have Creatures 1 to Docking Station installed."
+** 			Show World Type Button
+			part 7
+			pose 1
+** 			Make Info Fixed-Text part (higher for C3 machines)
+			pat: fixd 4 "ds world switcher2" 26 46 40 1 "whiteontransparentchars"
+
+		else
+** 			Creatures 3 is not installed and neither is C1.
+			sets name "wtype" "undocked"
+			setv name "dsc1" 0
+			adds va00 read "World Switcher" 18
+** 			Kill the World Type Toggle button
+			pat: kill 7
+** 			Recreate it as a dull part
+			pat: dull 7 "ds world switcher2" 30 254 228 2
+			part 7
+			pose 1
+** 			Make Info Fixed-Text part (lower for non C3 machines)
+			pat: fixd 4 "ds world switcher2" 26 46 75 1 "whiteontransparentchars"
+		endi
+** 		Update Display
+		part 9
+		frmt 0 0 0 0 0 0 2
+		ptxt read "World Switcher" 23
+		part 4
+		frmt 0 8 0 0 2 0 2
+		ptxt va00
+
+*******************************
+******************************
+
+*		Cancel / Quit
+		pat: butt 6 "ds world switcher2" 24 2 374 232 0 [1] 500 0
+		part 6
+		anim [0]
+*		Create World (tick)
+		pat: butt 5 "ds world switcher2" 22 2 125 232 0 [0] 503 0
+		part 5
+		anim [0]
+	retn
+
+	subr make_password
+*		Two cases:
+*			1. This world is password protected, please enter password to continue
+*			2. Please enter the desired password to continue...
+*				(Needs pwd and confirm boxes)
+
+		doif ov00 = 4
+** This World is Password Protected
+** "Dull" Background
+			pat: dull 1 "ds world switcher2" 19 22 20 0
+** What is current password? "dull" part
+			pat: dull 15 "ds world switcher2" 46 134 171 0
+
+			pat: fixd 6 "ds world switcher2" 18 150 161 0 "whiteontransparentchars"
+			part 6
+			frmt 0 8 0 0 2 0 0
+			ptxt read "World Switcher" 5
+
+			pat: text 7 "ds world switcher2" 17 145 182 0 700 "whiteontransparentpasswordchars"
+			part 7
+			ptxt ""
+
+			fcus
+
+			pat: fixd 8 "ds world switcher2" 26 45 40 0 "whiteontransparentchars"
+			part 8
+			frmt 0 8 0 0 4 0 2
+			ptxt read "World Switcher" 6
+		else
+** This World is not Password Protected
+
+** "Dull" Background
+			pat: dull 1 "ds world switcher2" 19 22 20 0
+
+** Confirm Password "Dull" part
+			pat: dull 15 "ds world switcher2" 45 134 103 0
+
+			pat: fixd 4 "ds world switcher2" 18 150 90 0 "whiteontransparentchars"
+			part 4
+			frmt 0 8 0 0 2 0 0
+			ptxt read "World Switcher" 5
+
+			pat: text 5 "ds world switcher2" 17 145 116 0 701 "whiteontransparentpasswordchars"
+			part 5
+			ptxt ""
+			fcus
+
+			pat: fixd 6 "ds world switcher2" 18 150 161 0 "whiteontransparentchars"
+			part 6
+			frmt 0 8 0 0 2 0 0
+			ptxt read "World Switcher" 7
+
+			pat: text 7 "ds world switcher2" 17 145 183 0 700 "whiteontransparentpasswordchars"
+			part 7
+			ptxt ""
+
+			pat: fixd 8 "ds world switcher2" 26 40 40 0 "whiteontransparentchars"
+			part 8
+			frmt 0 8 0 0 4 0 2
+			ptxt read "World Switcher" 8
+
+			pat: fixd 9 "ds world switcher2" 26 45 310 0 "whiteontransparentchars"
+			part 9
+			frmt 0 8 0 0 4 0 2
+			ptxt read "World Switcher" 16
+		endi
+
+*		Cancel from Password Screen  (Return to Main Menu)
+		pat: butt 2 "ds world switcher2" 24 2 374 232 0 [0] 502 0
+		part 2
+		anim [0]
+*		Accept Password (automatically loads world)
+		pat: butt 3 "ds world switcher2" 22 2 125 232 0 [0] 700 0
+		part 3
+		anim [0]
+	retn
+
+	subr make_switcher
+****
+
+
+
+
+		pat: dull 35 "ds world switcher2" 0 0 0 0
+
+		pat: fixd 100 "ds world switcher2" 18 45 34 0 "WhiteOnTransparentChars"
+		part 100
+		ptxt read "World Switcher" 9
+
+* 		Complexity Galore in making the switcher
+
+*		The first thing to do is to decide the number of world entries to make
+*		We make a maximum of 6
+		setv va00 nwld
+		doif va00 > 6
+			setv va00 6
+		endi
+*		If we are not making the full 6, then we dump small dull parts of nothingness in to placehold the ids
+
+*		Next stage is to ensure that we coerce the ov's to our will
+		doif ov02 ne nwld
+			setv ov02 nwld
+			setv va01 nwld
+			subv va01 ov03
+			doif va01 < 6
+				setv ov03 0
+			endi
+		endi
+
+** this changes it back to the page it was on when you deleted a world
+		doif name "post-deletion_refresh" = 1
+			setv name "post-deletion_refresh" 0
+** If the deleted world was not the first world shown on the page, then all we
+** need to do is reset the first world shown back to the one that was showing
+** before the deletion..  otherwise we have do be a bit more cunning! :-)
+			doif name "deleted_world" <> name "first_world"
+				setv ov03 name "first_world"
+			else
+** if there are other worlds on that page, display that page... otherwise go back a page.
+				setv va84 name "deleted_world"
+				addv va84 1
+** if there are definitely other worlds after the deleted world then it should be okay to try and display
+** that page. Otherwise, find the page to show by subtracting 1 from the deleted world number until it
+** finds another first world to show :-)
+				doif va84 <= nwld
+					setv ov03 name "first_world"
+				else
+					setv va85 name "deleted_world"
+					loop
+						subv va85 1
+						setv va86 va85
+						modv va86 6
+					untl va86 = 0
+					setv ov03 va85
+				endi
+			endi
+		endi
+
+
+** make the switcher entries
+		loop
+			gsub make_one_switcher_entry
+			subv va00 1
+		untl va00 = 0
+
+
+
+
+*		Now if we need to make the pageup and pagedown, do so
+		doif ov02 > 6
+** This is the first page!
+			doif ov03 = 0
+*				We are definitely at the top of the list
+				pat: kill 25
+				pat: dull 25 "ds world switcher2" 1 510 69 0
+				doif ov02 > 6
+					pat: kill 26
+					pat: butt 26 "ds world switcher2" 3 2 510 130 0 [1] 400 0
+					part 26
+					anim [0]
+				endi
+** Otherwise this is another page!
+			else
+** Definitely create the Up button!
+				pat: kill 25
+				pat: butt 25 "ds world switcher2" 1 2 510 69 0 [1] 400 0
+				part 25
+				anim [0]
+** Only create the down button if there are more to show on another page!
+				doif ov02 < 6
+** there are less than 6 worlds showing, so there can't be another page.
+					pat: kill 26
+					pat: dull 26 "ds world switcher2" 3 510 130 0
+					part 26
+					anim [0]
+				else
+** Otherwise there are 6 entries showing! But how do we know this isn't just one last page of 6?
+** 					> Find the first world on display..
+					setv va00 ov03
+**					> Add 7 to it...
+					addv va00 7
+**					> If va00 is greater than NWLD, this must be the last page! *fingers crossed* :))
+					doif va00 <= nwld
+						pat: kill 26
+						pat: butt 26 "ds world switcher2" 3 2 510 130 0 [1] 400 0
+						part 26
+						anim [0]
+					else
+						pat: kill 26
+						pat: dull 26 "ds world switcher2" 3 510 130 0
+						part 26
+						anim [0]
+					endi
+				endi
+			endi
+		endi
+
+*		Create World
+		pat: butt 28 "ds world switcher2" 14 2 167 275 0 [0] 501 0
+		part 28
+		anim [0]
+*		Quit Docking Station
+		pat: butt 33 "ds world switcher2" 43 2 345 276 0 [0] 500 0
+		part 33
+		anim [0]
+
+*		Button Texts coming up...
+*		load text
+		pat: fixd 29 "ds world switcher2" 17 40 232 0 "WhiteOnTransparentChars"
+		part 29
+		frmt 0 0 0 0 2 0 2
+		ptxt read "World Switcher" 11
+*		password
+		pat: fixd 30 "ds world switcher2" 17 219 232 0 "WhiteOnTransparentChars"
+		part 30
+		frmt 0 0 0 0 2 0 2
+		ptxt read "World Switcher" 12
+*		delete
+		pat: fixd 31 "ds world switcher2" 17 398 232 0 "WhiteOnTransparentChars"
+		part 31
+		frmt 0 0 0 0 2 0 2
+		ptxt read "World Switcher" 13
+*		create
+		pat: fixd 32 "ds world switcher2" 17 127 338 0 "WhiteOnTransparentChars"
+		part 32
+		frmt 0 0 0 0 2 0 2
+		ptxt read "World Switcher" 14
+*		exit
+		pat: fixd 34 "ds world switcher2" 17 308 338 0 "WhiteOnTransparentChars"
+		part 34
+		frmt 0 0 0 0 2 0 2
+		ptxt read "World Switcher" 15
+	retn
+
+	subr make_one_switcher_entry
+*		At this point, va00 is the entry to make.
+*		As we can make parts in any order, we are allowed to do it this way :)
+
+		setv va01 va00
+
+*		Now the world name is placed at va50 va51
+		doif va00 = 1 or va00 = 3 or va00 = 5
+			setv va50 70
+		else
+			setv va50 304
+		endi
+		doif va00 = 1 or va00 = 2
+			setv va51 74
+		elif va00 = 3 or va00 = 4
+			setv va51 101
+		else
+			setv va51 127
+		endi
+		setv va30 nwld
+		subv va30 ov03
+		doif va00 > ov02 or va00 > va30
+			pat: dull va01 "ds world switcher2" 16 va50 va51 0
+		else
+			setv va53 va00
+			subv va53 1
+			addv va53 ov03
+			sets va52 wrld va53
+			addv va50 15
+			pat: fixd va01 "ds world switcher2" 16 va50 va51 0 "whiteontransparentchars"
+			part va00
+			frmt 8 0 8 0 1 0 8
+			ptxt va52
+		endi
+
+		doif va00 = 1 or va00 = 3 or va00 = 5
+			setv va50 42
+		else
+			setv va50 278
+		endi
+		doif va00 = 1 or va00 = 2
+			setv va51 70
+		elif va00 = 3 or va00 = 4
+			setv va51 96
+		else
+			setv va51 123
+		endi
+
+		addv va01 6
+		doif va00 > ov02 or va00 > va30
+** No world found
+			pat: dull va01 "ds world switcher2" 5 va50 va51 0
+		else
+
+********* UPDATED FOR DOCKING STATION
+			sets game "engine_other_world" wrld va53
+			file iope 2 "wtype"
+			sets va64 innl
+			doif va64 = ""
+				sets va64 "c3"
+			endi
+			file iclo
+
+** adjust coordinates for larger icons
+			subv va50 6
+
+
+** 			Docked DS/C3 and No Password
+			doif va64 = "docked" and pswd va53 = ""
+				pat: butt va01 "ds world switcher2" 39 2 va50 va51 0 [1] 450 0
+** 			Docked DS/C3 and Password Protected
+			elif va64 = "docked" and pswd va53 <> ""
+				pat: butt va01 "ds world switcher2" 41 2 va50 va51 0 [1] 450 0
+			elif va64 = "undocked" and pswd va53 = ""
+**			Undocked DS and No Password
+				pat: butt va01 "ds world switcher2" 35 2 va50 va51 0 [1] 450 0
+			elif va64 = "undocked" and pswd va53 <> ""
+**			Undocked DS and Password Protected
+				pat: butt va01 "ds world switcher2" 37 2 va50 va51 0 [1] 450 0
+			elif va64 = "c3"
+**			Undocked C3 World (needs to be docked)
+				pat: butt va01 "ds world switcher2" 33 6 va50 va51 0 [1] 450 0
+			elif va64 = "c1" and pswd va53 = ""
+**			Undocked DS/C1 and No Password
+				pat: butt va01 "ds world switcher2" 48 2 va50 va51 0 [1] 450 0
+			elif va64 = "c1" and pswd va53 <> ""
+**			Undocked DS/C1 and Password Protected
+				pat: butt va01 "ds world switcher2" 50 2 va50 va51 0 [1] 450 0
+
+			elif va64 = "c1c3" and pswd va53 = ""
+**			Undocked DS/C1 and No Password
+				pat: butt va01 "ds world switcher2" 53 2 va50 va51 0 [1] 450 0
+			elif va64 = "c1c3" and pswd va53 <> ""
+**			Undocked DS/C1 and Password Protected
+				pat: butt va01 "ds world switcher2" 55 2 va50 va51 0 [1] 450 0
+
+			endi
+
+			part va01
+			anim [0]
+			doif ov04 = va53
+				anim [1]
+**************
+
+
+*				Load World
+				pat: butt 95 "ds world switcher2" 8 2 76 166 0 [0] 600 0
+				part 95
+				anim [0]
+*				Delete world
+				pat: butt 96 "ds world switcher2" 12 2 435 166 0 [0] 1100 0
+				part 96
+				anim [0]
+*				Lock controller
+				pat: butt 97 "ds world switcher2" 10 2 257 166 0 [0] 608 0
+				part 97
+				anim [0]
+			endi
+		endi
+	retn
+endm
+
+
+** World Type Button: Docked or Undocked or C1?
+scrp 1 2 1000 800
+	inst
+	lock
+	snde "2bep"
+** 	Check current World Type
+	doif name "wtype" = "docked"
+** 		Change to Undocked
+		sets name "wtype" "c1"
+		part 7
+		pose 17
+** 		Update Display
+		part 9
+		frmt 0 0 0 0 0 0 2
+		ptxt read "World SwitcherC1" 0
+	elif name "wtype" = "c1" and name "dsc1" = 0
+** 		Change to Docked
+		sets name "wtype" "c1c3"
+		part 7
+		pose 22
+** 		Update Display
+		part 9
+		frmt 0 0 0 0 0 0 2
+		ptxt read "World SwitcherC1" 1
+	elif name "wtype" = "c1" and name "dsc1" = 1
+** 		Change to Undocked
+		sets name "wtype" "undocked"
+		part 7
+		pose 1
+** 		Update Display
+		part 9
+		frmt 0 0 0 0 0 0 2
+		ptxt read "World Switcher" 23
+	elif name "wtype" = "c1c3" and name "dsc1" = 0
+** 		Change to Docked
+		sets name "wtype" "undocked"
+		part 7
+		pose 1
+** 		Update Display
+		part 9
+		frmt 0 0 0 0 0 0 2
+		ptxt read "World Switcher" 23
+	elif name "wtype" = "undocked" and name "dsc1" = 0
+** 		Change to Docked
+		sets name "wtype" "docked"
+		part 7
+		pose 2
+** 		Update Display
+		part 9
+		frmt 0 0 0 0 0 0 2
+		ptxt read "World Switcher" 22
+	elif name "wtype" = "undocked" and name "dsc1" = 1
+** 		Change to Docked
+		sets name "wtype" "c1"
+		part 7
+		pose 17
+** 		Update Display
+		part 9
+		frmt 0 0 0 0 0 0 2
+		ptxt read "World SwitcherC1" 0
+	endi
+endm
+
+
+rscr
+
+enum 1 2 1000
+	kill targ
+next
+enum 1 2 1001
+	kill targ
+next
+scrx 1 2 1000 2000
+scrx 1 2 1000 800
+scrx 1 1 32302 301
+enum 1 1 32302
+	kill targ
+next
+ject "DS world switcher.cos" 7

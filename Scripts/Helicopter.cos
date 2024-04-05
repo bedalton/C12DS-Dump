@@ -1,0 +1,129 @@
+****************************
+* C1 helicopter
+****************************
+
+* Dependencies:
+*  c1helicopter.c16
+*  c1h3.wav
+*  c1h4.wav
+
+* Installers
+inst
+
+new: simp 2 21 32306 "c1helicopter" 19 0 200
+attr 199
+accg 5
+bhvr 25
+fric 12.5
+aero 10
+elas 30
+perm 60
+
+doif game "C1_to_DS_Loaded" = 1 and totl 2 21 32306 <= 1
+* 	helicopter under ettin palace
+	mvsf 6085 11025
+elif type game "ds_game_type" ne 2
+* 	it's NOT a string, this must be C3 only
+* 	choose a safe C3 location
+	setv va00 5440
+	setv va01 3580
+	velo rand 30 40 -5
+	mvsf va00 va01
+else
+* 	it IS a string, but what is the value?
+	doif game "ds_game_type" eq "undocked"
+* 		this is an undocked world, location needs to be DS safe
+		setv va00 6100
+		setv va01 9200
+		velo rand 30 40 -5
+		mvsf va00 va01
+	elif game "ds_game_type" eq "docked"
+* 		this is a docked world, location can be anywhere in the DS/C3 realm
+		setv va00 6100
+		setv va01 9200
+		velo rand 30 40 -5
+		mvsf va00 va01
+	endi
+endi
+
+****************************
+* Scripts
+
+scrp 2 21 32306 1
+*	helicopter is pushed
+	inst
+	lock
+	doif obst down < 5
+		stim writ from 97 1
+		doif ov00 = 0
+*			wind up & leap
+			sndc "c1h3"
+*			anim [0 1 1 1 2 2 2 3 3 3 4 5 6 7]
+			anim [6 7 8 9 10]
+			over
+			inst
+			velo rand -1.5 1.5 -30
+			stpc
+			sndc "c1h4"
+			accg .5
+			anim [4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 255]
+		endi
+	endi
+endm
+
+scrp 2 21 32306 3
+*	helicopter is hit
+	inst
+	lock
+	stim writ from 0 1
+	velo rand -10 10 rand -10 -20
+	sndc "c1h4"
+	anim [9 10 11 12 13 12 11 10 9 10 11 12 13 12 11 10 0]
+endm
+
+scrp 2 21 32306 4
+*	helicopter is picked up	
+	stpc
+	pose 0
+endm
+
+scrp 2 21 32306 6
+*	helicopter collides
+	inst
+	lock
+	doif vely < 10 or vely > 10 and obst down < 5
+		accg 5
+		anim [0 0 1 1 2 2 3 3 4 4 3 3 2 2 1 1 2 2 3 3 2 2 1 1 0]
+*		anim [9 10 11 12 13 12 11 10 9 10 11 12 13 12 11 10 0]
+		stpc
+		sndc "c1h4"
+	elif vely > -2 and vely < 2 and obst down < 5
+		accg 5
+		stpc
+		pose 0
+	else
+		accg .5
+		velo 0 0
+	endi
+endm
+
+scrp 2 21 32306 12
+*	helicopter is bitten
+	inst
+	lock
+	stim writ from 0 1
+endm
+
+****************************
+* Removers
+
+* helicopter remover
+rscr
+enum 2 21 32306
+	kill targ
+next
+scrx 2 21 32306 1
+scrx 2 21 32306 3
+scrx 2 21 32306 4
+scrx 2 21 32306 6
+scrx 2 21 32306 12

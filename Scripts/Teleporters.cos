@@ -1,0 +1,183 @@
+* C1 Teleporters
+
+* Dependencies:
+*  c1transporters.c16
+*  c1t3.wav
+
+
+inst
+lock
+
+doif game "C1_to_DS_Loaded" = 1 and totl 3 2 32318 = 0
+* Norn house teleporter
+	new: vhcl 3 2 32318 "c1transporters" 11 0 300
+	pat: dull 1 "c1transporters" 11 1 29 0
+	seta va01 targ
+	setv ov00 1
+	attr 199
+	fric 100
+	accg 25
+	elas 0
+	aero 0
+	cabp -1
+	bhvr 1
+	perm 60
+	mvsf 3875 10600
+
+* Garden teleporter
+	new: vhcl 3 2 32318 "c1transporters" 11 0 300
+	pat: dull 1 "c1transporters" 11 1 29 0
+	seta va02 targ
+	setv ov00 0
+	attr 199
+	fric 100
+	accg 25
+	elas 0
+	aero 0
+	cabp -1
+	bhvr 1
+	perm 60
+	mvsf 4990 10826
+	targ va01
+	seta ov01 va02
+	targ va02
+	seta ov01 va01
+
+* Lovers Leap Teleporter
+	new: vhcl 3 2 32318 "c1transporters" 11 0 300
+	pat: dull 1 "c1transporters" 11 1 29 0
+	seta va01 targ
+	setv ov00 1
+	attr 199
+	fric 100
+	accg 25
+	elas 0
+	aero 0
+	cabp -1
+	bhvr 1
+	perm 60
+	mvsf 2160 10510
+
+* Norn Island Teleporter
+	new: vhcl 3 2 32318 "c1transporters" 11 0 300
+	pat: dull 1 "c1transporters" 11 1 29 0
+	seta va02 targ
+	setv ov00 0
+	attr 199
+	fric 100
+	accg 25
+	elas 0
+	aero 0
+	cabp -1
+	bhvr 1
+	perm 60
+	mvsf 8728 10350
+	targ va01
+	seta ov01 va02
+	targ va02
+	seta ov01 va01
+
+endi
+
+scrp 3 2 32318 1
+*	inst
+	lock
+	targ ov01
+	doif gmap posl post <> -1
+		targ ownr
+		frat 2.0
+		part 0
+		anim [0 1 2 3 4 5 6]
+		part 1
+		anim [0 1 2 3 4 5 6]
+
+		targ ov01
+		frat 2.0
+		part 0
+		anim [0 1 2 3 4 5 6]
+		part 1
+		anim [0 1 2 3 4 5 6]
+
+		targ ownr
+		snde "c1t3"
+		targ ov01
+		doif carr <> null
+			seta va02 carr
+		else
+			seta va02 null
+		endi
+		setv va00 posr
+		subv va00 posl
+		divv va00 2
+		addv va00 posl
+		setv va01 posb
+		subv va01 10
+		doif type from = 7
+			doif movs = 0
+				spas ownr targ
+			endi
+		else
+			etch 4 0 0
+				doif movs = 0
+					spas ownr targ
+				endi
+			next
+			cmrp va00 va01 0
+		endi
+
+		targ ownr
+		part 0
+		anim [6 7 8 9 10 0]
+		part 1
+		anim [6 7 8 9 10 0]
+		targ ov01
+		part 0
+		anim [6 7 8 9 10 0]
+		part 1
+		anim [6 7 8 9 10 0]
+
+		targ ownr
+		doif type from = 7
+			targ from
+			inst
+			doif carr <> null
+				rpas carr targ
+			endi
+			doif movs = 0
+				mvft va00 va01
+				stim writ from 96 1.0
+			endi
+		else
+			etch 4 0 0
+				inst
+				doif carr <> null
+					rpas carr targ
+				endi
+				doif movs = 0
+					mvft va00 va01
+					stim writ from 96 1.0
+					doif va02 <> null
+						setv va03 0
+						loop
+							spas va02 targ
+							wait 1
+							addv va03 1
+							inst
+						untl va03 > 100 or carr <> null
+					endi
+				endi
+			next
+		endi
+*		over
+		stpc
+		targ ownr
+		inst
+	endi
+endm
+
+
+rscr
+enum 3 2 32318
+	kill targ
+next
+scrx 3 2 32318 1

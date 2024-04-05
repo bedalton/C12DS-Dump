@@ -1,0 +1,32 @@
+inst
+
+* Cover bell in original background
+new: simp 2 24 32300 "c1bell" 1 0 1
+mvto 5665 10769
+attr 16
+fric 100
+elas 0
+aero 100
+
+* Bell
+new: comp 2 24 32300 "c1bell" 5 2 2
+attr 4
+bhvr 1
+pose 2
+frat 4
+pat: dull 1 "c1bell" 1 48 28 0
+mvto 5665 10769
+
+scrp 2 24 32300 1
+	lock
+	anim [2 1 0 1 2 3 4 3 2 1 2 3 2]
+	wait 4
+	sndc "c1bl"
+	unlk
+endm
+
+rscr
+enum 2 24 32300
+	kill targ
+next
+scrx 2 24 32300 1

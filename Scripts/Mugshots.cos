@@ -1,0 +1,76 @@
+* C1 Mugshots
+
+* Dependencies:
+*  c1mugshots.c16
+
+
+inst
+
+doif game "C1_to_DS_Loaded" = 1 and totl 1 1 32336 = 0
+
+	new: simp 1 1 32336 "c1mugshots" 8 0 50
+	attr 5
+	accg 0
+	fric 100
+	elas 0
+	aero 100
+	mvto 9432 10330
+
+endi
+
+**********
+* Scripts
+
+scrp 1 1 32336 1
+	inst
+	doif totl 1 2 32336 = 0
+		setv va00 posl
+		setv va01 post
+		subv va00 65
+		subv va01 75
+		setv va02 1
+		reps 8
+			new: simp 1 2 32336 "c1mugshots" 1 va02 100
+			attr 0
+			elas 100
+			accg 0
+			tick 200
+			perm 1
+			mvto va00 va01
+			doif va02 = 1
+				velo -1 -1
+			elif va02 = 2
+				velo -1 0
+			elif va02 = 3
+				velo -1 1
+			elif va02 = 4
+				velo 0 -1
+			elif va02 = 5
+				velo 0 1
+			elif va02 = 6
+				velo 1 -1
+			elif va02 = 7
+				velo 1 0
+			elif va01 >= 8
+				velo 1 1
+			endi
+			addv va02 1
+		repe
+	endi
+endm
+
+scrp 1 2 32336 9
+	inst
+	lock
+	kill targ
+endm
+
+rscr
+enum 1 1 32336
+	kill targ
+next
+scrx 1 1 32336 1
+enum 1 2 32336
+	kill targ
+next
+scrx 1 2 32336 9

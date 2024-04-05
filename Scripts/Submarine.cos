@@ -1,0 +1,409 @@
+* C1 Submarine
+* Dependencies:
+*  c1submarine.c16
+*  c1so.wav
+*  buzz.wav
+
+
+*	ov91 = left low position
+*	ov92 = right low position
+*	ov93 = left hi position
+*	ov94 = right hi position
+*   ov95 = dive / surface
+*	ov97 = left position
+*	ov98 = right position
+*   ov99 = left / right
+
+* Fixed: doesn't make sound when clicked on
+* Fixed: adjusted surfacing heights
+* Fixed: When creatures push or pull sub, they move strangely
+* Fixed: adjusted cabin size to hopefully carry grendels
+
+inst
+
+setv game "C1_Sub_pickup" 1
+
+doif game "C1_to_DS_Loaded" = 1 and totl 3 1 32315 = 0
+	setv game "C1_Sub_Speed" 3
+	new: vhcl 3 1 32315 "c1submarine" 1 0 60
+	setv ov97 7166
+	setv ov98 8170
+	setv ov91 10950
+	setv ov93 10798
+	setv ov92 10950
+	setv ov94 10755
+	setv ov99 0
+	cabp 0
+*	cabw 10
+	cabn 42 -50 185 170
+
+*	green blinky light that serves no purpose but looks dead sexy
+	pat: dull 8 "c1submarine" 20 158 20 101
+
+*	porthole
+	pat: dull 1 "c1submarine" 16 84 77 0
+
+*	hatch
+	pat: dull 2 "c1submarine" 1 102 5 100
+	part 2
+	pose 2
+	attr 516
+
+*	left button	
+	pat: dull 3 "c1submarine" 17 33 103 101
+	part 3
+	pose 0
+
+*	right button	
+	pat: dull 4 "c1submarine" 17 172 103 101
+	part 4
+	pose 0
+
+*	left bubbles
+	pat: dull 5 "c1submarine" 4 53 147 101
+	part 5
+	pose 0
+
+*	right bubbles
+	pat: dull 6 "c1submarine" 10 137 147 101
+	part 6
+	pose 0
+
+*	Overlay
+	pat: dull 7 "c1submarine" 0 0 0 100
+
+	accg 0
+	fric 0
+	aero 0
+	bhvr 3
+	elas 0
+	perm 0
+	tick 5
+	clac 0
+	setv ov61 100
+*	mvto ov98 ov94
+	mvto ov97 ov93
+*	set the room number that the sub thinks it is in based on its starting location
+	setv ov50 room targ
+	cabv ov50
+endi
+
+scrp 3 1 32315 1
+*	push script (go left)
+	inst
+	lock
+	doif from = pntr
+		part 3
+		pose 0
+		part 4
+		pose 2
+		attr 540
+		doif ov99 = 1 or posl >= ov98
+			setv ov99 -1
+			setv va00 velx
+			setv va01 vely
+			mulv va00 -1
+			mulv va01 -1
+			velo va00 va01
+			doif ov95 <> 0
+				setv va02 ov95
+				mulv va02 -1
+				setv ov95 va02
+			endi
+		elif ov99 = -1 or posl <= ov98
+			setv ov99 1
+			setv va00 velx
+			setv va01 vely
+			mulv va00 -1
+			mulv va01 -1
+			velo va00 va01
+			doif ov95 <> 0
+				setv va02 ov95
+				mulv va02 -1
+				setv ov95 va02
+			endi
+		endi
+	else
+		doif ov99 = 0
+			doif posl >= ov98
+				setv ov99 -1
+			elif posl <= ov98
+				setv ov99 1
+			endi
+		endi
+	endi
+endm
+
+scrp 3 1 32315 2
+	mesg writ ownr 0
+endm
+
+scrp 3 1 32315 9
+*	submarine timer
+	inst
+	lock
+	epas 4 0 0
+		chem 30 10.0
+	next
+*	pickup creatures lost on sea floor	
+	rtar 1 1 32318
+	doif pose = 0 or game "C1_Sub_pickup" = 1
+		targ ownr
+		doif ov99 = 1 or ov99 = -1
+			etch 4 0 0
+				chem 30 10.0
+				doif movs = 0 and carr <> ownr
+					setv va21 0
+					zomb 1
+					pose 36
+					dirn 1
+					loop
+						spas ownr targ
+						wait 1
+						inst
+						addv va21 1
+					untl movs <> 0 or va21 > 100
+					zomb 0
+				endi
+			next
+		endi
+	endi
+	targ ownr
+	doif ov99 = -1
+		attr 540
+		mesg writ ownr 1001
+		part 3
+		pose 1
+		part 4
+		pose 0
+	elif ov99 = 1
+		attr 540
+		mesg writ ownr 1001
+		part 3
+		pose 0
+		part 4
+		pose 2
+	elif ov99 = 0
+		attr 516
+		part 3
+		pose 0
+		part 4
+		pose 0
+		part 2
+		doif pose <> 2
+			anim [0 1 2]
+		endi
+		over
+		inst
+	endi
+	addv ov88 1
+	doif ov88 > 600 and ov99 = 0
+		setv ov88 0
+		part 2
+		anim [2 1 0]
+		over
+		inst
+		mesg wrt+ ownr 1003 ownr 0 0
+		doif posl = ov97
+			setv ov99 1
+		elif posl = ov98
+			setv ov99 -1
+		endi
+	endi
+endm
+
+scrp 3 1 32315 1001
+	inst
+	lock
+
+	part 2
+	doif ov99 <> -2 and pose <> 0
+*		close the hatch
+		anim [2 1 0]
+		over
+		inst
+	endi
+	doif ov95 = 0 and post < ov91
+*		prepare to dive
+		doif posl = ov97 or posl = ov98
+			setv ov95 1
+			mesg wrt+ ownr 1003 from 0 0
+		endi
+		part 8
+		anim [0 0 0 0 1 1 1 1 255]
+		snde "buzz"
+		wait 15
+		snde "buzz"
+		wait 15
+		snde "buzz"
+		inst
+		velo 0 game "C1_Sub_Speed"
+	endi
+	doif ov95 = 1 and post >= ov91
+*		stop diving
+		setv ov95 0
+		doif posl <= ov97
+			setv va00 ov97
+		elif posl >= ov98
+			setv va00 ov98
+		endi
+		mvto va00 ov91
+		sndl "c1so"
+		velo 0 0
+		setv va02 game "C1_Sub_Speed"
+		mulv va02 ov99
+		velo va02 0
+	endi
+	doif ov95 = 0 and ov99 <> 0
+*		move laterally
+		part 5
+		doif ov99 = -1 and pose <> 0
+			pose 0
+		elif ov99 = 1 and pose = 0
+			anim [1 2 3 4 5 255]
+		endi
+		part 6
+		doif ov99 = -1 and pose = 0
+			anim [1 2 3 4 5 255]
+		elif ov99 = 1 and pose <> 0
+			pose 0
+		endi
+		part 8
+		pose 1
+	endi
+	doif ov95 = 0 and ov99 = 1 and posl >= ov98
+*		stop moving so you can surface
+		setv ov95 -1
+		stpc
+		part 8
+		anim [0 0 0 0 1 1 1 1 255]
+		mvto ov98 post
+		part 6
+		pose 0
+		part 5
+		pose 0
+		velo 0 0
+		setv va02 game "C1_Sub_Speed"
+		mulv va02 -1
+		velo 0 va02
+	elif ov95 = 0 and ov99 = -1 and posl <= ov97
+		setv ov95 -1
+		stpc
+		part 8
+		anim [0 0 0 0 1 1 1 1 255]
+		mvto ov97 post
+		velo 0 0
+		setv va02 game "C1_Sub_Speed"
+		mulv va02 -1
+		velo 0 va02
+	endi
+	doif ov95 = -1
+*		surface
+		part 5
+		pose 0
+		part 6
+		pose 0
+		doif posl <= ov97 and post <= ov93
+			setv ov95 0
+			part 8
+			pose 0
+			setv ov99 0
+			setv va00 ov97
+			setv va01 ov93
+			mvto va00 va01
+			velo 0 0
+			mesg writ ownr 1004
+			setv ov88 0
+		elif posl >= ov98 and post <= ov94
+			setv ov95 0
+			part 8
+			pose 0
+			setv ov99 0
+			setv va00 ov98
+			setv va01 ov94
+			mvto va00 va01
+			velo 0 0
+			mesg writ ownr 1004
+			setv ov88 0
+		endi
+	endi
+endm
+
+
+scrp 3 1 32315 1003
+*	pickup creatures
+	inst
+	lock
+	doif type _p1_ = 7
+		setv va21 0
+		targ _p1_
+		setv va01 post
+		loop
+			pose 36
+			spas ownr _p1_
+			wait 1
+			inst
+			addv va21 1
+		untl movs <> 0 or va21 > 100
+	else
+		etch 4 0 0
+			setv va21 0
+			zomb 1
+			pose 36
+			dirn 1
+			loop
+				spas ownr targ
+				wait 1
+				inst
+				addv va21 1
+			untl movs <> 0 or va21 > 100
+			zomb 0
+		next
+	endi
+endm
+
+scrp 3 1 32315 1004
+*	drop creatures
+	inst
+	lock
+	attr 516
+	setv va00 posr
+	subv va00 posl
+	divv va00 2
+	addv va00 posl
+	subv va00 60
+	setv va01 posb
+	subv va01 post
+	divv va01 2
+	addv va01 post
+	addv va01 20
+
+	doif posl <= ov97
+		setv va02 -10
+	elif posl >= ov98
+		setv va02 10
+		addv va00 60
+	endi
+	epas 4 0 0
+		zomb 1
+		dirn 1
+		pose 36
+		stim writ from 94 1.0
+		rpas ownr targ
+		mvsf va00 va01
+		zomb 0
+	next
+endm
+
+
+rscr
+enum 3 1 32315
+	kill targ
+next
+scrx 3 1 32315 1
+scrx 3 1 32315 2
+scrx 3 1 32315 9
+scrx 3 1 32315 1001
+scrx 3 1 32315 1002
+scrx 3 1 32315 1003
+scrx 3 1 32315 1004

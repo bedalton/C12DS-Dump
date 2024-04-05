@@ -1,0 +1,120 @@
+* C1 to DS/C3 Teleporters
+
+* Dependencies:
+*  c1porter.c16
+*  c1te.wav
+*  buzz.wav
+
+
+inst
+
+doif game "C1_to_DS_Loaded" = 1 and totl 3 2 64401 = 0
+
+*teleporter with c1 image
+	new: simp 3 2 64401 "c1porter" 11 0 500
+	attr 198
+	bhvr 1
+	accg 4
+	fric 99
+	elas 5
+	perm 100
+	puhl -1 21 15
+
+	doif type game "ds_game_type" ne 2
+* 		it's NOT a string, this must be C3 only
+* 		choose a safe C3 location
+		setv va00 5440
+		setv va01 3580
+*		velo rand 30 40 -5
+		mvsf va00 va01
+	else
+* 		it IS a string, but what is the value?
+		doif game "ds_game_type" eq "undocked"
+* 			this is an undocked world, location needs to be DS safe
+			setv va00 2760
+			setv va01 9028.544922
+*			velo rand 30 40 -5
+			mvsf va00 va01
+		elif game "ds_game_type" eq "docked"
+* 			this is a docked world, location can be anywhere in the DS/C3 realm
+			setv va00 2760
+			setv va01 9028.544922
+*			velo rand 30 40 -5
+			mvsf va00 va01
+		endi
+	endi
+	seta va00 targ
+
+*teleporter with ds image
+	new: simp 3 2 64401 "c1porter" 11 11 500
+	attr 198
+	bhvr 1
+	accg 4
+	fric 99
+	elas 5
+	perm 100
+	puhl -1 21 15
+	mvsf 3614 10585
+*set the pointer to/from the other teleporter
+	seta ov00 va00
+	seta avar va00 0 targ
+
+endi
+
+************
+* Scripts
+
+scrp 3 2 64401 1
+*	teleport the creatures through to/from the metaroom teleporters
+*	don't let this be interrupted
+	lock
+	inst
+	targ ov00
+	doif gmap posx posy <> -1
+		targ ownr
+		anim [1 2 3 4 5 6 7]
+		sndc "c1te"
+		targ ov00
+		anim [1 2 3 4 5 6 7 8 9 10 0]
+		doif carr <> null
+			seta va02 carr
+		else
+			seta va02 null
+		endi
+		sndc "c1te"
+		setv va00 posx
+		setv va01 posb
+		targ ownr
+		over
+		etch 4 0 0
+			doif movs eq 0
+				mvsf va00 va01
+				stim writ targ 95 1.0
+				doif va02 <> null
+					setv va03 0
+					loop
+						spas va02 targ
+						wait 1
+						addv va03 1
+						inst
+					untl va03 > 100 or carr <> null
+				endi
+			endi
+		next
+		doif touc pntr ownr = 1
+			cmrp va00 va01 0
+		endi
+		anim [7 8 9 10 0]
+		over
+	else
+		targ ownr
+		sndc "buzz"
+	endi
+	unlk
+endm
+
+rscr
+enum 3 2 64401
+	kill targ
+next
+scrx 3 2 64401 1
