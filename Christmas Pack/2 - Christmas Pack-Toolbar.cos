@@ -1,0 +1,1064 @@
+* C1 Toolbar - 1 1 32304
+* Bug: errors caused when weeds have been removed!
+
+* Dependencies: 
+*	c1 toolbar updated.cos
+*	c12dsStore2.catalogue
+*	c1storemute.c16
+*	c1toolbar.c16
+*	c1hatchery.c16
+*	c1viewer.c16
+*	c1discworldmap.c16
+*	c1c0.wav
+*	eggs.c16
+*	c1gender.c16
+*	c1favoriteplaces.c16
+*	c1shopkit.c16
+*	c1storemute.c16
+***	c1hf.wav
+*	c1he.wav
+*	c1ki.wav
+*	bep2.wav
+*	buzz.wav
+
+* Shows the C1 Hatchery: 	1 1 32305
+* Makes the Norn's eye view: 	1 1 32306
+* Favorite Places toolbar: 	1 2 32300
+* Favorite Places markers:    1 2 32301
+* Shop:    				1 2 32302
+* Fake eggs:			1 1 32320
+
+* Bug: eggs dropped into the hatchery stop working!
+
+*********************
+* Install
+
+inst
+reaf
+
+doif game "C1_to_DS_Loaded" = 1 and totl 1 1 32304 = 0
+	new: comp 1 1 32304 "c1toolbar" 0 0 10000
+	pat: butt 1 "c1toolbar" 3 2 0 0 0 [] 1001 1
+	pat: butt 2 "c1toolbar" 5 2 23 0 0 [] 1002 1
+	pat: fixd 3 "c1toolbar" 1 115 0 0 "blackontransparentchars"
+	pat: butt 4 "c1toolbar" 7 2 46 0 0 [] 1003 1
+	pat: butt 5 "c1toolbar" 9 2 69 0 0 [] 1004 1
+	pat: butt 6 "c1toolbar" 11 2 92 0 0 [] 1005 1
+	pat: butt 7 "c1toolbar" 0 16 -23 0 0 [] 1006 1
+	attr 51
+	bhvr 0
+	part 1
+	pose 1
+	part 2
+	pose 1
+	part 4
+	pose 1
+	part 5
+	pose 1
+	part 6
+	pose 1
+	flto 175 60
+	tick 2
+	part 3
+	frmt 7 7 0 0 0 0 0
+endi
+
+*********************
+* Scripts
+
+scrp 1 2 32301 1
+*	favorite places marker clicked
+	inst
+	doif ov97 <> 0 and ov98 <> 0
+		scam null 0
+*		trck null 0 0 0 0
+		cmra ov97 ov98 0
+	endi
+endm
+
+scrp 1 2 32301 9
+*	favorite places timer
+	doif touc ownr pntr = 1 and pose <> 0
+		pose 1
+	elif touc ownr pntr = 0 and pose <> 0
+		pose 2
+	endi
+endm
+
+scrp 1 1 32304 5
+*	toolbar dropped
+	inst
+	setv va00 posl
+	setv va01 post
+	setv va02 ftoi va00
+	setv va03 ftoi va01
+	subv va00 va02
+	subv va01 va03
+	mvby va00 va01
+endm
+
+scrp 1 1 32304 9
+*	toolbar timer
+	inst
+	lock
+	targ norn
+	sets va03 "Life Force: "
+	doif targ <> null
+		setv va02 chem 4
+		mulv va02 100
+		adds va03 vtos ftoi va02
+		adds va03 "%"
+	endi
+	targ ownr
+	part 3
+	ptxt va03
+*	check egg count in hatchery
+	rtar 1 1 32305
+	seta va05 targ
+	setv va00 0
+	setv va07 24
+	doif targ <> null and type targ = 6
+		epas 1 1 32320
+			addv va00 1
+		next
+		doif va00 = 0
+			reps 6
+				setv va01 rand 0 5
+				mulv va02 24
+				setv va03 88
+				setv va04 va01
+				mulv va04 8
+				addv va04 va03
+				new: simp 1 1 32320 "eggs" 8 va04 800
+*				store the egg image offset
+				setv ov99 va04
+				attr 0
+				accg 3
+				elas 0
+				perm 60
+				fric 100
+				frel va05
+				tick rand 3 5
+				flto va07 210
+				setv va06 0
+				spas va05 targ
+				doif carr <> null
+					attr 212
+				else
+					attr 4
+				endi
+				pose 2
+				sets va08 "norn.c1tods*"
+				gene load targ 1 va08
+				setv ov01 rand 1 2
+				addv va07 48
+			repe
+		endi
+	endi
+endm
+
+scrp 1 1 32304 128
+*	toolbar on reload
+	inst
+	enum 1 2 32300
+		kill targ
+	next
+	enum 1 2 32301
+		kill targ
+	next
+endm
+
+scrp 1 1 32304 1001
+*	C1 hatchery button is clicked
+	inst
+	lock
+	rtar 1 1 32305
+	doif targ = null
+*		create hatchery
+		new: vhcl 1 1 32305 "c1hatchery" 1 0 8910
+		cabp 1
+		cabn 4 51 320 249
+		pat: butt 2 "c1hatchery" 1 2 299 5 0 [] 1000 1
+		pat: dull 3 "c1hatchery" 3 112 51 2
+		part 3
+		pose 1
+		pat: dull 4 "c1hatchery" 5 4 215 2
+		pat: dull 5 "c1hatchery" 6 230 107 2
+		pat: butt 6 "c1hatchery" 10 10 15 50 0 [] 1001 1
+		part 5
+		anim [0 1 2 3 255]
+		setv ov80 120
+		setv ov81 250
+		attr 826
+		frel null
+		flto wndr 0
+		setv ov00 0
+		tick 5
+	endi
+	doif ov00 = 0
+*		show hatchery
+		rtar 1 1 32305
+		doif targ <> null
+			sndl "c1ki"
+			setv ov00 1
+			flto ov80 ov81
+			targ ownr
+			part 1
+			anim [1 0]
+		endi
+	else
+*		hide hatchery
+		stpc
+		setv ov80 fltx
+		setv ov81 flty
+		frel null
+		flto wndr 0
+		setv ov00 0
+		targ ownr
+		part 1
+		pose 1
+	endi
+endm
+
+scrp 1 1 32304 1002
+*	Norn's Eye View
+	inst
+	lock
+	doif totl 1 1 32306 < 1
+		part 2
+		anim [1 0]
+		new: comp 1 1 32306 "c1viewer" 1 0 8920
+		pat: cmra 1 "blank" 0 19 13 -1 91 68 91 68
+		pat: butt 2 "c1viewer" 1 2 112 4 0 [] 1000 0
+		seta va20 targ
+		attr 310
+		tick 2
+		setv ov00 0
+		setv ov80 200
+		setv ov81 200
+	endi
+	rtar 1 1 32306
+	doif targ <> null
+*		toggle
+		doif ov00 = 0
+			setv ov00 1
+		else
+			setv ov00 0
+		endi
+		doif ov00 = 1
+*			show
+			frel null
+			flto ov80 ov81
+			targ ownr
+			part 2
+			anim [1 0]
+		elif ov00 = 0
+*			hide
+			setv ov80 fltx
+			setv ov81 flty
+			frel null
+			flto wndr 0
+			targ ownr
+			part 2
+			anim [0 1]
+		endi
+	endi
+
+endm
+
+scrp 1 1 32304 1003
+*	show / hide map
+	inst
+	rtar 1 1 32334
+	doif targ = null
+* 		C1 Discworld Map
+* 		Clicking the discworld map brings you to the opposite side of the world
+		new: simp 1 1 32334 "c1discworldmap" 37 0 10000
+		attr 54
+		frel null
+		flto 160 135
+		tick 5
+		pose 36
+		setv ov00 0
+	endi
+	doif ov00 <> 0 and wndl >= 0 and wndr <= 11520 and wndt >= 10000 and wndb <= 11196
+		setv ov00 0
+		targ ownr
+		part 4
+		pose 1
+	elif wndl >= 0 and wndr <= 11520 and wndt >= 10000 and wndb <= 11196
+		setv ov00 1
+		targ ownr
+		part 4
+		pose 0
+	else
+		sndc "buzz"
+	endi
+endm
+
+scrp 1 1 32304 1004
+*	show/hide store
+	inst
+	rtar 1 2 32302
+	doif targ = null
+*		C1 Shop
+*		maximum text width 42
+		new: vhcl 1 2 32302 "c1shopkit" 1 0 8911
+		pat: fixd 1 "c1shopkit" 1 50 54 1 "WhiteOnTransparentChars"
+		part 1
+		frmt 0 0 0 0 0 0 2
+		pat: fixd 2 "c1shopkit" 1 50 174 1 "WhiteOnTransparentChars"
+		part 2
+		frmt 0 0 0 0 0 0 2
+		cabp 1
+* orig	cabn 132 82 232 163
+		cabn 48 47 314 163
+		setv ov80 120
+		setv ov81 250
+		attr 826
+		frel null
+		flto wndr 0
+		setv ov00 0
+		setv ov01 0
+		setv ov50 1
+		pat: butt 3 "c1shopkit" 2 2 105 238 1 [] 1001 0
+		pat: butt 4 "c1shopkit" 4 2 212 238 1 [] 1002 0
+		pat: butt 5 "c1storemute" 0 2 164 228 1 [] 1007 0
+		tick 5
+		mesg writ targ 1003
+	endi
+	rtar 1 2 32302
+	doif targ <> null
+		doif ov00 = 0
+*			show shop
+			doif ov50 = 1
+				sndl "c1ki"
+			endi
+			setv ov00 1
+			flto ov80 ov81
+			mesg writ targ 1003
+		elif targ <> null
+*			hide shop
+			stpc
+			setv ov80 fltx
+			setv ov81 flty
+			frel null
+			flto wndr 0
+			setv ov00 0
+			epas 0 0 0
+				kill targ
+			next
+		endi
+		setv va00 ov00
+		targ ownr
+		part 5
+		doif va00 = 0
+			pose 1
+		else
+			pose 0
+		endi
+	endi
+endm
+
+scrp 1 1 32304 1005
+*	show/hide favorite places
+	inst
+	lock
+	doif totl 1 2 32300 = 0 or totl 1 2 32301 < 4
+*		delete any existing ones
+		enum 1 2 32300
+			kill targ
+		next
+		enum 1 2 32301
+			kill targ
+		next
+* 		C1 Favorite Places
+		setv va01 151
+		setv va03 -50
+* 		Create favorite places toolbar
+		new: comp 1 2 32300 "c1toolbar" 1 2 10000
+		pat: cmra 1 "c1favoriteplaces" 0 2 2 0 200 180 50 45
+		seta va02 targ
+		attr 310
+		accg 0
+		aero 100
+		fric 100
+		bhvr 0
+		elas 0
+		perm 0
+		mvto 3823 10795
+* 		Create marker 1
+		new: simp 1 2 32301 "c1favoriteplaces" 3 0 5000
+		attr 278
+		elas 0
+		fric 100
+		aero 100
+		accg 0
+		tick 10
+		pose 0
+		mvto 3914 10853
+		seta va04 targ
+		targ va02
+		scam targ 1
+		trck va04 0 0 2 0
+		cmrt 0
+		seta ov99 va02
+* 		Create shortcut 2
+		targ va02
+		pat: cmra 2 "c1favoriteplaces" 0 56 2 0 200 180 50 45
+*		Create marker 2	
+		new: simp 1 2 32301 "c1favoriteplaces" 3 0 5000
+		attr 278
+		elas 0
+		fric 100
+		aero 100
+		accg 0
+		tick 10
+		pose 0
+		mvto 6880 10465
+		seta va04 targ
+		targ va02
+		scam targ 2
+		trck va04 0 0 2 0
+		cmrt 0
+		seta ov99 va02
+* 		Create shortcut 3
+		targ va02
+		pat: cmra 3 "c1favoriteplaces" 0 110 2 0 200 180 50 45
+* 		Create marker 3
+		new: simp 1 2 32301 "c1favoriteplaces" 3 0 5000
+		attr 278
+		elas 0
+		fric 100
+		aero 100
+		accg 0
+		tick 10
+		pose 0
+		mvto 6161 10783
+		seta va04 targ
+		targ va02
+		scam targ 3
+		trck va04 0 0 2 0
+		cmrt 0
+		seta ov99 va02
+* 		Create shortcut 4
+		pat: cmra 4 "c1favoriteplaces" 0 164 2 0 200 180 50 45
+* 		Create marker 4
+		new: simp 1 2 32301 "c1favoriteplaces" 3 0 5000
+		attr 278
+		elas 0
+		fric 100
+		aero 100
+		accg 0
+		tick 10
+		pose 0
+		mvto 8587 10569
+		seta va04 targ
+		targ va02
+		scam targ 4
+		trck va04 0 0 2 0
+		cmrt 0
+		seta ov99 va02
+		targ va02
+		frel null
+		flto va01 va03
+	endi
+	targ ownr
+	part 6
+	doif pose = 1
+		pose 0
+		enum 1 2 32300
+			doif ov81 <> 0
+				flto fltx ov81
+			else
+				flto fltx 84
+			endi
+		next
+		enum 1 2 32301
+			pose 2
+			tick 10
+		next
+	else
+		pose 1
+		enum 1 2 32301
+			pose 0
+			tick 0
+		next
+		enum 1 2 32300
+			setv ov81 flty
+			flto fltx -50
+		next
+	endi
+endm
+
+scrp 1 1 32304 1006
+*	Pyramid button
+	inst
+	sndc "c102"
+	anim [16 15 16 15 16 15]
+	rtar 2 24 32304
+	doif targ <> null
+		doif post >= 11196
+			mvto 7494 10057
+		endi
+		setv va00 posx
+		setv va01 posy
+		cmrp va00 va01 0
+	endi
+endm
+
+scrp 1 2 32302 1007
+*	store mute toggle button
+	rtar 1 2 32302
+	part 5
+	doif ov50 = 1
+		stpc
+		setv ov50 0
+		pose 1
+	elif ov50 = 0
+		setv ov50 1
+		pose 0
+		sndl "c1ki"
+	endi
+endm
+
+scrp 1 1 32305 9
+*	hatchery timer
+	doif rand 0 12 >= 10
+		targ ownr
+		part 3
+		anim [0 1]
+		snde "c1hl"
+	endi
+	doif ov00 = 0
+*		hatchery is off
+		enum 1 1 32316
+			kill targ
+		next
+	endi
+endm
+
+scrp 1 1 32305 124
+*	hatchery receives an item dropped into it
+	inst
+	lock
+	epas 3 4 0
+		setv va00 posl
+		setv va01 post
+		setv va02 pose
+		doif type ov99 <> 0 and type ov99 <> 1
+			setv va03 0
+		elif type ov99 = 1 or type ov99 = 0
+			setv va03 ov99
+		endi
+		seta va07 targ
+		setv va08 ov01
+		new: simp 1 1 32320 "eggs" 8 va03 800
+		gene move targ 1 ownr 1
+		setv ov01 va08
+		setv ov99 va03
+		accg 3
+*		attr 199
+		attr 212
+		elas 0
+		fric 100
+		pose va02
+		mvsf va00 va01
+		setv va06 0
+		loop
+			spas ownr targ
+			wait 1
+			inst
+			addv va06 1
+		untl carr <> null or va06 > 1000
+		tick rand 3 5
+		targ va07
+		kill targ
+	next
+endm
+
+scrp 1 1 32305 1000
+*	Hatchery Close button
+	inst
+	rtar 1 1 32304
+	stpc
+	part 1
+	pose 1
+	targ ownr
+	frel null
+	flto wndr 0
+	setv ov00 0
+endm
+
+scrp 1 1 32305 1001
+*	Hatchery Reset Button
+	inst
+	lock
+	targ ownr
+	epas 1 1 32320
+		kill targ
+	next
+endm
+
+scrp 1 1 32306 1
+*	norn's eye view clicked, so zoom to location
+	inst
+	doif norn ne null
+		scam targ 1
+		targ norn
+		doif iitt ne null
+			seta va02 iitt
+		else
+			seta va02 norn
+		endi
+		setv va00 posl
+		setv va01 post
+		scam null 0
+		cmrp va00 va01 0
+	endi
+
+endm
+
+scrp 1 1 32306 9
+*	Norn's Eye View timer
+	inst
+	doif norn ne null
+		scam targ 1
+		targ norn
+		doif iitt ne null
+			seta va02 iitt
+		else
+			seta va02 norn
+		endi
+		setv va00 posl
+		setv va01 post
+		targ ownr
+		doif gmap va00 va01 <> -1
+			cmrp va00 va01 0
+			trck va02 0 0 0 0
+		endi
+	endi
+endm
+
+scrp 1 1 32306 1000
+*	Norn's eye view closer
+	inst
+	rtar 1 1 32304
+	part 2
+	anim [0 1]
+	targ ownr
+	kill targ
+endm
+
+scrp 1 1 32320 1
+*	fake egg clicked, so make the real egg
+	inst
+	lock
+	setv va00 3355
+	setv va01 10858
+	setv va02 pose
+	setv va03 ov99
+	new: simp 3 4 1 "eggs" 8 va03 800
+	gene move targ 1 ownr 1
+	setv ov99 va03
+	setv ov01 mv01
+	pose va02
+	accg 3
+	attr 199
+	elas 0
+	fric 100
+	aero 0
+	mvsf va00 va01
+	cmrp va00 va01 1
+	tick 600
+	rtar 1 1 32305
+	mesg writ targ 1000
+	targ ownr
+	kill targ
+endm
+
+scrp 1 1 32320 5
+*	Fake egg is dropped, so make a real egg
+	inst
+	lock
+	setv va00 posl
+	setv va01 post
+	setv va02 pose
+	setv va03 ov99
+	new: simp 3 4 1 "eggs" 8 va03 800
+	gene move targ 1 ownr 1
+	setv ov99 va03
+	setv ov01 mv01
+	pose va02
+	accg 3
+	attr 199
+	elas 0
+	fric 100
+	aero 0
+	mvsf va00 va01
+	tick 600
+	targ ownr
+	kill targ
+endm
+
+scrp 1 1 32320 9
+*	fake egg timer (animate egg and gender indicator)
+	inst
+	targ pntr
+	setv va00 posl
+	setv va01 post
+	targ ownr
+	doif mv02 = 0 and posl <= va00 and posr >= va00 and post <= va01 and posb >= va01
+		setv mv02 1
+		doif mv01 = 1
+			new: simp 1 1 32316 "c1gender" 6 6 10000
+			attr 304
+			frel ownr
+			flto 12 -18
+			frat 3.0
+			anim [0 1 2 3 4 5 255]
+		elif mv01 = 2
+			new: simp 1 1 32316 "c1gender" 6 0 10000
+			attr 304
+			frel ownr
+			flto 12 -18
+			frat 3.0
+			anim [0 1 2 3 4 5 255]
+		endi
+	elif mv02 = 1
+		doif posl > va00 or posr < va00 or post > va01 or posb < va01
+			targ ownr
+			setv mv02 0
+			etch 1 1 32316
+				kill targ
+			next
+		endi
+	endi
+	doif mv02 = 1
+		targ ownr
+		snde "c1he"
+		slow
+		doif vely = 0
+			mvby -3 -1
+			wait 1
+			mvby 3 1
+			wait 1
+			mvby -2 -1
+			wait 1
+			mvby 2 1
+			wait 1
+		endi
+	endi
+endm
+
+scrp 1 1 32334 1
+*	discworld map clicked
+	targ pntr
+	setv va00 posl
+	setv va01 post
+	inst
+	doif wndl >= 0 and wndr <= 11520 and wndt >= 10000 and wndb <= 11196
+		targ pntr
+		sndc "bep2"
+		scam null 0
+		setv va04 wndl
+		addv va04 4175.5
+		setv va05 wndt
+		doif va04 >= 0 and va04 <= 10399 and va05 >= 10000 and va05 <= 11196
+		else
+			subv va04 8351
+		endi
+		cmra va04 va05 0
+		mesg writ ownr 9
+	endi
+endm
+
+scrp 1 1 32334 9
+*	discworld map timer
+	inst
+	doif ov00 <> 0 and wndl >= 0 and wndr <= 11520 and wndt >= 10000 and wndb <= 11196
+		setv va00 wndl
+		subv va00 1633
+		divv va00 232.9
+		doif va00 >= 0 and va00 <= 35
+			pose va00
+		else
+			pose 35
+		endi
+	else
+		pose 36
+	endi
+endm
+
+scrp 1 2 32300 1
+*	favorite places clicked
+	setv va10 relx ownr pntr
+	doif va10 >= -85 and va10 < -35
+		scam ownr 1
+	elif va10 >= -31 and va10 < 19
+		scam ownr 2
+	elif va10 >= 23 and va10 < 73
+		scam ownr 3
+	elif va10 >= 77 and va10 < 127
+		scam ownr 4
+	else
+		targ pntr
+		sndc "buzz"
+	endi
+	seta va99 trck
+	doif va99 <> null
+		scam null 0
+		targ va99
+		setv ov97 wndl
+		setv ov98 wndt
+		setv va20 posl
+		setv va21 posb
+		setv va22 gmap va20 va21
+		cmrp va20 va21 0
+	elif va99 = NULL
+		snde "buzz"
+	endi
+endm
+
+scrp 1 2 32302 1001
+*	Shop - previous item
+	inst
+	part 3
+	anim [1 0]
+	doif ov01 <= 0
+*		can't look lower than 0, so let's start again at the top
+		setv ov01 200
+		sets va00 "C1toDS Store "
+		adds va00 vtos ov01
+		loop
+			doif reaq va00 = 0
+				subv ov01 1
+			endi
+			sets va00 "C1toDS Store "
+			adds va00 vtos ov01
+		untl reaq va00 <> 0
+	elif ov01 > 0
+		loop
+			doif ov01 <= 0
+				setv ov01 200
+				sets va00 "C1toDS Store "
+				adds va00 vtos ov01
+			else
+				subv ov01 1
+				sets va00 "C1toDS Store "
+				adds va00 vtos ov01
+			endi
+			doif reaq va00 = 0
+				sets va00 "C1toDS Store "
+				adds va00 vtos ov01
+			endi
+		untl reaq va00 <> 0 or ov01 < 0
+	endi
+	doif ov01 < 0
+		setv ov01 0
+	endi
+	sets va00 "C1toDS Store "
+	adds va00 vtos ov01
+	setv va01 reaq va00
+	mesg writ ownr 1003
+endm
+
+scrp 1 2 32302 1002
+*	Shop - next item
+	inst
+	part 4
+	anim [1 0]
+	doif ov01 >= 200
+*		can't look higher than 200, so let's start again at the bottom
+		setv ov01 0
+		sets va00 "C1toDS Store "
+		adds va00 vtos ov01
+		loop
+			doif reaq va00 = 0
+				addv ov01 1
+			endi
+			sets va00 "C1toDS Store "
+			adds va00 vtos ov01
+		untl reaq va00 <> 0
+	elif ov01 < 200
+		loop
+			doif ov01 >= 200
+				setv ov01 0
+				sets va00 "C1toDS Store "
+				adds va00 vtos ov01
+			else
+				addv ov01 1
+				sets va00 "C1toDS Store "
+				adds va00 vtos ov01
+			endi
+			doif reaq va00 = 0
+				sets va00 "C1toDS Store "
+				adds va00 vtos ov01
+			endi
+		untl reaq va00 <> 0 or ov01 < 0
+	endi
+	doif ov01 > 200
+		setv ov01 0
+	endi
+	sets va00 "C1toDS Store "
+	adds va00 vtos ov01
+	setv va01 reaq va00
+	mesg writ ownr 1003
+endm
+
+scrp 1 2 32302 1003
+*	Shop - makes items for C1
+	inst
+	sets va34 "1"
+	char va34 1 34
+
+	setv va00 posl
+	setv va01 post
+	addv va00 142
+	addv va01 132
+	epas 0 0 0
+		kill targ
+	next
+	targ ownr
+	sets va04 "C1toDS Store "
+	adds va04 vtos ov01
+	sets va02 read va04 0
+	setv va99 rean va04
+	subv va99 1
+	setv va98 1
+	loop
+		adds va02 va34
+		adds va02 read va04 va98
+		addv va98 1
+	untl va98 = rean va04
+	sets va03 va02
+	adds va03 va34
+	adds va02 " mvsf va00 va01 spas ownr targ"
+	adds va03 " mvsf va00 va01 spas ownr targ"
+	sets ov68 va02
+	sets ov69 va03
+	sets va14 caos 1 1 0 0 va02 1 1 ov71
+	doif type va14 = 0
+		doif va14 = 0
+*			success
+		else
+*			failure for any reason
+			sets va15 caos 1 1 0 0 va03 1 1 ov72
+		endi
+	endi
+	wait 1
+	inst
+	targ ownr
+	epas 0 0 0
+		setv va20 fmly
+		setv va21 gnus
+		setv va22 spcs
+	next
+	sets va23 "Agent Help "
+	adds va23 vtos va20
+	adds va23 " "
+	adds va23 vtos va21
+	adds va23 " "
+	adds va23 vtos va22
+	doif reaq va23 = 1
+		sets va05 read va23 0
+		sets va06 read va23 1
+	else
+		sets va05 ""
+		sets va06 ""
+	endi
+	doif type va05 = 2
+		part 1
+		doif va05 <= ""
+			ptxt "Unknown Agent"
+		else
+			ptxt va05
+		endi
+	endi
+	doif type va06 = 2
+		part 2
+		doif va06 <= ""
+			ptxt "Nothing is known about this item."
+		else
+			ptxt va06
+		endi
+	endi
+endm
+
+scrp 1 2 32302 125
+*	Shop lost an agent - make another
+	mesg writ ownr 1003
+endm
+
+********************
+* Remove
+
+rscr
+enum 1 2 32300
+	kill targ
+next
+scrx 1 2 32300 1
+enum 1 1 32304
+	kill targ
+next
+scrx 1 1 32304 5
+scrx 1 1 32304 9
+scrx 1 1 32304 128
+scrx 1 1 32304 1001
+scrx 1 1 32304 1002
+scrx 1 1 32304 1003
+scrx 1 1 32304 1004
+scrx 1 1 32304 1005
+scrx 1 1 32304 1006
+
+enum 1 1 32305
+	kill targ
+next
+scrx 1 1 32305 125
+scrx 1 1 32305 1000
+scrx 1 1 32305 1001
+
+enum 1 1 32306
+	kill targ
+next
+scrx 1 1 32306 1
+scrx 1 1 32306 9
+scrx 1 1 32306 1000
+
+enum 1 1 32320
+	kill targ
+next
+scrx 1 1 32320 5
+scrx 1 1 32320 9
+
+enum 1 1 32316
+	kill targ
+next
+enum 1 1 32334
+	kill targ
+next
+scrx 1 1 32334 9
+
+enum 1 2 32300
+	kill targ
+next
+scrx 1 2 32300 1
+enum 1 2 32301
+	kill targ
+next
+scrx 1 2 32301 1
+scrx 1 2 32301 9
+targ null
+scam targ 0
+trck null 0 0 0 0
+rtar 1 2 32302
+enum 1 2 32302
+	dpas 0 0 0
+	kill targ
+next
+scrx 1 2 32302 1
+scrx 1 2 32302 9
+scrx 1 2 32302 124
+scrx 1 2 32302 1001
+scrx 1 2 32302 1002
+scrx 1 2 32302 1003

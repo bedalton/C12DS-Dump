@@ -1,0 +1,135 @@
+TAG "C1toDS Store 23"
+"new: simp 2 24 32305 "
+"c1xmasdeco"
+" 1 0 800 elas 0 accg 0 fric 100 aero 100 attr 199"
+
+TAG "C1toDS Store 24"
+"new: simp 2 24 32306 "
+"c1xmasdeco"
+" 1 1 800 elas 0 accg 0 fric 100 aero 100 attr 199"
+
+TAG "C1toDS Store 25"
+"new: simp 2 24 32307 "
+"c1xmasdeco"
+" 1 2 800 elas 0 accg 0 fric 100 aero 100 attr 199"
+
+TAG "C1toDS Store 26"
+"new: simp 2 5 32308 "
+"c1xmasholi"
+" 2 10 2000 attr 199 fric 100 accg 0 elas 0 aero 100 perm 60"
+
+TAG "C1toDS Store 27"
+"new: simp 2 4 32309 "
+"c1xmasholi"
+" 1 13 2000 attr 199 fric 100 accg 0 elas 0 aero 100 perm 60 rnge 250 tick rand 60 80"
+
+TAG "C1toDS Store 28"
+"new: simp 2 24 32311 "
+"c1xmaslite2"
+" 6 0 801 attr 199 accg 0 aero 100 fric 100 elas 0 perm 60 anim [0 1 2 3 4 5 255] emit 1 0.9 frat 1.6"
+
+TAG "C1toDS Store 29"
+"new: simp 2 15 32302 "
+"c1xmasholi"
+" 9 15 1000 attr 199 fric 20 accg 1 elas 0 perm 60 frat 1.6 tick 2 setv ov00 1 setv ov95 -1 setv ov96 5 setv ov97 -1 core 0 65 0 72 rnge 1999 bhvr 1"
+
+TAG "C1toDS Store 30"
+"new: simp 3 8 32300 "
+"c1xmassnowmaker"
+" 2 0 1000 attr 199 fric 80 accg 5 elas 0 aero 10 perm 60 rnge 1999"
+
+TAG "C1toDS Store 31"
+"new: simp 2 21 32336 "
+"c1xmasholi"
+" 8 25 200 attr 195 fric 100 accg 5 elas 0 pose 7 bhvr 1"
+
+TAG "C1toDS Store 32"
+"new: simp 2 21 32322 "
+"c1xmascrackers"
+" 2 0 1000 attr 199 fric 80 accg 2 elas 0 aero 10 perm 60 bhvr 1"
+
+
+TAG "Agent Help 2 24 32305"
+"Christmas Cards"
+"You can display your creatures' christmas cards."
+
+TAG "Agent Help 2 24 32306"
+"Christmas Garland"
+"You can decorate Albia to celebrate Christmas!"
+
+TAG "Agent Help 2 24 32307"
+"Christmas Ribbon"
+"You can decorate Albia to celebrate Christmas!"
+
+TAG "Agent Help 2 5 32308"
+"Holly"
+"Use this holly to decorate Albia, but make sure your creatures do not eat it."
+
+TAG "Agent Help 2 4 32309"
+"Mistletoe"
+"With this festive herb, your creatures may want to kiss one another."
+
+TAG "Agent Help 2 24 32311"
+"Fairy Lights"
+"Decorate Albia with these twinkling fairy lights."
+
+TAG "Agent Help 2 15 32302"
+"Reindeer"
+"These magical creatures are fun to play with, but don't like getting their feet wet."
+
+TAG "Agent Help 3 8 32300"
+"Snow Making Machine"
+"This machine creates a wintery snowstorm to entertain your creatures."
+
+TAG "Agent Help 2 11 32304"
+"Flaming Christmas Pudding"
+"This seasonal speciality appears in the left-most oven in the stove near the incubator. You'll need to be careful though, as it's still cooking, and is extremely hot. If any creature attempts to sneak a quick bite, the pudding will be a bit painful. The pudding will decrease in size when eaten. Also, your creature may be lucky enough to find a surprise silver coin inside a portion of pudding. It's not all good news though; your creature may have a lucky coin but he'll also have a sore mouth!"
+
+TAG "Agent Help 2 21 32321"
+"Good Luck Christmas Pudding Coin"
+"Your creature may be lucky enough to find a surprise silver coin inside a portion of pudding. It's not all good news though; they may have a lucky coin but they'll also have a sore mouth!"
+
+TAG "Agent Help 2 21 32336"
+"Snowman"
+"The snowman toy makes creatures happy when played with. Beware of frostbite!"
+
+TAG "Agent Help 2 24 32309"
+"Christmas Tree"
+"Your creatures can celebrate the Christmas season with this fresh pine-scented Christmas tree."
+
+TAG "Agent Help 2 24 32312"
+"Fire Log Box"
+"Using this log box will add fuel to any nearby fireplaces."
+
+TAG "Agent Help 2 24 32308"
+"Fireplace"
+"The fireplace provides warmth, light, and a place to hang your creatures' stockings." 
+
+TAG "Agent Help 2 11 32305"
+"Turkey"
+"This tasty turkey provides your creatures with tasty holiday food." 
+
+TAG "Agent Help 2 11 32306"
+"Pudding"
+"Pudding is a delicious dessert food for creatures."
+
+TAG "Agent Help 2 23 32308"
+"Oven"
+"There are delicious smells wafting out of the oven." 
+
+
+TAG "Agent Help 2 24 32310"
+"Incubator Fairy Lights"
+"These lights decorate the Incubator with Christmas spirit." 
+
+TAG "Agent Help 2 21 32322"
+"Christmas Cracker Toy"
+"Each Christmas Cracker contains a toy surprise!" 
+
+TAG "Agent Help 2 21 32335"
+"Christmas Toy"
+"These Christmas trinket toys are very entertaining for creatures."
+
+TAG "Agent Help 2 19 32301"
+"Snowflake"
+"It's snowing!"
