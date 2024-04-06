@@ -1,0 +1,1041 @@
+**** C1 to DS Christmas Packs
+** Created November 4, 2007 by Clucky
+
+**** Bugs ******************************************************************
+** 
+****************************************************************************
+
+**** Files *****************************************************************
+*c12dschristmas.catalogue
+*c1 toolbar updated.cos
+*c1storemute.c16
+*c1 christmas packs.cos
+*c1cc.wav
+*c1cn.wav
+*c1fi.wav
+*c1hv.wav
+*c1ms.wav
+*c1r1.wav
+*c1r2.wav
+*c1sb.wav
+*chwc.wav
+*chwl.wav
+*c1xmascoin.c16
+*c1xmascrackers.c16
+*c1xmasdeco.c16
+*c1xmasfireplace.c16
+*c1xmasholi.c16
+*c1xmasinculite.c16
+*c1xmaslite.c16
+*c1xmaslite2.c16
+*c1xmaslogbox.c16
+*c1xmaspudding.c16
+*c1xmassnow.c16
+*c1xmasstove.c16
+*c1xmassnowmaker.c16
+
+****************************************************************************
+
+
+
+inst
+** C1 Christmas Crackers
+*new: simp 2 21 32322 "c1xmascrackers" 2 0 1000
+*attr 199
+*fric 80
+*accg 2
+*elas 0
+*aero 10
+*perm 60
+*bhvr 1
+*mvsf 3962 11055
+
+* C1 Christmas Cracker Toy 2 21 32335
+
+** C1 Christmas Holly 2 5 32308
+*new: simp 2 5 32308 "c1xmasholi" 1 10 2000
+*attr 199
+*fric 100
+*accg 0
+*elas 0
+*aero 100
+*perm 60
+*mvsf 3474 10504
+
+** C1 Christmas Mistletoe 2 4 32309
+*new: simp 2 4 32309 "c1xmasholi" 1 13 2000
+*attr 199
+*fric 100
+*accg 0
+*elas 0
+*aero 100
+*perm 60
+*mvsf 3699 10755
+
+* C1 Christmas Reindeer 2 15 32302
+new: simp 2 15 32302 "c1xmasholi" 9 15 1000
+attr 199
+fric 20
+accg 1
+elas 0
+perm 60
+mvsf 3900 10808
+frat 1.6
+tick 2
+core 0 65 0 72
+bhvr 1
+rnge 1999
+setv ov00 1
+* set speeds
+setv ov95 -1
+setv ov96 5
+setv ov97 -1
+
+**Christmas Pudding 1997
+** This seasonal speciality (once injected into the game) appears on 
+** the stove near the incubator. You'll need to be careful though, as 
+** it's still cooking, and is extremely hot.
+** If any Norn attempts to sneak a quick bite, the pudding will be a 
+** bit painful. The pudding will decrease in size when eaten. Also, your
+** Norn may be lucky enough to find a surprise silver coin inside a 
+** portion. It's not all good news though; your
+** Norn may have a lucky coin but he'll also have a sore mouth!
+
+* C1 Christmas Oven Vendor 2 23 32308
+** vends flaming pudding, turkey, and normal pudding
+new: comp 2 23 32308 "c1xmasstove" 1 0 5
+attr 4
+mvto 3816 10869
+bhvr 7
+pat: butt 1 "c1xmasstove" 2 3 5 8 0 [] 0 1
+pat: butt 2 "c1xmasstove" 5 3 36 7 0 [] 1 1
+pat: dull 3 "c1xmasstove" 1 0 0 -1
+pat: butt 4 "c1xmasstove" 2 3 62 7 0 [] 2 1
+
+* C1 Christmas Snow 2 19 32301
+* C1 Christmas Snow Maker Gadget 3 8 32300
+new: simp 3 8 32300 "c1xmassnowmaker" 2 0 1000
+attr 199
+fric 80
+accg 5
+elas 0
+aero 10
+perm 60
+rnge 1999
+bhvr 40
+mvsf 3962 11055
+
+* C1 Christmas Snowman 2 21 32336
+new: simp 2 21 32336 "c1xmasholi" 8 25 200
+attr 195
+fric 100
+accg 5
+elas 0
+bhvr 1
+mvsf 4300 10922
+core 0 118 0 108
+tick 6000
+
+** C1 Christmas Decoration 1 2 24 32305
+*new: simp 2 24 32305 "c1xmasdeco" 1 0 800
+*attr 199
+*accg 0
+*aero 100
+*fric 100
+*elas 0
+*mvsf 3536 10971
+
+** C1 Christmas Decoration 2 2 24 32306
+*new: simp 2 24 32306 "c1xmasdeco" 1 1 800
+*attr 199
+*accg 0
+*aero 100
+*fric 100
+*elas 0
+*mvsf 3736 10971
+
+** C1 Christmas Decoration 2 2 24 32307
+*new: simp 2 24 32307 "c1xmasdeco" 1 2 800
+*attr 199
+*accg 0
+*aero 100
+*fric 100
+*elas 0
+*mvsf 3936 10971
+
+
+* C1 Christmas Fireplace 2 24 32308
+new: simp 2 24 32308 "c1xmasfireplace" 13 0 10
+attr 195
+fric 100
+accg 5
+elas 0
+mvsf 3565 10814
+
+* C1 Christmas Tree 2 24 32309
+new: simp 2 24 32309 "c1xmasholi" 3 6 500
+attr 195
+fric 80
+accg 5
+elas 0
+aero 10
+perm 60
+mvsf 3718 10808
+frat 1.6
+anim [0 1 2 255]
+
+* C1 Christmas Incubator Lights 2 24 32310
+rtar 2 22 32316
+seta va00 targ
+doif va00 <> null
+	new: simp 2 24 32310 "c1xmaslite" 6 0 201
+	attr 32
+	frat 1.6
+	anim [0 1 2 3 4 5 255]
+	emit 1 0.9
+	frel va00
+	flto 5 9
+endi
+
+* C1 Christmas Fairy Lights 2 24 32311
+*new: simp 2 24 32311 "c1xmaslite2" 6 0 801
+*attr 199
+*accg 0
+*aero 100
+*fric 100
+*elas 0
+*anim [0 1 2 3 4 5 255]
+*mvsf 3738 10900
+
+* C1 Christmas Fire Logs 2 24 32312
+new: simp 2 24 32312 "c1xmaslogbox" 6 0 601
+attr 199
+accg 5
+fric 100
+elas 0
+perm 60
+mvsf 3738 10900
+bhvr 1
+rnge 300
+
+*********************************************************
+scrp 2 23 32308 0
+*	Oven deactivate
+	inst
+	setv va00 posl
+	setv va01 post
+	addv va01 10
+	setv va03 plne
+	addv va00 63
+	subv va03 1
+* 	C1 Normal Pudding 2 11 32306
+	new: simp 2 11 32306 "c1xmasholi" 2 0 va03
+	attr 199
+	fric 100
+	accg 0
+	elas 0
+	aero 10
+	perm 60
+	bhvr 48
+	mvsf va00 va01
+	seta va04 targ
+	targ ownr
+	part 4
+	snde "c1r1"
+	anim [0 1 1 2]
+	wait 10
+	inst
+	targ va04
+	plne 500
+	accg 5
+	velo rand -2 2 rand -1 1
+	targ ownr
+	part 4
+	stpc
+	snde "c1r2"
+	anim [2 2 2 2 2 2 1 1 0]
+endm
+
+scrp 2 21 32336 4
+*	snowman pickup
+	doif pose = 7
+		pose 0
+		core 0 118 0 108
+		tick 6000
+	endi
+endm
+
+scrp 2 23 32308 1
+*	Oven activate 1
+	inst
+	setv va00 posl
+	setv va01 post
+	subv va01 2
+	setv va03 plne
+	addv va00 8
+	subv va03 1
+* 	C1 Christmas Pudding 2 11 32304
+	new: simp 2 11 32304 "c1xmaspudding" 16 0 va03
+	attr 199
+	fric 100
+	accg 0
+	elas 0
+	aero 10
+	perm 60
+	tick 300
+	bhvr 48
+	mvsf va00 va01
+	pose 9
+	seta va04 targ
+	targ ownr
+	part 1
+	snde "c1r1"
+	anim [0 1 1 2]
+	wait 10
+	inst
+	targ va04
+	plne 500
+	anim [0 1 2 3 4 5 6 7 8 255]
+	accg 5
+	velo rand -2 2 rand -1 1
+	targ ownr
+	part 1
+	stpc
+	snde "c1r2"
+	anim [2 2 2 2 2 2 1 1 0]
+endm
+
+scrp 2 11 32304 9
+*	flaming pudding timer
+	doif pose < 9
+		pose 9
+	endi
+endm
+
+scrp 2 11 32304 12
+*	flaming pudding is eaten	
+	inst
+	doif pose < 9
+		chem 148 0.125
+		stim writ from 79 1
+		pose 10
+	elif pose < 15
+		setv va00 pose
+		addv va00 1
+		doif va00 <= 15
+			pose va00
+		endi
+		stim writ from 79 1
+	elif pose = 15
+		stim writ from 79 1
+		kill targ
+	endi
+	doif rand 0 7 > 6
+* 		C1 Christmas Coin 2 21 32321
+		setv va00 posl
+		setv va01 post
+		setv va03 plne
+		addv va03 1
+		new: simp 2 21 32321 "c1xmascoin" 11 0 va03
+		attr 211
+		elas 20
+		accg 2
+		perm 0
+		aero 0
+		mvsf va00 va01
+		velo rand -2 2 rand -5 -2
+		tick rand 60 80
+		anim [0 1 2 3 4 255]
+	endi
+endm
+
+scrp 2 11 32305 12
+* Turkey is eaten
+	snde "chwc"
+	doif pose = 0
+		pose 1
+	else
+		kill targ
+	endi
+	stim writ from 79 1
+endm
+
+scrp 2 11 32306 12
+* Normal pudding is eaten
+	snde "chwc"
+	doif pose = 0
+		pose 1
+	else
+		kill targ
+	endi
+	stim writ from 79 1
+endm
+
+scrp 2 21 32321 4
+*	Christmas Coin Picked Up
+	pose 0
+endm
+
+scrp 2 21 32321 5
+*	Christmas Coin Dropped
+	tick rand 60 80
+	anim [0 1 2 3 4 255]
+endm
+
+scrp 2 21 32321 6
+*	Christmas Coin Collides
+	inst
+	lock
+	doif _p2_ > 5
+		snde "c1cn"
+	endi
+endm
+
+scrp 2 21 32321 9
+*	Christmas Coin Timer
+	doif pose <> 7
+		anim [5 6 7]
+		tick 6000
+	elif pose = 7
+		kill targ
+	endi
+endm
+
+scrp 2 23 32308 2
+*	Oven activate 2
+	inst
+	setv va00 posl
+	setv va01 post
+	addv va01 12
+	setv va03 plne
+	addv va00 28
+	subv va03 1
+* 	C1 Christmas Turkey 2 11 32305
+	new: simp 2 11 32305 "c1xmasholi" 2 3 va03
+	attr 199
+	fric 100
+	accg 0
+	elas 0
+	aero 10
+	perm 60
+	bhvr 48
+	mvsf va00 va01
+	seta va04 targ
+	targ ownr
+	part 2
+	snde "c1r1"
+	anim [0 1 1 2]
+	wait 10
+	inst
+	targ va04
+	plne 500
+	accg 5
+	velo rand -2 2 rand -1 1
+	targ ownr
+	part 2
+	stpc
+	snde "c1r2"
+	anim [2 2 2 2 2 2 1 1 0]
+endm
+
+scrp 2 5 32308 12
+*	Holly is eaten
+** 	boredom decrease 			20 (part of weed stim)
+** 	Need for Pleasure Decrease 	30 (part of weed stim)
+** 	Fear Increase			30
+** 	Pain increase			120
+	inst
+	snde "chwl"
+	targ from
+	doif crea targ = 1
+		chem 80 0.12
+		chem 148 0.47
+		stim writ from 83 1
+	endi
+	targ ownr
+	doif pose = 0
+		pose 1
+	elif pose = 1
+		kill targ
+	endi
+endm
+
+scrp 2 24 32311 4
+*	christmas lights picked up
+	mira rand 0 1
+endm
+
+scrp 2 24 32312 1
+* firelogs activated
+	anim [1 2 3 4 4 4 4 4 4 4 4 4 3 2 1 0]
+	esee 2 24 32308
+		setv ov99 1
+		tick 1
+	next
+endm
+
+scrp 2 24 32308 9
+*	fireplace timer
+	doif ov99 = 1
+		stpc
+		sndl "c1fi"
+		emit 2 .9
+		emit 1 0.9
+		anim [1 2 3 4 5 6 7 8 255]
+		setv ov99 2
+		tick 1200
+	elif ov99 = 2
+		anim [9 10 11 12 255]
+		setv ov99 3
+		emit 2 .7
+		emit 1 0
+		stpc
+		tick 600
+	elif ov99 = 3
+		pose 0
+		setv ov99 0
+		emit 2 0
+		emit 1 0
+		tick 0
+	endi
+endm
+
+scrp 3 8 32300 1
+*	Snow Maker Toggle
+	inst
+	snde "bep2"
+	stim writ from 90 1.0
+	doif pose = 0
+		pose 1
+		setv ov00 1
+		tick 40
+	elif pose = 1
+		pose 0
+		setv ov00 0
+		tick 0
+	endi
+endm
+
+scrp 3 8 32300 3
+* 	Snow maker is hit
+	stim writ from 92 1.0
+endm
+
+scrp 3 8 32300 9
+* 	Snow Maker Timer
+	inst
+	setv va00 posl
+	setv va01 post
+	setv game "snowdrift" rand -2.0 2.0
+
+	setv va05 totl 3 8 32300
+	mulv va05 100
+	doif totl 2 19 32301 < va05
+		reps 10
+			setv va03 rand 1000 8000
+			new: simp 2 19 32301 "c1xmassnow" 11 0 va03
+			attr 211
+			elas 0
+			accg 0
+			perm 0
+			aero 0
+			core 7 9 0 16
+			tick rand 30 40
+			addv va00 rand -100 100
+			mvsf va00 va01
+			velo rand -20 20 rand -20 -15
+		repe
+	endi
+endm
+
+scrp 2 19 32301 6
+*	snow collision
+	inst
+	doif obst _up_ <= 5
+		setv va00 posl
+		setv va02 posr
+		setv va03 posb
+		subv va03 10
+		setv ov22 rtyp grap va00 va03
+		setv ov23 rtyp grap va02 va03
+		setv va04 .23
+		addv va04 rand 0 .02
+		accg va04
+		aero rand 8 12
+		attr 195
+		perm rand 30 70
+		setv va00 rand 1 8
+		doif va00 = 1
+			anim [1 2 3 4 5 6 7 8 255]
+		elif va00 = 2
+			anim [2 3 4 5 6 7 8 1 255]
+		elif va00 = 3
+			anim [3 4 5 6 7 8 1 2 255]
+		elif va00 = 4
+			anim [4 5 6 7 8 1 2 3 255]
+		elif va00 = 5
+			anim [5 6 7 8 1 2 3 4 255]
+		elif va00 = 6
+			anim [6 7 8 1 2 3 4 5 255]
+		elif va00 = 7
+			anim [7 8 1 2 3 4 5 6 255]
+		elif va00 = 8
+			anim [8 1 2 3 4 5 6 7 255]
+		endi
+	elif obst down <= 5
+		anim [9 10]
+		over
+		kill targ
+	endi
+endm
+
+scrp 2 19 32301 9
+*	snow timer
+	inst
+	setv va00 posl
+	setv va02 posr
+	setv va03 posb
+	subv va03 10
+	setv ov22 rtyp grap va00 va03
+	setv ov23 rtyp grap va02 va03
+	doif ov22 = 8 and ov23 = 8
+		targ ownr
+		kill targ
+	elif ov22 = 9 and ov23 = 9
+		targ ownr
+		kill targ
+	endi
+	doif obst down <= 3
+		targ ownr
+		kill targ
+	else
+		velo game "snowdrift" vely
+	endi
+endm
+
+scrp 2 19 32301 255
+	kill targ
+endm
+
+scrp 2 21 32336 1
+*	snowman is pushed
+	stim writ from 97 1
+endm
+
+scrp 2 21 32336 9
+*	snowman timer
+	doif pose < 5
+		setv va00 pose
+		addv va00 1
+		pose va00
+	else
+		kill targ
+	endi
+endm
+
+scrp 2 15 32302 1
+*	reindeer activated
+	inst
+	doif ov99 = 0
+		setv ov99 rand 0 1
+	endi
+	setv ov97 -20
+	setv ov95 10
+	setv va60 ov95
+	mulv va60 ov99
+	accg .5
+	sndl "c1sb"
+	fric 0
+	doif ov99 = 1
+		anim [1 3 5 7 255]
+	else
+		anim [0 2 4 6 255]
+	endi
+	velo va60 ov97
+endm
+
+scrp 2 15 32302 6
+*	reindeer collision
+	inst
+	doif obst down <= 5 and _p2_ > 5
+		stpc
+		snde "c1hv"
+	endi
+endm
+
+* C1 Christmas Reindeer 2 15 32302 - Timer
+scrp 2 15 32302 9
+
+	inst
+	doif velx < 0 and ov99 = 1
+		setv ov99 -1
+	elif velx > 0 and ov99 = -1
+		setv ov99 1
+	endi
+* 	move - and let's make sure you are near the garden pump
+	doif movs = 4
+		pose 8
+		stpc
+	elif ov99 <= 1 and obst down < 5
+		setv va20 10000000
+
+*		check for food and fruit. you don't want to starve!
+		esee 2 11 0
+			addv va05 1
+		next
+		esee 2 8 0
+			addv va05 1
+		next
+
+* 		check for under water
+		setv va06 rtyp grap posx posy
+		doif va06 = 8 or va06 = 9
+			setv ov97 -20
+			setv ov95 10
+			accg .5
+			sndl "c1sb"
+			addv ov94 1
+			doif ov94 > 40
+*				you drownded, sry!
+				kill targ
+			endi
+		else
+			setv ov97 -1
+			setv ov95 5
+			setv ov94 0
+			accg 1
+		endi
+*		if there is no food or fruit, you start to starve
+		doif va05 = 0
+			addv ov98 1
+			doif ov98 > 300
+*				you starved to death. sorry!
+				targ ownr
+				kill targ
+			endi
+		else
+*			you found food or fruit. yay!
+			setv ov98 0
+		endi
+		esee 2 21 32333
+			addv va04 1
+			doif sqrt disq ownr < va20 and seee ownr targ = 1
+				seta va21 targ
+				setv va00 posl
+				setv va01 post
+				setv va02 posr
+				setv va03 posb
+				setv va20 sqrt disq ownr
+			endi
+		next
+		targ ownr
+		doif ov99 = -1 and velx >= 0
+			setv ov99 1
+		elif ov99 = 1 and velx <= 0
+			setv ov99 -1
+		endi
+		doif va20 >= 500 and va20 < 2000 and movs = 0
+			doif posl > va02
+				setv ov99 -1
+			endi
+			doif posr < va00
+				setv ov99 1
+			endi
+		else
+*			choose a direction	
+			inst
+			setv va22 rand 1 20
+			doif va22 >= 20
+				doif ov99 = -1
+					setv ov99 1
+				elif ov99 = 1 or obst rght < 50
+					setv ov99 -1
+				endi
+			elif va22 <= 1
+				setv ov99 0
+			endi
+		endi
+
+		inst
+* 		check your room type
+* 		if under water, you should drown
+*		go forward or stop
+		doif ov99 = 1 or ov99 = -1
+			setv va60 ov95
+			mulv va60 ov99
+			doif ov99 = 1
+				anim [1 3 5 7 255]
+			else
+				anim [0 2 4 6 255]
+			endi
+			fric 0
+			velo va60 ov97
+			wait rand 7 11
+			inst
+		elif ov99 = 0
+			fric 100
+			velo 0 0
+			stpc
+			anim [8 8 8]
+			over
+			inst
+			wait rand 22 33
+			inst
+*			tick rand 2 3
+			doif rand 0 1 = 1
+				setv ov99 1
+			else
+				setv ov99 -1
+			endi
+		endi
+
+*		hill holder
+		inst
+		targ ownr
+		doif velx < 0 and ov99 = 1
+			fric 100
+			velo 0 0
+			stpc
+		elif velx > 0 and ov99 = -1
+			fric 100
+			velo 0 0
+			stpc
+		endi
+	endi
+endm
+
+scrp 2 4 32309 9
+* Mistletoe Timer
+*	Make Norns want to kiss
+	esee 4 1 0
+		urge writ targ 36 0.25 6 0.25
+		wait 20
+		urge writ targ 36 0.25 1 0.25
+	next
+*	Make Grendels want to kiss
+	esee 4 2 0
+		urge writ targ 37 0.25 6 0.25
+		wait 20
+		urge writ targ 37 0.25 1 0.25
+	next
+*	Make Ettins want to kiss
+	esee 4 3 0
+		urge writ targ 38 0.25 6 0.25
+		wait 20
+		urge writ targ 38 0.25 1 0.25
+	next
+endm
+
+scrp 2 21 32322 1
+*	push the Christmas cracker
+	inst
+	setv va00 posl
+	setv va01 post
+*	doif crea from = 1 and carr = pntr
+	snde "c1cc"
+	new: simp 2 21 32335 "c1xmascrackers" 6 10 1000
+	attr 199
+	fric 100
+	accg 2
+	elas 0
+	aero 0
+	perm 60
+	bhvr 33
+	mvsf va00 va01
+	velo rand -2 2 rand 2 4
+	pose rand 0 5
+	targ ownr
+	anim [1 1 1 1 1 1 1]
+	reps 5
+		new: simp 2 21 32322 "c1xmascrackers" 7 3 1001
+		attr 208
+		fric 0
+		accg 2
+		elas 75
+		aero 0
+		perm 60
+		mvsf va00 va01
+		velo rand -10 10 rand -10 -5
+		anim [0 1 2 3 4 5 6 5 4 3 2 1 255]
+		tick rand 30 40
+	repe
+	targ ownr
+	kill targ
+endm
+
+scrp 2 21 32322 9
+*	cracker star timer
+	kill targ
+endm
+
+scrp 2 21 32335 1
+*	push the cracker toy
+	inst
+	doif crea from = 1
+		stim writ from 97 1
+	endi
+	doif pose = 0
+		setv va03 rand 1 2
+		fric 10
+		aero 0
+		doif va03 = 1
+			mira 1
+			velo rand -10 -1 -2
+		else
+			mira 0
+			velo rand 1 10 -2
+		endi
+	elif pose = 3
+		setv va03 rand 1 2
+		fric 10
+		aero 0
+		doif va03 = 1
+			mira 1
+			velo rand -10 -1 -2
+		else
+			mira 0
+			velo rand 1 10 -2
+		endi
+	elif pose = 4
+		elas 90
+		fric 100
+		accg 3
+		velo rand -10 10 rand -30 -10
+	elif pose = 5
+		elas 90
+		fric 100
+		accg 3
+		velo rand -10 10 rand -30 -10
+	endi
+endm
+
+rscr
+* C1 Christmas Holly 2 5 32308
+enum 2 5 32308
+	kill targ
+next
+scrx 2 5 32308 12
+
+* C1 Christmas Mistletoe 2 4 32309
+enum 2 4 32309
+	kill targ
+next
+scrx 2 4 32309 9
+
+* C1 Christmas Oven 2 23 32308
+enum 2 23 32308
+	kill targ
+next
+scrx 2 23 32308 1
+scrx 2 23 32308 2
+scrx 2 23 32308 3
+scrx 2 23 32308 9
+
+* C1 Christmas Pudding 2 11 32304
+enum 2 11 32304
+	kill targ
+next
+scrx 2 11 32304 12
+
+* C1 Christmas Turkey 2 11 32305
+enum 2 11 32305
+	kill targ
+next
+scrx 2 11 32305 12
+
+* C1 Christmas Flaming Pudding 2 11 32306
+enum 2 11 32306
+	kill targ
+next
+scrx 2 11 32306 9
+scrx 2 11 32306 12
+
+* C1 Christmas Snow 2 19 32301
+enum 2 19 32301
+	kill targ
+next
+scrx 2 19 32301 6
+scrx 2 19 32301 9
+
+* Snow Maker
+enum 3 8 32300
+	kill targ
+next
+scrx 3 8 32300 1
+scrx 3 8 32300 9
+
+* C1 Christmas Coin 2 21 32321
+enum 2 21 32321
+	kill targ
+next
+
+* C1 Christmas Cracker 2 21 32322
+enum 2 21 32322
+	kill targ
+next
+scrx 2 21 32322 1
+
+* C1 Christmas Cracker Toy 2 21 32335
+enum 2 21 32335
+	kill targ
+next
+scrx 2 21 32335 1
+
+* C1 Christmas Snowman 2 21 32336
+enum 2 21 32336
+	kill targ
+next
+scrx 2 21 32336 1
+scrx 2 21 32336 4
+scrx 2 21 32336 6
+scrx 2 21 32336 9
+
+* C1 Christmas Decoration 1 2 24 32305
+enum 2 24 32305
+	kill targ
+next
+
+* C1 Christmas Decoration 2 2 24 32306
+enum 2 24 32306
+	kill targ
+next
+
+* C1 Christmas Decoration 3 2 24 32307
+enum 2 24 32307
+	kill targ
+next
+
+* C1 Christmas Fireplace 2 24 32308
+enum 2 24 32308
+	kill targ
+next
+scrx 2 24 32308 9
+
+* C1 Christmas Tree 2 24 32309
+enum 2 24 32309
+	kill targ
+next
+
+* C1 Christmas Incubator Lights 2 24 32310
+enum 2 24 32310
+	kill targ
+next
+
+* C1 Christmas Fairy Lights 2 24 32311
+enum 2 24 32311
+	kill targ
+next
+scrx 2 24 32311 1
+scrx 2 24 32311 4
+
+* C1 Christmas Fire Logs 2 24 32312
+enum 2 24 32312
+	kill targ
+next
+scrx 2 24 32312 1
+
+* C1 Christmas Reindeer 2 15 32302
+enum 2 15 32302
+	kill targ
+next
+scrx 2 15 32302 9
